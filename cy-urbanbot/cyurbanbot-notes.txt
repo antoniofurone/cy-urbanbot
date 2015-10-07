@@ -1,0 +1,8 @@
+{"ok":true,"result":[
+{"update_id":447315868,"message":{"message_id":7,"from":{"id":114716051,"first_name":"Antonio","last_name":"Furone","username":"antoniofurone"},
+	"chat":{"id":114716051,"first_name":"Antonio","last_name":"Furone","username":"antoniofurone"},"date":1443974313,"text":"\/start"}},
+{"update_id":447315869,"message":{"message_id":8,"from":{"id":114716051,"first_name":"Antonio","last_name":"Furone","username":"antoniofurone"},
+	"chat":{"id":114716051,"first_name":"Antonio","last_name":"Furone","username":"antoniofurone"},"date":1443974355,"text":"Secondo"}},
+{"update_id":447315870,"message":{"message_id":9,"from":{"id":114716051,"first_name":"Antonio","last_name":"Furone","username":"antoniofurone"},
+	"chat":{"id":114716051,"first_name":"Antonio","last_name":"Furone","username":"antoniofurone"},"date":1443976701,
+	"voice":{"duration":2,"mime_type":"audio\/ogg","file_id":"AwADBAADAQADk23WBonOS_VP_9vZAg","file_size":6702}}}]}
