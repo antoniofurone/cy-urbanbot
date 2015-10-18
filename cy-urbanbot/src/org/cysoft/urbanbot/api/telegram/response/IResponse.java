@@ -1,4 +1,4 @@
-package org.cysoft.urbanbot.response;
+package org.cysoft.urbanbot.api.telegram.response;
 
 public interface IResponse {
 	//public boolean getOk();

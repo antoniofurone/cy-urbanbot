@@ -1,4 +1,4 @@
-package org.cysoft.urbanbot.response;
+package org.cysoft.urbanbot.api.telegram.response;
 
 public abstract class ResponseAdapter implements IResponse {
 	private boolean ok=false;

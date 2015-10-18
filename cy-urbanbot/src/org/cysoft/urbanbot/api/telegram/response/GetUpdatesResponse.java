@@ -1,9 +1,9 @@
-package org.cysoft.urbanbot.response;
+package org.cysoft.urbanbot.api.telegram.response;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cysoft.urbanbot.model.Update;
+import org.cysoft.urbanbot.api.telegram.model.Update;
 
 public class GetUpdatesResponse  extends ResponseAdapter{
 

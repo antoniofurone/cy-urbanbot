@@ -1,6 +1,6 @@
-package org.cysoft.urbanbot.model;
+package org.cysoft.urbanbot.api.telegram.model;
 
-public class User {
+public class Chat {
 	
 	private long id;
 	public long getId() {
@@ -36,17 +36,30 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
+	
+	private String title="";
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-	
-	
-	
+	private String type="";
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", first_name=" + first_name + ", last_name="
-				+ last_name + ", username=" + username + "]";
+		return "Chat [id=" + id + ", first_name=" + first_name + ", last_name="
+				+ last_name + ", username=" + username + ", title=" + title
+				+ ", type=" + type + "]";
 	}
 	
-
 	
-
 }

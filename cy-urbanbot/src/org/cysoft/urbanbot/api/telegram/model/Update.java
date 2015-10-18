@@ -1,4 +1,4 @@
-package org.cysoft.urbanbot.model;
+package org.cysoft.urbanbot.api.telegram.model;
 
 public class Update {
 	

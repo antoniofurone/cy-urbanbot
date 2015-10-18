@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<property name="USER_HOME" value="c:/Temp" />
+	<property name="USER_HOME" value="/home/antonio" />
 	
    
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
@@ -55,6 +55,26 @@
     </logger>
     
     <logger name="org.cysoft.urbanbot.main" level="INFO">
+        <appender-ref ref="dailyRollingFileAppender"/>
+        <appender-ref ref="minuteRollingFileAppender"/>
+    </logger>
+    
+    <logger name="org.cysoft.urbanbot.api.bss" level="INFO">
+        <appender-ref ref="dailyRollingFileAppender"/>
+        <appender-ref ref="minuteRollingFileAppender"/>
+    </logger>
+    
+    <logger name="org.cysoft.urbanbot.api.telegram" level="INFO">
+        <appender-ref ref="dailyRollingFileAppender"/>
+        <appender-ref ref="minuteRollingFileAppender"/>
+    </logger>
+    
+    <logger name="org.cysoft.urbanbot.api.telegram.model" level="INFO">
+        <appender-ref ref="dailyRollingFileAppender"/>
+        <appender-ref ref="minuteRollingFileAppender"/>
+    </logger>
+    
+    <logger name="org.cysoft.urbanbot.api.telegram.model.response" level="INFO">
         <appender-ref ref="dailyRollingFileAppender"/>
         <appender-ref ref="minuteRollingFileAppender"/>
     </logger>
