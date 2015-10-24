@@ -22,7 +22,10 @@ public class UpdateWorker implements Runnable{
 		// TODO Auto-generated method stub
 		logger.info(">>> Start UpdateWorket Thread...");
 		
+		WorkflowManager wf=new WorkflowManager(session);
+		wf.transition(update);
 		
+		session.setLocked(false);
 		logger.info("<<< Start UpdateWorket Thread...");
 	}
 

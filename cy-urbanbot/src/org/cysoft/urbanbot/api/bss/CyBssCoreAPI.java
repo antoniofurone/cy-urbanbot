@@ -9,6 +9,7 @@ import org.cysoft.bss.core.model.AppParam;
 import org.cysoft.bss.core.rest.response.cybssauth.CyBssAuthLogOn;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.core.model.BotMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +95,43 @@ public class CyBssCoreAPI {
 		
 		return ret;
 	}
+	
+	public String getMessage(String id,String languageCode){
+		String ret="No msg found"; 
+		if (BotMessage.WAIT_FOR_LOCK_SESSION_ID.equals(id))
+			if ("it".equals(languageCode))
+				ret="Attendi un attimo .....";
+			else
+				ret="Wait a moment .....";
+		
+		if (BotMessage.WELCOME_MENU.equals(id))
+			if ("it".equals(languageCode)){
+				ret="Benvenuto in Carovigno Smart City Bot (by @antoniofurone). Inviami uno dei seguenti comandi:";
+				ret+="/s invia una segnalazione; /a avvisi; /o orari treni; /e eventi; /m monumenti; /r risoranti; /l change language.";
+			}
+			else
+			{
+				ret="Welcome at Carovigno Smart City Bot (by @antoniofurone). Send one of follow command:";
+				ret+="/s send warning; /a advice; /o train timeline; /e events; /m monuments; /r restaurant; /l cambia lingua.";
+			}
+		
+		if (BotMessage.COMMAND_NOT_RECOGNIZED.equals(id))
+			if ("it".equals(languageCode))
+				ret="Comando non riconosciuto...scusami";
+			else
+				ret="Command not recognized...sorry";
+		
+		if (BotMessage.INVALID_SESSION.equals(id))
+			if ("it".equals(languageCode))
+				ret="Stato invalido. Invia /start";
+			else
+				ret="Invalid status. Send /start";
+		
+		
+		
+		return ret;
+	}
+	
 	
 	@Override
 	public String toString() {

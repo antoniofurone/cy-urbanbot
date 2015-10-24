@@ -10,6 +10,7 @@ public class Session {
 		this.id=id;
 		this.creationTime=Calendar.getInstance().getTimeInMillis();
 		this.lastUseTime=Calendar.getInstance().getTimeInMillis();
+		this.sessionStatus=new SessionStatus();
 	}
 	
 	private long id;
@@ -55,6 +56,14 @@ public class Session {
 	public synchronized void setLocked(boolean locked) {
 		this.locked = locked;
 	}
+	
+	private SessionStatus sessionStatus=null;
+	public SessionStatus getSessionStatus() {
+		return sessionStatus;
+	}
+	public void setSessionStatus(SessionStatus sessionStatus) {
+		this.sessionStatus = sessionStatus;
+	}
 
 	@Override
 	public int hashCode() {
@@ -82,9 +91,9 @@ public class Session {
 	public String toString() {
 		return "Session [id=" + id + ", language=" + language
 				+ ", creationTime=" + creationTime + ", lastUseTime="
-				+ lastUseTime + ", locked=" + locked + "]";
+				+ lastUseTime + ", locked=" + locked + ", sessionStatus="
+				+ sessionStatus.toString() + "]";
 	}
 
-	
 
 }

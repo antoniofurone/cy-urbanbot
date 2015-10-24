@@ -4,7 +4,11 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.concurrent.TransferQueue;
 
+import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
+import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.main.UrbanbotMain;
 import org.slf4j.Logger;
@@ -43,6 +47,14 @@ public class UpdateDispatcher implements Runnable{
 					session=LiveSessions.getInstance().get(chatId);
 					if (session.isLocked()){
 						logger.info("locked:"+session);
+						String waitMessage=CyBssCoreAPI.getInstance().
+								getMessage(BotMessage.WAIT_FOR_LOCK_SESSION_ID, session.getLanguage());
+						try {
+							TelegramAPI.getInstance().sendMessage(waitMessage, session.getId(), update.getMessage().getMessage_id());
+						} catch (CyUrbanbotException e) {
+							// TODO Auto-generated catch block
+							logger.error(e.toString());
+						}
 						continue;
 					}
 					else
