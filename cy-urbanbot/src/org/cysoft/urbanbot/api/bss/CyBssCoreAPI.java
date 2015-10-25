@@ -107,12 +107,12 @@ public class CyBssCoreAPI {
 		if (BotMessage.WELCOME_MENU.equals(id))
 			if ("it".equals(languageCode)){
 				ret="Benvenuto in Carovigno Smart City Bot (by @antoniofurone). Inviami uno dei seguenti comandi:";
-				ret+="/s invia una segnalazione; /a avvisi; /o orari treni; /e eventi; /m monumenti; /r risoranti; /l change language.";
+				ret+="/s invia una segnalazione; /a avvisi; /t narratore ; /e eventi; /i itinerari; /p locali; /l change language.";
 			}
 			else
 			{
-				ret="Welcome at Carovigno Smart City Bot (by @antoniofurone). Send one of follow command:";
-				ret+="/s send warning; /a advice; /o train timeline; /e events; /m monuments; /r restaurant; /l cambia lingua.";
+				ret="Welcome at Carovigno Smart City Bot (by @antoniofurone). Send one of following commands:";
+				ret+="/s send warning; /a advice; /t storyteller; /e events; /i itineraries; /p places; /l cambia lingua.";
 			}
 		
 		if (BotMessage.COMMAND_NOT_RECOGNIZED.equals(id))
@@ -127,6 +127,35 @@ public class CyBssCoreAPI {
 			else
 				ret="Invalid status. Send /start";
 		
+		if (BotMessage.SEND_WARNING.equals(id))
+			if ("it".equals(languageCode))
+				ret="Scrivi la segnalazione o /b per tornare indietro";
+			else
+				ret="Write warning o /b to return back";
+		
+		if (BotMessage.SEND_WARNIMGORLOC.equals(id))
+			if ("it".equals(languageCode))
+				ret="Grazie. Ora invia una Location o un Immagine o /b per tornare indietro";
+			else
+				ret="Thanks. Now send Location or Image or /b to return back";
+		
+		if (BotMessage.SEND_WARNLOCOK.equals(id))
+			if ("it".equals(languageCode))
+				ret="Grazie. Location acquisita.";
+			else
+				ret="Thanks. Location acquired.";
+		
+		if (BotMessage.SEND_WARNIMG.equals(id))
+			if ("it".equals(languageCode))
+				ret="Ora invia un Immagine o /b per tornare indietro";
+			else
+				ret="Now send Image or /b to return back";
+		
+		if (BotMessage.SEND_WARNIMGOK.equals(id))
+			if ("it".equals(languageCode))
+				ret="Grazie. Immagine acquisita.";
+			else
+				ret="Thanks. Image acquired.";
 		
 		
 		return ret;
