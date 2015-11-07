@@ -6,10 +6,11 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.AppParam;
-import org.cysoft.bss.core.rest.response.cybssauth.CyBssAuthLogOn;
+import org.cysoft.bss.core.web.response.ICyBssResultConst;
+import org.cysoft.bss.core.web.response.rest.AppResponse;
+import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
-import org.cysoft.urbanbot.core.model.BotMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,10 +19,6 @@ import com.google.gson.Gson;
 public class CyBssCoreAPI {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CyBssCoreAPI.class);
-	
-	private final String AUTH_SERVICE="/cybss-auth";
-	
-	private final String LOGON_METHOD="/logOn";
 	
 	private String securityToken="";
 	
@@ -35,14 +32,23 @@ public class CyBssCoreAPI {
 	private CyBssCoreAPI() {
 	}
 	
-	private String appId="";
-	public String getAppId() {
+	
+	
+	private long appId;
+	public long getAppId() {
 		return appId;
 	}
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
 	
+	private String appName="";
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+
+
 	private String coreUrl="";
 	public String getCoreUrl() {
 		return coreUrl;
@@ -53,11 +59,68 @@ public class CyBssCoreAPI {
 	
 	
 	private long updatesOffSet=0;
-	public long getUpdatesOffSet() {
+	public long getUpdatesOffSet() throws CyUrbanbotException {
+		
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/app/"+appId+"/getVariable/updatesOffSet", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		
+		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
+		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		}
+		
+		if (appResponse.getAppVariable()!=null)
+			updatesOffSet=Long.parseLong(appResponse.getAppVariable().getValue());
+		
 		return updatesOffSet;
 	}
-	public void setUpdatesOffSet(long updatesOffSet) {
+	
+	
+	public void setUpdatesOffSet(long updatesOffSet) throws CyUrbanbotException {
+		
 		this.updatesOffSet = updatesOffSet;
+		
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		String jsonString="{"
+				+ "\"appId\":\""+appId
+				+"\",\"name\":\"updatesOffSet\",\"value\":\""+updatesOffSet+"\""
+				+",\"type\":\"N\""
+				+ "}";
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpPostBodyRequest(
+					coreUrl+"/rest/app/"+appId+"/putVariable",
+					headerAttrs,
+					jsonString);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
+		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		}
+		
 	}
 	
 	
@@ -70,12 +133,37 @@ public class CyBssCoreAPI {
 		String jsonString="{\"userId\":\""+userId+"\",\"pwd\":\""+pwd+"\"}";
 		
 		response=CyUrbanBotUtility.httpPostBodyRequest(
-				coreUrl+"/rest"+AUTH_SERVICE+LOGON_METHOD,
+				coreUrl+"/rest/cybss-auth/logOn",
 				headerAttrs,
 				jsonString);
 		
 		CyBssAuthLogOn authLogOn = new Gson().fromJson(response, CyBssAuthLogOn.class);
+		if (!authLogOn.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(authLogOn.getResultCode()+":"+authLogOn.getResultDesc());
+			throw new CyUrbanbotException(authLogOn.getResultCode()+":"+authLogOn.getResultDesc());
+		}
+		
 		securityToken=authLogOn.getSecurityToken();
+		
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/app/getByName?name="+appName, 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
+		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		}
+		logger.info(appResponse.getApp().toString());
+		appId=appResponse.getApp().getId();
+		
+		
 	}
 	
 	public void logOff(){
@@ -83,80 +171,59 @@ public class CyBssCoreAPI {
 	}
 	
 	
-	public AppParam getParam(String name){
-		AppParam ret=null;
+	public AppParam getParam(String name) throws CyUrbanbotException{
 		
-		if (name.equalsIgnoreCase("bot.url")){
-			ret=new AppParam();
-			ret.setName(name);
-			ret.setValue("https://api.telegram.org/bot130643009:AAGW77QBGQV4A7G494zA_w2DfzCR0zqULCM/");
-			ret.setType("S");
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/app/"+appId+"/getParam/"+name, 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
-		return ret;
+		
+		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
+		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		}
+		
+		if (appResponse.getAppParam()!=null)
+			return appResponse.getAppParam();
+		else
+			return null;
 	}
 	
-	public String getMessage(String id,String languageCode){
-		String ret="No msg found"; 
-		if (BotMessage.WAIT_FOR_LOCK_SESSION_ID.equals(id))
-			if ("it".equals(languageCode))
-				ret="Attendi un attimo .....";
-			else
-				ret="Wait a moment .....";
+	public String getMessage(String id,String languageCode) throws CyUrbanbotException{
+		String ret="Sorry ! I don't know reply."; 
+	
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/app/"+appId+"/getMessage/"+languageCode+"/"+id, 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 		
-		if (BotMessage.WELCOME_MENU.equals(id))
-			if ("it".equals(languageCode)){
-				ret="Benvenuto in Carovigno Smart City Bot (by @antoniofurone). Inviami uno dei seguenti comandi:";
-				ret+="/s invia una segnalazione; /a avvisi; /t narratore ; /e eventi; /i itinerari; /p locali; /l change language.";
-			}
-			else
-			{
-				ret="Welcome at Carovigno Smart City Bot (by @antoniofurone). Send one of following commands:";
-				ret+="/s send warning; /a advice; /t storyteller; /e events; /i itineraries; /p places; /l cambia lingua.";
-			}
+
+		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
+		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		}
 		
-		if (BotMessage.COMMAND_NOT_RECOGNIZED.equals(id))
-			if ("it".equals(languageCode))
-				ret="Comando non riconosciuto...scusami";
-			else
-				ret="Command not recognized...sorry";
-		
-		if (BotMessage.INVALID_SESSION.equals(id))
-			if ("it".equals(languageCode))
-				ret="Stato invalido. Invia /start";
-			else
-				ret="Invalid status. Send /start";
-		
-		if (BotMessage.SEND_WARNING.equals(id))
-			if ("it".equals(languageCode))
-				ret="Scrivi la segnalazione o /b per tornare indietro";
-			else
-				ret="Write warning o /b to return back";
-		
-		if (BotMessage.SEND_WARNIMGORLOC.equals(id))
-			if ("it".equals(languageCode))
-				ret="Grazie. Ora invia una Location o un Immagine o /b per tornare indietro";
-			else
-				ret="Thanks. Now send Location or Image or /b to return back";
-		
-		if (BotMessage.SEND_WARNLOCOK.equals(id))
-			if ("it".equals(languageCode))
-				ret="Grazie. Location acquisita.";
-			else
-				ret="Thanks. Location acquired.";
-		
-		if (BotMessage.SEND_WARNIMG.equals(id))
-			if ("it".equals(languageCode))
-				ret="Ora invia un Immagine o /b per tornare indietro";
-			else
-				ret="Now send Image or /b to return back";
-		
-		if (BotMessage.SEND_WARNIMGOK.equals(id))
-			if ("it".equals(languageCode))
-				ret="Grazie. Immagine acquisita.";
-			else
-				ret="Thanks. Image acquired.";
-		
+		if (appResponse.getAppMessage()!=null)
+			ret=appResponse.getAppMessage().getText();
 		
 		return ret;
 	}

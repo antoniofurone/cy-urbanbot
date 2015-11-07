@@ -1,8 +1,6 @@
 package org.cysoft.urbanbot.api.telegram;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.List;
 

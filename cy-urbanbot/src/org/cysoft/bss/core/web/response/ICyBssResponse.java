@@ -1,6 +1,6 @@
-package org.cysoft.bss.core.rest.response;
+package org.cysoft.bss.core.web.response;
 
-public interface ICyBssRestResponse {
+public interface ICyBssResponse {
 	
 	public String getResultCode();
 	public void setResultCode(String resultCode);
@@ -12,4 +12,5 @@ public interface ICyBssRestResponse {
 	
 	public void setUserId(long id);
 	public long getUserId();
+	
 }

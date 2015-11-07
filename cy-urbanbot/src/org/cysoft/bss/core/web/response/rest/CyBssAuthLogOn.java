@@ -1,12 +1,12 @@
-package org.cysoft.bss.core.rest.response.cybssauth;
+package org.cysoft.bss.core.web.response.rest;
 
 import org.cysoft.bss.core.model.User;
-import org.cysoft.bss.core.rest.response.CyBssRestResponseAdapter;
-import org.cysoft.bss.core.rest.response.ICyBssRestResponse;
+import org.cysoft.bss.core.web.response.CyBssResponseAdapter;
+import org.cysoft.bss.core.web.response.ICyBssResponse;
 
 
-public class CyBssAuthLogOn extends CyBssRestResponseAdapter
-	implements ICyBssRestResponse
+public class CyBssAuthLogOn extends CyBssResponseAdapter
+	implements ICyBssResponse
 {
 	
 	private User user=null;

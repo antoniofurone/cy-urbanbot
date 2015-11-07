@@ -1,8 +1,8 @@
-package org.cysoft.bss.core.rest.response;
+package org.cysoft.bss.core.web.response;
 
 import org.cysoft.bss.core.model.ICyBssConst;
 
-public abstract class CyBssRestResponseAdapter implements ICyBssRestResponse{
+public abstract class CyBssResponseAdapter implements ICyBssResponse{
 	
 	private String resultCode=ICyBssResultConst.RESULT_OK;
 	public String getResultCode() {
@@ -35,6 +35,10 @@ public abstract class CyBssRestResponseAdapter implements ICyBssRestResponse{
 	}
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+	
+	public void reset(){
+		resultCode=ICyBssResultConst.RESULT_OK;resultDesc="OK";
 	}
 	
 }

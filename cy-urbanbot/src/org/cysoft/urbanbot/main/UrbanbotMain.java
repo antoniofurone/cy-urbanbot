@@ -8,26 +8,22 @@ import java.util.concurrent.TransferQueue;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
-import org.cysoft.urbanbot.api.telegram.response.GetUpdatesResponse;
-import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
-import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.UpdateDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 
 public class UrbanbotMain  implements Runnable{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UrbanbotMain.class);
 	
-	private String bssAppId="";
-		public String getBssAppId() {
-		return bssAppId;
+	private String bssAppName="";
+		public String getBssAppName() {
+		return bssAppName;
 	}
-	public void setBssAppId(String bssAppId) {
-		this.bssAppId = bssAppId;
+	public void setBssAppName(String bssAppName) {
+		this.bssAppName = bssAppName;
 	}
 	
 	private String bssCoreUrl="";
@@ -67,8 +63,8 @@ public class UrbanbotMain  implements Runnable{
 		}
 
 		UrbanbotMain urbanBot=new UrbanbotMain();
-		urbanBot.setBssAppId(args[0]);
-		logger.info("appId="+urbanBot.getBssAppId());
+		urbanBot.setBssAppName(args[0]);
+		logger.info("appName="+urbanBot.getBssAppName());
 		
 		urbanBot.setBssCoreUrl(args[1]);
 		logger.info("coreUrl="+urbanBot.getBssCoreUrl());
@@ -128,7 +124,7 @@ public class UrbanbotMain  implements Runnable{
 		logger.info(">>> Start Main Thread...");
 		
 		CyBssCoreAPI bssCoreAPI=CyBssCoreAPI.getInstance();
-		bssCoreAPI.setAppId(bssAppId);		
+		bssCoreAPI.setAppName(bssAppName);		
 		bssCoreAPI.setCoreUrl(bssCoreUrl);
 		
 		try {
@@ -141,10 +137,21 @@ public class UrbanbotMain  implements Runnable{
 		}
 		
 		
-		long updatesOffSet=bssCoreAPI.getUpdatesOffSet();
+		long updatesOffSet=0;
+		try {
+			updatesOffSet = bssCoreAPI.getUpdatesOffSet();
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			System.exit(1);
+		}
 		
 		TelegramAPI telegramAPI=TelegramAPI.getInstance();
-		telegramAPI.setBotUrl(bssCoreAPI.getParam("bot.url").getValue());
+		try {
+			telegramAPI.setBotUrl(bssCoreAPI.getParam("bot_url").getValue());
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			System.exit(1);
+		}
 		
 		TransferQueue<Update> queue =new LinkedTransferQueue<Update>();
 		Thread t=new Thread(new UpdateDispatcher(queue));
@@ -164,8 +171,8 @@ public class UrbanbotMain  implements Runnable{
 				
 				int updatesSize=telegramUpdates.size();
 				if (updatesSize>0){
-					bssCoreAPI.setUpdatesOffSet(telegramUpdates.get(updatesSize-1).getUpdate_id()+1);
-					updatesOffSet=bssCoreAPI.getUpdatesOffSet();
+					updatesOffSet=telegramUpdates.get(updatesSize-1).getUpdate_id()+1;
+					bssCoreAPI.setUpdatesOffSet(updatesOffSet);
 				}
 				
 			} catch (CyUrbanbotException | InterruptedException e) {
@@ -188,17 +195,6 @@ public class UrbanbotMain  implements Runnable{
 		
 		
 		bssCoreAPI.logOff();
-		
-		
-		/*
-					
-				telegramAPI.sendMessage("Hi "+update.getMessage().getFrom().getFirst_name()+"!", 
-						update.getMessage().getChat().getId(), 
-						update.getMessage().getMessage_id());
-				
-		*/
-		
-		
 		
 		
 		logger.info(">>> End Main Thread...");
