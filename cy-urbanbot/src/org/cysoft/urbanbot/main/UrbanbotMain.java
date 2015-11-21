@@ -10,13 +10,17 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.UpdateDispatcher;
+import org.cysoft.urbanbot.core.UpdateDispatcherListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class UrbanbotMain  implements Runnable{
+public class UrbanbotMain  implements Runnable,UpdateDispatcherListener	
+{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UrbanbotMain.class);
+	
+	private boolean stopNow=false;
 	
 	private String bssAppName="";
 		public String getBssAppName() {
@@ -86,34 +90,6 @@ public class UrbanbotMain  implements Runnable{
 		}
 		
 		
-		/*
-		
-		List<Update> telegramUpdates=null;
-		try {
-			telegramUpdates = telegramAPI.getUpdates(0);
-		} catch (CyUrbanbotException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		for(Update update:telegramUpdates){
-			logger.info("Received:"+update);
-			
-			try {
-				
-				telegramAPI.sendMessage("Hi "+update.getMessage().getFrom().getFirst_name()+"!", 
-						update.getMessage().getChat().getId(), 
-						update.getMessage().getMessage_id());
-				
-			} catch (CyUrbanbotException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		*/
-		
 		
 		logger.info("<<< End Urbanbot...");
 		
@@ -154,7 +130,8 @@ public class UrbanbotMain  implements Runnable{
 		}
 		
 		TransferQueue<Update> queue =new LinkedTransferQueue<Update>();
-		Thread t=new Thread(new UpdateDispatcher(queue));
+		UpdateDispatcher updateDispatcher=new UpdateDispatcher(queue); 
+		Thread t=new Thread(updateDispatcher);
 		t.start();
 		
 		
@@ -163,12 +140,14 @@ public class UrbanbotMain  implements Runnable{
 		while(true){
 			
 			try {
+				if (stopNow) break;
 				telegramUpdates = telegramAPI.getUpdates(updatesOffSet);
 				for(Update update:telegramUpdates){
 					logger.info("Received:"+update);
 					queue.transfer(update);
 				}
 				
+				if (stopNow) break;
 				int updatesSize=telegramUpdates.size();
 				if (updatesSize>0){
 					updatesOffSet=telegramUpdates.get(updatesSize-1).getUpdate_id()+1;
@@ -180,8 +159,6 @@ public class UrbanbotMain  implements Runnable{
 				e.printStackTrace();
 				logger.warn(e.toString());
 			}
-			
-			
 			
 			try {
 				Thread.sleep(3000);
@@ -195,10 +172,14 @@ public class UrbanbotMain  implements Runnable{
 		
 		
 		bssCoreAPI.logOff();
-		
-		
 		logger.info(">>> End Main Thread...");
 		
+	}
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		logger.info("Stopping...");
+		stopNow=true;
 	}
 	
 }

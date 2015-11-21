@@ -1,16 +1,21 @@
 package org.cysoft.urbanbot.core.model;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.cysoft.bss.core.model.ICyBssConst;
 
 public class Session {
+	
+	private Map <String,Object> sessionVariabiles=null;
 	
 	public Session(long id){
 		this.id=id;
 		this.creationTime=Calendar.getInstance().getTimeInMillis();
 		this.lastUseTime=Calendar.getInstance().getTimeInMillis();
 		this.sessionStatus=new SessionStatus();
+		this.sessionVariabiles= new LinkedHashMap<String,Object>(); 
 	}
 	
 	private long id;
@@ -64,7 +69,39 @@ public class Session {
 	public void setSessionStatus(SessionStatus sessionStatus) {
 		this.sessionStatus = sessionStatus;
 	}
+	
+	private long personId;
+	public long getPersonId() {
+		return personId;
+	}
+	public void setPersonId(long personId) {
+		this.personId = personId;
+	}
 
+	private String firstName="";
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	private String secondName="";
+	public String getSecondName() {
+		return secondName;
+	}
+	public void setSecondName(String secondName) {
+		this.secondName = secondName;
+	}
+
+	public void putVariable(String name,Object value){
+		sessionVariabiles.put(name, value);
+	}
+	
+	public Object getVariable(String name){
+		return sessionVariabiles.get(name);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -92,8 +129,10 @@ public class Session {
 		return "Session [id=" + id + ", language=" + language
 				+ ", creationTime=" + creationTime + ", lastUseTime="
 				+ lastUseTime + ", locked=" + locked + ", sessionStatus="
-				+ sessionStatus.toString() + "]";
+				+ sessionStatus.toString() + ", personId=" + personId + ", firstName="
+				+ firstName + ", secondName=" + secondName + "]";
 	}
+
 
 
 }

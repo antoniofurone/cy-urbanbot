@@ -26,7 +26,7 @@ public class WorkflowManager {
 	}
 
 	public void transition(Update update) throws CyUrbanbotException{
-		ITask task=null;
+		Task task=null;
 		
 		
 		

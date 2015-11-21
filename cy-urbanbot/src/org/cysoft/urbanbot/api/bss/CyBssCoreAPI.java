@@ -9,8 +9,11 @@ import org.cysoft.bss.core.model.AppParam;
 import org.cysoft.bss.core.web.response.ICyBssResultConst;
 import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
+import org.cysoft.bss.core.web.response.rest.PersonResponse;
+import org.cysoft.bss.core.web.response.rest.TicketResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.core.NameValueList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -226,6 +229,107 @@ public class CyBssCoreAPI {
 			ret=appResponse.getAppMessage().getText();
 		
 		return ret;
+	}
+	
+	
+	public long updatePerson(String code,String firstName, String secondName)
+		throws CyUrbanbotException
+	{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/person/getByCode?code="+code, 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		PersonResponse personResponse = new Gson().fromJson(response, PersonResponse.class);
+		if (personResponse.getResultCode().equals(ICyBssResultConst.RESULT_NOT_FOUND)){
+			// add
+				
+			NameValueList nvl=new NameValueList(); 
+			nvl.add("code", code);
+			nvl.add("firstName", firstName);
+			nvl.add("secondName", secondName);
+			
+			response=CyUrbanBotUtility.httpPostBodyRequest(
+					coreUrl+"/rest/person/add",
+					headerAttrs,
+					nvl.toJSon());
+			
+			personResponse = new Gson().fromJson(response, PersonResponse.class);
+			if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+				throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+			}
+			
+			return personResponse.getPerson().getId();
+			
+		}
+		else {
+			if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+				throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+			}
+			// update
+			long ret=personResponse.getPerson().getId();
+			
+			NameValueList nvl=new NameValueList(); 
+			nvl.add("code", code);
+			nvl.add("firstName", firstName);
+			nvl.add("secondName", secondName);
+			
+			response=CyUrbanBotUtility.httpPostBodyRequest(
+					coreUrl+"/rest/person/"+ret+"/update",
+					headerAttrs,
+					nvl.toJSon());
+			
+			personResponse = new Gson().fromJson(response, PersonResponse.class);
+			if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+				throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+			}
+			
+			return ret;
+		}
+		
+	}
+	
+	public long addWarn(String text,long personId) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("text", text);
+		nvl.add("personId", (new Long(personId)).toString());
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpPostBodyRequest(
+					coreUrl+"/rest/ticket/add",
+					headerAttrs,
+					nvl.toJSon());
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		
+		}
+		//System.out.println("response="+response);
+		
+		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
+		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+			throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+		}
+		
+		return ticketResponse.getTicket().getId();
 	}
 	
 	

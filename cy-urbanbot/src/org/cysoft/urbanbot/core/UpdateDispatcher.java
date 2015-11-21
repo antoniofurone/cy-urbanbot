@@ -1,11 +1,14 @@
 package org.cysoft.urbanbot.core;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TransferQueue;
 
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.api.telegram.model.User;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
@@ -17,11 +20,25 @@ public class UpdateDispatcher implements Runnable{
 	private static final Logger logger = LoggerFactory.getLogger(UpdateDispatcher.class);
 	
 	
-	TransferQueue<Update> updateQueue = null;
+	private TransferQueue<Update> updateQueue = null;
 	public UpdateDispatcher(TransferQueue<Update> updateQueue){
 		this.updateQueue=updateQueue;
 	}
 
+	private List<UpdateDispatcherListener> listeners=new ArrayList<UpdateDispatcherListener>();
+	public void addUpdateDispatcherListener(UpdateDispatcherListener l){
+		listeners.add(l);
+	}
+	public void removeUpdateDispatcherListener(UpdateDispatcherListener l){
+		listeners.remove(l);
+	}
+	
+	private synchronized void doStop(){
+		if (!listeners.isEmpty())
+			for(UpdateDispatcherListener l:listeners)
+				l.onStop();
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -35,10 +52,26 @@ public class UpdateDispatcher implements Runnable{
 				long chatId=update.getMessage().getChat().getId();
 				
 				if (!LiveSessions.getInstance().containsKey(chatId)){
+					
+					User user=update.getMessage().getFrom();
+					long personId=0;
+					
+					try {
+						personId=CyBssCoreAPI.getInstance().updatePerson("tlg:"+user.getUsername(), 
+								user.getFirst_name(), user.getLast_name());
+					} catch (CyUrbanbotException e) {
+						// TODO Auto-generated catch block
+						logger.error(e.toString());
+						doStop();
+						break;
+					}
 					session=new Session(chatId);
-				    logger.info("new session ="+session);
-				    session.setLocked(true);
-					LiveSessions.getInstance().add(session);		
+					session.setPersonId(personId);
+					session.setFirstName(user.getFirst_name());
+					session.setSecondName(user.getLast_name());
+					session.setLocked(true);
+					logger.info("new session ="+session);
+				    LiveSessions.getInstance().add(session);		
 				}
 				else
 				{
@@ -52,6 +85,8 @@ public class UpdateDispatcher implements Runnable{
 						} catch (CyUrbanbotException e) {
 							// TODO Auto-generated catch block
 							logger.error(e.toString());
+							doStop();
+							break;
 						}
 						continue;
 					}
@@ -71,6 +106,7 @@ public class UpdateDispatcher implements Runnable{
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				logger.error(e.toString());
+				doStop();
 				break;
 			}
 				

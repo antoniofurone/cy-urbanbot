@@ -1,6 +1,6 @@
 package org.cysoft.urbanbot.core;
 
-public abstract class TaskAdapter implements ITask {
+public abstract class TaskAdapter implements Task {
 
 	
 }

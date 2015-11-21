@@ -40,16 +40,8 @@ public class CyUrbanBotUtility {
 			for(NameValuePair attr:headerAttrs)
 				httppost.setHeader(attr.getName(), attr.getValue());
 		
-		try {
-			StringEntity sEntity = new StringEntity(params);
-			httppost.setEntity(sEntity);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			throw new CyUrbanbotException(e);
-		}
-		
+		StringEntity sEntity = new StringEntity(params,"UTF-8");
+		httppost.setEntity(sEntity);
 		
 		HttpResponse response;
 		try {
