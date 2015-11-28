@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.api.telegram.response.GetFileResponse;
 import org.cysoft.urbanbot.api.telegram.response.GetUpdatesResponse;
 import org.cysoft.urbanbot.api.telegram.response.SendMessageResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
@@ -21,6 +22,7 @@ public class TelegramAPI {
 	
 	private static final String GETUPDATES_METHOD="getUpdates";
 	private static final String SENDMESSAGE_METHOD="sendMessage";
+	private static final String GETFILE_METHOD="getFile";
 	
 	private TelegramAPI(){};
 	
@@ -40,6 +42,22 @@ public class TelegramAPI {
 		this.botUrl = botUrl;
 	}
 	
+	private String botFileUrl="";
+	public String getBotFileUrl() {
+		return botFileUrl;
+	}
+	public void setBotFileUrl(String botFileUrl) {
+		this.botFileUrl = botFileUrl;
+	}
+	
+	
+	private String downloadPath="";
+	public String getDownloadPath() {
+		return downloadPath;
+	}
+	public void setDownloadPath(String downloadPath) {
+		this.downloadPath = downloadPath;
+	}
 	
 	public List<Update> getUpdates(long offSet) throws CyUrbanbotException{
 		
@@ -95,6 +113,31 @@ public class TelegramAPI {
 		if (!sendResponse.isOk()){
 			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
 		}
+	}
+	
+	public void downloadFile(String telegramFilePath) throws CyUrbanbotException{
+		CyUrbanBotUtility.httpDownload(botFileUrl+telegramFilePath, downloadPath, telegramFilePath);
+	}
+	
+	public String getFilePath(String fileId) throws CyUrbanbotException{
+		String response=null;
+		try {
+			String url=botUrl+GETFILE_METHOD+"?file_id="+fileId;
+			//logger.info("url="+url);
+			response=CyUrbanBotUtility.httpGet(url,null);
+		} catch (CyUrbanbotException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
+		
+		GetFileResponse fileResponse = new Gson().fromJson(response, GetFileResponse.class);
+		if (!fileResponse.isOk()){
+			throw new CyUrbanbotException(GETFILE_METHOD+" nok !");
+		}
+		
+		return fileResponse.getResult().getFile_path();
+	
 	}
 	
 	

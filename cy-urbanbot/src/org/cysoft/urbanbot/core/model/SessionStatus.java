@@ -6,6 +6,8 @@ public class SessionStatus {
 	public static int WARNING_STATUS_ID=2;
 	public static int WARNING_IMGORLOC_STATUS_ID=3;
 	public static int WARNING_IMG_STATUS_ID=4;
+	public static int WARNING_SEL_OP_ID=5;
+	public static int WARNING_SHOW_OP_ID=6;
 	
 	
 	private int id=INIT_STATUS_ID;

@@ -23,9 +23,10 @@ public class GetWarnTask extends TaskAdapter implements Task {
 		
 		if (warn.equalsIgnoreCase("/b")){
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.WELCOME_MENU, session.getLanguage());
+					getMessage(BotMessage.SHOW_WARNOP, session.getLanguage());
+			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-			session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
+			session.getSessionStatus().setId(SessionStatus.WARNING_SEL_OP_ID);
 			return;
 		}
 		

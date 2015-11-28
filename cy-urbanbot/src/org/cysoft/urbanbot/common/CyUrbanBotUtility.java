@@ -1,12 +1,18 @@
 package org.cysoft.urbanbot.common;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -14,16 +20,24 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CyUrbanBotUtility {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CyUrbanBotUtility.class);
+	
 	
 	
 	public static String httpPostBodyRequest(String url,
@@ -253,4 +267,98 @@ public class CyUrbanBotUtility {
 		
 		return ret;
 	}
+	
+	public static void httpDownload(String url,String downloadPath,String filePath) 
+			throws CyUrbanbotException{
+	
+		logger.info(">>> httpDownload:"+url+";"+downloadPath+";"+filePath);
+		
+		File file=new File(downloadPath+filePath);
+		if (!file.getParentFile().exists())
+			file.getParentFile().mkdirs();
+		
+		URL website=null;
+		try {
+			website = new URL(url);
+			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+			FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile());
+	        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+	        fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		
+		logger.info("<<< httpDownload:"+url+";"+downloadPath+";"+filePath);
+			
+	}	
+		
+	public static String httpUpload(String url,String filePath,List<NameValuePair> headerAttrs,
+			List<NameValuePair> params) throws CyUrbanbotException{
+		
+		logger.info(">>> httpUpload:"+url+";"+filePath);
+		String ret="";
+		
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpPost httppost = new HttpPost(url);
+		   
+		if (headerAttrs!=null)
+			for(NameValuePair attr:headerAttrs)
+				httppost.setHeader(attr.getName(), attr.getValue());
+		
+		
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		builder.addPart("file",new FileBody(new File(filePath)));
+		for(NameValuePair param:params){
+			builder.addPart(param.getName(),new StringBody(param.getValue(),ContentType.TEXT_PLAIN));
+		}
+        HttpEntity reqEntity = builder.build();
+		  
+        httppost.setEntity(reqEntity);
+        
+        HttpResponse response;
+		try {
+			response = httpclient.execute(httppost);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		HttpEntity entity = response.getEntity();
+
+		if (entity != null) {
+		    InputStream instream;
+			
+			try {
+				instream = entity.getContent();
+			} catch (IllegalStateException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e.toString());
+				throw new CyUrbanbotException(e);
+			}
+			
+		    try {
+		        // do something useful
+		    	ret = getStringFromInputStream(instream);
+		    } finally {
+		        try {
+					instream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error(e.toString());
+					throw new CyUrbanbotException(e);
+				}
+		    }
+		}
+		
+		logger.info("<<< httpUpload:"+url+";"+filePath);
+		return ret;
+
+	}
+	
 }

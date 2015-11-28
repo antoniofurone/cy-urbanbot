@@ -4,7 +4,10 @@ public class BotMessage {
 	public static String WAIT_FOR_LOCK_SESSION_ID="waitforlocksession";
 	public static String WELCOME_MENU="welcomemenu";
 	public static String COMMAND_NOT_RECOGNIZED="commandnot";
+	public static String ERROR="error";
 	public static String INVALID_SESSION="invalidsession";
+	
+	public static String SHOW_WARNOP="showwarn_op";
 	public static String SEND_WARNING="sendwarn";
 	public static String SEND_WARNIMGORLOC="sendwarn_imgorloc";
 	public static String SEND_WARNLOCOK="sendwarn_locok";

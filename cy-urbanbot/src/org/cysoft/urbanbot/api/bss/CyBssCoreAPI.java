@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.AppParam;
+import org.cysoft.bss.core.model.Ticket;
 import org.cysoft.bss.core.web.response.ICyBssResultConst;
+import org.cysoft.bss.core.web.response.file.FileResponse;
 import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
 import org.cysoft.bss.core.web.response.rest.PersonResponse;
@@ -319,10 +321,10 @@ public class CyBssCoreAPI {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
 			throw new CyUrbanbotException(e);
-		
 		}
-		//System.out.println("response="+response);
 		
+		
+		System.out.println("response="+response);
 		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
 		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
 			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
@@ -332,6 +334,66 @@ public class CyBssCoreAPI {
 		return ticketResponse.getTicket().getId();
 	}
 	
+	public void addWarnLoc(long warnId, double latitude, double longitude) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("id", (new Long(warnId)).toString());
+		nvl.add("latitude", (new Double(latitude)).toString());
+		nvl.add("longitude", (new Double(longitude)).toString());
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpPostBodyRequest(
+					coreUrl+"/rest/ticket/"+warnId+"/setLocation",
+					headerAttrs,
+					nvl.toJSon());
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
+		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+			throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+		}
+		
+	
+	}
+	
+	public void addWarnImg(long warnId,String filePath) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("entityId", (new Long(warnId)).toString());
+		nvl.add("entityName", Ticket.ENTITY_NAME);
+		nvl.add("fileType", "Image");
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					coreUrl+"/fileservice/file/upload",
+					filePath,
+					headerAttrs,
+					nvl.toList());
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		FileResponse fileResponse = new Gson().fromJson(response, FileResponse.class);
+		if (!fileResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+			throw new CyUrbanbotException(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+		}
+	
+		
+	}
 	
 	@Override
 	public String toString() {

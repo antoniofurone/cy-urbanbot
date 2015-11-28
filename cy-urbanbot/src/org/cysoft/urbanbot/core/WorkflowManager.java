@@ -11,6 +11,7 @@ import org.cysoft.urbanbot.core.task.GetWarnImgLocTask;
 import org.cysoft.urbanbot.core.task.GetWarnTask;
 import org.cysoft.urbanbot.core.task.InvalidCommandTask;
 import org.cysoft.urbanbot.core.task.InvalidStatusTask;
+import org.cysoft.urbanbot.core.task.SelectOpWarnTask;
 import org.cysoft.urbanbot.core.task.SendWarnTask;
 import org.cysoft.urbanbot.core.task.WelcomeTask;
 import org.slf4j.Logger;
@@ -28,8 +29,6 @@ public class WorkflowManager {
 	public void transition(Update update) throws CyUrbanbotException{
 		Task task=null;
 		
-		
-		
 		// Init Status
 		if (session.getSessionStatus().getId()==SessionStatus.INIT_STATUS_ID){
 			if (update.getMessage().getText().trim().equalsIgnoreCase("/start"))
@@ -43,11 +42,12 @@ public class WorkflowManager {
 		// Menu Status
 		if (session.getSessionStatus().getId()==SessionStatus.MAIN_MENU_STATUS_ID){
 			
-			if (update.getMessage().getText().trim().equalsIgnoreCase("/a") ||
-				update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
-				update.getMessage().getText().trim().equalsIgnoreCase("/e") ||
-				update.getMessage().getText().trim().equalsIgnoreCase("/i") ||
-				update.getMessage().getText().trim().equalsIgnoreCase("/p")
+			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
+				(update.getMessage().getText().trim().equalsIgnoreCase("/a") ||
+				 update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
+				 update.getMessage().getText().trim().equalsIgnoreCase("/e") ||
+				 update.getMessage().getText().trim().equalsIgnoreCase("/i") ||
+				 update.getMessage().getText().trim().equalsIgnoreCase("/p"))
 					){
 					try {
 						TelegramAPI.getInstance().sendMessage("Working in Progress...", session.getId(), update.getMessage().getMessage_id());
@@ -59,11 +59,13 @@ public class WorkflowManager {
 				} // working progress 
 				
 			
-			if (update.getMessage().getText().trim().equalsIgnoreCase("/l"))
+			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
+				update.getMessage().getText().trim().equalsIgnoreCase("/l"))
 				task=new ChangeLanguageTask();
 			
-			if (update.getMessage().getText().trim().equalsIgnoreCase("/s"))
-				task=new SendWarnTask();
+			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
+				update.getMessage().getText().trim().equalsIgnoreCase("/s"))
+				task=new SelectOpWarnTask();
 			
 			
 			if (task==null)
@@ -72,6 +74,13 @@ public class WorkflowManager {
 		}
 		// end Menu Status
 	
+		// Warning Show Op
+			if (session.getSessionStatus().getId()==SessionStatus.WARNING_SHOW_OP_ID ||
+				session.getSessionStatus().getId()==SessionStatus.WARNING_SEL_OP_ID)
+				task=new SelectOpWarnTask();
+		// Warning Show Op
+		
+		
 		// Warning Status
 		if (session.getSessionStatus().getId()==SessionStatus.WARNING_STATUS_ID)
 			task=new GetWarnTask();
@@ -84,11 +93,11 @@ public class WorkflowManager {
 		// end Warn Img or Loc Status
 		
 		
+		
 		if (task==null)
 			task=new InvalidStatusTask();
 		
 		task.exec(update, session);
-		
 		
 	}
 	

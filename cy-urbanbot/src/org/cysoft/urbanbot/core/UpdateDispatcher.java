@@ -15,7 +15,7 @@ import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UpdateDispatcher implements Runnable{
+public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UpdateDispatcher.class);
 	
@@ -36,7 +36,7 @@ public class UpdateDispatcher implements Runnable{
 	private synchronized void doStop(){
 		if (!listeners.isEmpty())
 			for(UpdateDispatcherListener l:listeners)
-				l.onStop();
+				l.onUpdateDispatcherStop();
 	}
 	
 	@Override
@@ -112,6 +112,11 @@ public class UpdateDispatcher implements Runnable{
 				
 		}
 		logger.info(">>> Stop Dispatcher Thread...");
+	}
+	@Override
+	public void onUpdateWorkerError(Session session,Update update) {
+		// TODO Auto-generated method stub
+		logger.error("UpdateWorkerError on "+session.toString()+ " at "+update.toString());
 	}
 
 }

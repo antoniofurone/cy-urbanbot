@@ -124,6 +124,9 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		TelegramAPI telegramAPI=TelegramAPI.getInstance();
 		try {
 			telegramAPI.setBotUrl(bssCoreAPI.getParam("bot_url").getValue());
+			telegramAPI.setDownloadPath(bssCoreAPI.getParam("download_path").getValue());
+			telegramAPI.setBotFileUrl(bssCoreAPI.getParam("bot_file_url").getValue());
+			
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			System.exit(1);
@@ -176,7 +179,7 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		
 	}
 	@Override
-	public void onStop() {
+	public void onUpdateDispatcherStop() {
 		// TODO Auto-generated method stub
 		logger.info("Stopping...");
 		stopNow=true;
