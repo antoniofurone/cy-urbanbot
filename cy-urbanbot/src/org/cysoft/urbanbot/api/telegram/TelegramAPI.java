@@ -21,8 +21,11 @@ public class TelegramAPI {
 	
 	
 	private static final String GETUPDATES_METHOD="getUpdates";
-	private static final String SENDMESSAGE_METHOD="sendMessage";
 	private static final String GETFILE_METHOD="getFile";
+	
+	private static final String SENDMESSAGE_METHOD="sendMessage";
+	private static final String SENDLOCATION_METHOD="sendLocation";
+	
 	
 	private TelegramAPI(){};
 	
@@ -113,6 +116,38 @@ public class TelegramAPI {
 		if (!sendResponse.isOk()){
 			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
 		}
+	}
+
+	public void sendLocation(double latitude,double longitude,long chatId,long replyToMessageId) throws CyUrbanbotException{
+		String response=null;
+		try {
+			  
+			response=CyUrbanBotUtility.httpGet(
+					botUrl+SENDLOCATION_METHOD+"?chat_id="+chatId+"&latitude="+
+					URLEncoder.encode(new Double(latitude).toString(),java.nio.charset.StandardCharsets.UTF_8.toString())+
+					"&longitude="+
+					URLEncoder.encode(new Double(longitude).toString(),java.nio.charset.StandardCharsets.UTF_8.toString())+
+					(replyToMessageId!=0?"&reply_to_message_id="+replyToMessageId:""),
+					null
+					);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e.toString());
+			throw e;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		//logger.info("response received="+response);
+		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
+		if (!sendResponse.isOk()){
+			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+		}
+		
 	}
 	
 	public void downloadFile(String telegramFilePath) throws CyUrbanbotException{

@@ -20,10 +20,9 @@ public class ChangeLanguageTask extends TaskAdapter implements Task {
 		else
 			session.setLanguage(ICyBssConst.LOCALE_IT);
 		String message=CyBssCoreAPI.getInstance().
-				getMessage(BotMessage.WELCOME_MENU, session.getLanguage());
+				getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 		
 		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-		
 	}
 
 }

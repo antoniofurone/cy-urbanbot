@@ -17,41 +17,41 @@ import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetWarnImgLocTask extends TaskAdapter implements Task {
+public class WarnImgLocTask extends TaskAdapter implements Task {
 	
-	private static final Logger logger = LoggerFactory.getLogger(GetWarnImgLocTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(WarnImgLocTask.class);
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 		
-		if (session.getSessionStatus().getId()==SessionStatus.WARNING_IMGORLOC_STATUS_ID||
-			session.getSessionStatus().getId()==SessionStatus.WARNING_IMG_STATUS_ID	){
+		if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID||
+			session.getSessionStatus().getId()==SessionStatus.WARN_IMG_STATUS_ID	){
 			String text=update.getMessage().getText()==null?"":update.getMessage().getText();
 			
 			if (text.equalsIgnoreCase("/b")){
 				String message=CyBssCoreAPI.getInstance().
-						getMessage(BotMessage.SHOW_WARNOP, session.getLanguage());
+						getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-				session.getSessionStatus().setId(SessionStatus.WARNING_SEL_OP_ID);
+				session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 				return;
 			}
 			
 			Location loc=update.getMessage().getLocation();
-			if (loc!=null && session.getSessionStatus().getId()==SessionStatus.WARNING_IMGORLOC_STATUS_ID)
+			if (loc!=null && session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID)
 			{
 				logger.info("location="+loc);
 				
 				long warnId=(long)session.getVariable("warnId");
 				CyBssCoreAPI.getInstance().addWarnLoc(warnId, loc.getLatitude(),loc.getLongitude()); 
 				
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.SEND_WARNLOCOK, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LOCOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.SEND_WARNIMG, session.getLanguage());
+				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMG_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
-				session.getSessionStatus().setId(SessionStatus.WARNING_IMG_STATUS_ID);
+				session.getSessionStatus().setId(SessionStatus.WARN_IMG_STATUS_ID);
 				
 				return;
 			}
@@ -77,23 +77,23 @@ public class GetWarnImgLocTask extends TaskAdapter implements Task {
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
 				
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.SEND_WARNIMGOK, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMGOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
-				if (session.getSessionStatus().getId()==SessionStatus.WARNING_IMGORLOC_STATUS_ID)
-					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.SEND_WARNIMGORLOC, session.getLanguage());
+				if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID)
+					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());
 				else
-					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.SEND_WARNIMG, session.getLanguage());
+					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMG_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
-				if (session.getSessionStatus().getId()==SessionStatus.WARNING_IMGORLOC_STATUS_ID)
-					session.getSessionStatus().setId(SessionStatus.WARNING_IMGORLOC_STATUS_ID);
-				else
-					session.getSessionStatus().setId(SessionStatus.WARNING_IMG_STATUS_ID);
 				return;
 			}
 			
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.SEND_WARNIMGORLOC, session.getLanguage());
+			String message=null;
+			if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID)
+				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());
+			else
+				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMG_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			
 		} 

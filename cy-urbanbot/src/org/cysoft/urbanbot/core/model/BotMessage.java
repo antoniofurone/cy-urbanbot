@@ -1,18 +1,21 @@
 package org.cysoft.urbanbot.core.model;
 
 public class BotMessage {
-	public static String WAIT_FOR_LOCK_SESSION_ID="waitforlocksession";
-	public static String WELCOME_MENU="welcomemenu";
-	public static String COMMAND_NOT_RECOGNIZED="commandnot";
-	public static String ERROR="error";
-	public static String INVALID_SESSION="invalidsession";
 	
-	public static String SHOW_WARNOP="showwarn_op";
-	public static String SEND_WARNING="sendwarn";
-	public static String SEND_WARNIMGORLOC="sendwarn_imgorloc";
-	public static String SEND_WARNLOCOK="sendwarn_locok";
-	public static String SEND_WARNIMG="sendwarn_img";
-	public static String SEND_WARNIMGOK="sendwarn_imgok";
+	public static String WAIT_LOCK_SESSION_ID="WAIT_LOCK_SESSION";
+	public static String WELCOME_MENU_ID="WELCOME_MENU";
+	public static String COMMAND_NOT_ID="COMMAND_NOT";
+	public static String ERROR_ID="ERROR";
+	public static String INVALID_SESSION_ID="INVALID_SESSION";
+	
+	public static String WARN_SHOW_OP_ID="WARN_SHOW_OP";
+	public static String WARN_TEXT_ID="WARN_TEXT";
+	public static String WARN_IMGLOC_ID="WARN_IMGLOC";
+	public static String WARN_LOCOK_ID="WARN_LOCOK";
+	public static String WARN_IMG_ID="WARN_IMG";
+	public static String WARN_IMGOK_ID="WARN_IMGOK";
+	public static String WARN_LIST_ID="WARN_LIST";
+	public static String WARN_LIST_OP_ID="WARN_LIST_OP";
 	
 	
 	private String id="";

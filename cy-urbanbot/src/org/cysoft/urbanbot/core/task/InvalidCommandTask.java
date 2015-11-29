@@ -15,7 +15,7 @@ public class InvalidCommandTask extends TaskAdapter implements Task {
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 		String message=CyBssCoreAPI.getInstance().
-				getMessage(BotMessage.COMMAND_NOT_RECOGNIZED, session.getLanguage());
+				getMessage(BotMessage.COMMAND_NOT_ID, session.getLanguage());
 		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 	}
 

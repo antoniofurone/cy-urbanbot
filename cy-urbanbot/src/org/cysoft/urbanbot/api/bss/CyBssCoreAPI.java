@@ -12,6 +12,7 @@ import org.cysoft.bss.core.web.response.file.FileResponse;
 import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
 import org.cysoft.bss.core.web.response.rest.PersonResponse;
+import org.cysoft.bss.core.web.response.rest.TicketListResponse;
 import org.cysoft.bss.core.web.response.rest.TicketResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
@@ -324,7 +325,7 @@ public class CyBssCoreAPI {
 		}
 		
 		
-		System.out.println("response="+response);
+		//System.out.println("response="+response);
 		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
 		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
 			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
@@ -333,6 +334,59 @@ public class CyBssCoreAPI {
 		
 		return ticketResponse.getTicket().getId();
 	}
+	
+	public List<Ticket> findWarns(long personId) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/find?personId="+personId, 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		TicketListResponse ticketListResponse = new Gson().fromJson(response, TicketListResponse.class);
+		if (!ticketListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+			throw new CyUrbanbotException(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+		}
+		
+		return ticketListResponse.getTickets();
+	}
+
+	public Ticket getWarn(long warnId) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/"+warnId+"/get", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
+		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+			throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+		}
+		
+		return ticketResponse.getTicket();
+	}
+
+	
+	
 	
 	public void addWarnLoc(long warnId, double latitude, double longitude) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();

@@ -80,7 +80,7 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 						logger.info("locked:"+session);
 						try {
 						String waitMessage=CyBssCoreAPI.getInstance().
-								getMessage(BotMessage.WAIT_FOR_LOCK_SESSION_ID, session.getLanguage());
+								getMessage(BotMessage.WAIT_LOCK_SESSION_ID, session.getLanguage());
 							TelegramAPI.getInstance().sendMessage(waitMessage, session.getId(), update.getMessage().getMessage_id());
 						} catch (CyUrbanbotException e) {
 							// TODO Auto-generated catch block

@@ -16,7 +16,7 @@ public class InvalidStatusTask extends TaskAdapter implements Task {
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 		String message=CyBssCoreAPI.getInstance().
-				getMessage(BotMessage.INVALID_SESSION, session.getLanguage());
+				getMessage(BotMessage.INVALID_SESSION_ID, session.getLanguage());
 		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 		session.getSessionStatus().setId(SessionStatus.INIT_STATUS_ID);
 	}

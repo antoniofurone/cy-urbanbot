@@ -16,7 +16,7 @@ public class WelcomeTask extends TaskAdapter implements Task {
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 		String message=CyBssCoreAPI.getInstance().
-				getMessage(BotMessage.WELCOME_MENU, session.getLanguage());
+				getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 		session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 	}

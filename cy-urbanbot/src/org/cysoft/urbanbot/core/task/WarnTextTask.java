@@ -10,17 +10,16 @@ import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 
-public class SendWarnTask extends TaskAdapter implements Task {
+public class WarnTextTask extends TaskAdapter implements Task {
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 		String message=CyBssCoreAPI.getInstance().
-				getMessage(BotMessage.SEND_WARNING, session.getLanguage());
+				getMessage(BotMessage.WARN_TEXT_ID, session.getLanguage());
 		
 		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-		session.getSessionStatus().setId(SessionStatus.WARNING_STATUS_ID);
-		
+		session.getSessionStatus().setId(SessionStatus.WARN_TEXT_STATUS_ID);
 	}
 
 }

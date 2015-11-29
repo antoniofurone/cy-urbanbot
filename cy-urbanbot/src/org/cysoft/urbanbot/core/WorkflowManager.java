@@ -7,12 +7,13 @@ import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
-import org.cysoft.urbanbot.core.task.GetWarnImgLocTask;
-import org.cysoft.urbanbot.core.task.GetWarnTask;
+import org.cysoft.urbanbot.core.task.WarnImgLocTask;
+import org.cysoft.urbanbot.core.task.WarnGetTextTask;
 import org.cysoft.urbanbot.core.task.InvalidCommandTask;
 import org.cysoft.urbanbot.core.task.InvalidStatusTask;
-import org.cysoft.urbanbot.core.task.SelectOpWarnTask;
-import org.cysoft.urbanbot.core.task.SendWarnTask;
+import org.cysoft.urbanbot.core.task.WarnSelOpTask;
+import org.cysoft.urbanbot.core.task.WarnShowDelTask;
+import org.cysoft.urbanbot.core.task.WarnTextTask;
 import org.cysoft.urbanbot.core.task.WelcomeTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class WorkflowManager {
 				 update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/e") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/i") ||
-				 update.getMessage().getText().trim().equalsIgnoreCase("/p"))
+				 update.getMessage().getText().trim().equalsIgnoreCase("/m"))
 					){
 					try {
 						TelegramAPI.getInstance().sendMessage("Working in Progress...", session.getId(), update.getMessage().getMessage_id());
@@ -65,7 +66,7 @@ public class WorkflowManager {
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/s"))
-				task=new SelectOpWarnTask();
+				task=new WarnSelOpTask();
 			
 			
 			if (task==null)
@@ -74,25 +75,19 @@ public class WorkflowManager {
 		}
 		// end Menu Status
 	
-		// Warning Show Op
-			if (session.getSessionStatus().getId()==SessionStatus.WARNING_SHOW_OP_ID ||
-				session.getSessionStatus().getId()==SessionStatus.WARNING_SEL_OP_ID)
-				task=new SelectOpWarnTask();
-		// Warning Show Op
+		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWOP_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.WARN_SELOP_STATUS_ID)
+			task=new WarnSelOpTask();
 		
+		if (session.getSessionStatus().getId()==SessionStatus.WARN_TEXT_STATUS_ID)
+			task=new WarnGetTextTask();
 		
-		// Warning Status
-		if (session.getSessionStatus().getId()==SessionStatus.WARNING_STATUS_ID)
-			task=new GetWarnTask();
-		// end Warning Status
+		if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.WARN_IMG_STATUS_ID)
+			task=new WarnImgLocTask();
 		
-		// Warn Img or Loc Status
-		if (session.getSessionStatus().getId()==SessionStatus.WARNING_IMGORLOC_STATUS_ID ||
-			session.getSessionStatus().getId()==SessionStatus.WARNING_IMG_STATUS_ID)
-			task=new GetWarnImgLocTask();
-		// end Warn Img or Loc Status
-		
-		
+		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWLIST_STATUS_ID)
+			task=new WarnShowDelTask();
 		
 		if (task==null)
 			task=new InvalidStatusTask();

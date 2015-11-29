@@ -12,9 +12,9 @@ import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetWarnTask extends TaskAdapter implements Task {
+public class WarnGetTextTask extends TaskAdapter implements Task {
 	
-	private static final Logger logger = LoggerFactory.getLogger(GetWarnTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(WarnGetTextTask.class);
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {
@@ -23,10 +23,10 @@ public class GetWarnTask extends TaskAdapter implements Task {
 		
 		if (warn.equalsIgnoreCase("/b")){
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.SHOW_WARNOP, session.getLanguage());
+					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-			session.getSessionStatus().setId(SessionStatus.WARNING_SEL_OP_ID);
+			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
 		}
 		
@@ -37,11 +37,11 @@ public class GetWarnTask extends TaskAdapter implements Task {
 			session.putVariable("warnId", warnId);
 			
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.SEND_WARNIMGORLOC, session.getLanguage());
+					getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 		}
 		
-		session.getSessionStatus().setId(SessionStatus.WARNING_IMGORLOC_STATUS_ID);
+		session.getSessionStatus().setId(SessionStatus.WARN_IMGLOC_STATUS_ID);
 	}
 
 }
