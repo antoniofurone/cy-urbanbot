@@ -37,11 +37,11 @@ public class WarnSelOpTask extends TaskAdapter implements Task {
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
 				update.getMessage().getText().trim().equalsIgnoreCase("/v")){
-						List<Ticket> warns=CyBssCoreAPI.getInstance().findWarns(session.getPersonId());
+						List<Ticket> warns=CyBssCoreAPI.getInstance().findWarns(session.getPersonId(),session.getLanguage());
 						String messageList=CyBssCoreAPI.getInstance().
 								getMessage(BotMessage.WARN_LIST_ID, session.getLanguage())+"\n";
 						for(Ticket warn:warns)
-							messageList+=warn.getId()+" {"+(warn.getCategoryName()==null?"":warn.getCategoryName())+";"+warn.getStatusName()+"} @ "+warn.getCreationDate()+";\n";
+							messageList+=warn.getId()+" @ "+warn.getCreationDate()+";\n";
 						
 						messageList+=CyBssCoreAPI.getInstance().
 								getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());

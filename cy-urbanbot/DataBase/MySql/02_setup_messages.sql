@@ -26,12 +26,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WELCOME_MENU','Benvenuto in Carovigno Smart City Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni; /a avvisi; /t narratore ; /e eventi; /i itinerari; /m mappe;  /l change language.');
+1,'WELCOME_MENU','Benvenuto in Carovigno Smart City Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni;  /t narra ; /e eventi; /i itinerari; /m mappe;  /l change language.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WELCOME_MENU','Welcome at Carovigno Smart City Bot (Beta version). Send one of following commands: /s warnings; /a advice; /t storyteller; /e events; /i itineraries; /m maps; /l cambia lingua.');
+2,'WELCOME_MENU','Welcome at Carovigno Smart City Bot (Beta version). Send one of following commands: /s warnings; /t tell; /e events; /i itineraries; /m maps; /l cambia lingua.');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -139,3 +139,12 @@ values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'WARN_LIST_OP','Send /v #segn to show; /d #segn to delete; /b to return back.');
 
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'WARN_INVALID_ID','#segn non valida !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'WARN_INVALID_ID','invalid #segn !');

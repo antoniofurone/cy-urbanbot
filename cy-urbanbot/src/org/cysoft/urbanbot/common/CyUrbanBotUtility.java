@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -20,17 +19,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -231,6 +227,7 @@ public class CyUrbanBotUtility {
 		}
 
 		if (response.getStatusLine().getStatusCode() != 200) {
+			logger.error(response.toString());
 			throw new RuntimeException("Failed : HTTP error code : "
 			   + response.getStatusLine().getStatusCode());
 		}
@@ -293,9 +290,15 @@ public class CyUrbanBotUtility {
 		logger.info("<<< httpDownload:"+url+";"+downloadPath+";"+filePath);
 			
 	}	
-		
+	
 	public static String httpUpload(String url,String filePath,List<NameValuePair> headerAttrs,
 			List<NameValuePair> params) throws CyUrbanbotException{
+		
+		return httpUpload(url,filePath,headerAttrs,params,"file");
+	}
+	
+	public static String httpUpload(String url,String filePath,List<NameValuePair> headerAttrs,
+			List<NameValuePair> params,String fileParamName) throws CyUrbanbotException{
 		
 		logger.info(">>> httpUpload:"+url+";"+filePath);
 		String ret="";
@@ -309,7 +312,7 @@ public class CyUrbanBotUtility {
 		
 		
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		builder.addPart("file",new FileBody(new File(filePath)));
+		builder.addPart(fileParamName,new FileBody(new File(filePath)));
 		for(NameValuePair param:params){
 			builder.addPart(param.getName(),new StringBody(param.getValue(),ContentType.TEXT_PLAIN));
 		}

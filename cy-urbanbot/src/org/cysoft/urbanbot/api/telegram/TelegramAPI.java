@@ -10,6 +10,7 @@ import org.cysoft.urbanbot.api.telegram.response.GetUpdatesResponse;
 import org.cysoft.urbanbot.api.telegram.response.SendMessageResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.core.NameValueList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ public class TelegramAPI {
 	
 	private static final String SENDMESSAGE_METHOD="sendMessage";
 	private static final String SENDLOCATION_METHOD="sendLocation";
+	private static final String SENDPHOTO_METHOD="sendPhoto";
 	
 	
 	private TelegramAPI(){};
@@ -149,6 +151,35 @@ public class TelegramAPI {
 		}
 		
 	}
+	
+	public void sendPhoto(String filePath,long chatId,String caption) throws CyUrbanbotException{
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("chat_id", (new Long(chatId)).toString());
+		if (caption!=null && !caption.equals(""))
+			nvl.add("caption", caption);
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					botUrl+SENDPHOTO_METHOD,
+					downloadPath+filePath,
+					null,
+					nvl.toList(),"photo");
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		//logger.info("response received="+response);
+		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
+		if (!sendResponse.isOk()){
+			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+		}
+		
+	}
+	
 	
 	public void downloadFile(String telegramFilePath) throws CyUrbanbotException{
 		CyUrbanBotUtility.httpDownload(botFileUrl+telegramFilePath, downloadPath, telegramFilePath);

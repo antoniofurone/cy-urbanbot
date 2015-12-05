@@ -1,6 +1,10 @@
 package org.cysoft.urbanbot.core.task;
 
+
+import java.util.List;
+
 import org.cysoft.bss.core.model.Ticket;
+import org.cysoft.bss.core.model.CyBssFile;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
@@ -52,15 +56,60 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 				return;
 			}
 			
-			Ticket warn=CyBssCoreAPI.getInstance().getWarn(warnId);
-			TelegramAPI.getInstance().sendMessage(warn.getText(), session.getId(), update.getMessage().getMessage_id());
+			Ticket warn=CyBssCoreAPI.getInstance().getWarn(warnId,session.getLanguage());
+			if (warn.getPersonId()==0 || warn.getPersonId()!=session.getPersonId())
+				{
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_INVALID_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				return;
+				}
+			
+			TelegramAPI.getInstance().sendMessage(warn.getText()+" {"+(warn.getCategoryName()==null?"":warn.getCategoryName())+";"+warn.getStatusName()+"}", session.getId(), update.getMessage().getMessage_id());
 			if (warn.getLocation()!=null){
 				// Invia Location
 				TelegramAPI.getInstance().sendLocation(warn.getLocation().getLatitude(), warn.getLocation().getLongitude(), 
 						session.getId(), update.getMessage().getMessage_id());
 			}
-		}
+			
+			List<CyBssFile> files=CyBssCoreAPI.getInstance().getWarnFiles(warnId);
+			if (files!=null && !files.isEmpty()){
+				int nPhoto=1;
+				for(CyBssFile file:files){
+					CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
+					TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), session.getId(), "["+nPhoto+"/"+files.size()+"] "
+							+warn.getId()+" @ "+warn.getCreationDate());
+					nPhoto++;
+				}
+			}
+			
+		} // end /v
 		
+
+		if (aSelection[0].equalsIgnoreCase("/d")){
+			long warnId=0;
+			try {
+				warnId=Long.parseLong(aSelection[1]);
+			}
+			catch (NumberFormatException ne){
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				return;
+			}
+			
+			Ticket warn=CyBssCoreAPI.getInstance().getWarn(warnId,session.getLanguage());
+			if (warn.getPersonId()==0 || warn.getPersonId()!=session.getPersonId())
+				{
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_INVALID_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				return;
+				}
+			
+			CyBssCoreAPI.getInstance().removeWarn(warnId);
+						
+		} // end /d
+
+	
+	
 	}
 
 }

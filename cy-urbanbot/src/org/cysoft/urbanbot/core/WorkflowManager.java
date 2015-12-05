@@ -13,7 +13,6 @@ import org.cysoft.urbanbot.core.task.InvalidCommandTask;
 import org.cysoft.urbanbot.core.task.InvalidStatusTask;
 import org.cysoft.urbanbot.core.task.WarnSelOpTask;
 import org.cysoft.urbanbot.core.task.WarnShowDelTask;
-import org.cysoft.urbanbot.core.task.WarnTextTask;
 import org.cysoft.urbanbot.core.task.WelcomeTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +43,7 @@ public class WorkflowManager {
 		if (session.getSessionStatus().getId()==SessionStatus.MAIN_MENU_STATUS_ID){
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-				(update.getMessage().getText().trim().equalsIgnoreCase("/a") ||
-				 update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
+				(update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/e") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/i") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/m"))
