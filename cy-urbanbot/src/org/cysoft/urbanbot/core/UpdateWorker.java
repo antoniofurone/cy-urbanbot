@@ -31,6 +31,7 @@ public class UpdateWorker implements Runnable{
 	}
 	
 	private synchronized void doError(){
+		logger.info("doError() >>>");
 		session.setLocked(false);
 		if (!listeners.isEmpty())
 			for(UpdateWorkerListener l:listeners)
@@ -43,6 +44,7 @@ public class UpdateWorker implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		logger.info("doError() <<<");
 		
 	}
 	

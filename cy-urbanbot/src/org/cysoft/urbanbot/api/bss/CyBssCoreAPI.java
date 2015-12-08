@@ -8,12 +8,14 @@ import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.AppParam;
 import org.cysoft.bss.core.model.CyBssFile;
 import org.cysoft.bss.core.model.Ticket;
+import org.cysoft.bss.core.model.TicketCategory;
 import org.cysoft.bss.core.web.response.ICyBssResultConst;
 import org.cysoft.bss.core.web.response.file.FileListResponse;
 import org.cysoft.bss.core.web.response.file.FileResponse;
 import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
 import org.cysoft.bss.core.web.response.rest.PersonResponse;
+import org.cysoft.bss.core.web.response.rest.TicketCategoryListResponse;
 import org.cysoft.bss.core.web.response.rest.TicketListResponse;
 import org.cysoft.bss.core.web.response.rest.TicketResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
@@ -315,7 +317,7 @@ public class CyBssCoreAPI {
 		
 	}
 	
-	public long addWarn(String text,long personId) throws CyUrbanbotException{
+	public long addWarn(String text,long categoryId,long personId) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
@@ -323,6 +325,7 @@ public class CyBssCoreAPI {
 		NameValueList nvl=new NameValueList(); 
 		nvl.add("text", text);
 		nvl.add("personId", (new Long(personId)).toString());
+		nvl.add("categoryId", (new Long(categoryId)).toString());
 		
 		String response;
 		try {
@@ -422,6 +425,33 @@ public class CyBssCoreAPI {
 		return ticketResponse.getTicket();
 	}
 
+	public List<TicketCategory> getWarnCategories(String languageCode)throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		headerAttrs.add(new BasicNameValuePair("Language",languageCode));
+		
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/getCategoryAll", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		TicketCategoryListResponse ticketCategoryListResponse = new Gson().fromJson(response, TicketCategoryListResponse.class);
+		if (!ticketCategoryListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(ticketCategoryListResponse.getResultCode()+":"+ticketCategoryListResponse.getResultDesc());
+			throw new CyUrbanbotException(ticketCategoryListResponse.getResultCode()+":"+ticketCategoryListResponse.getResultDesc());
+		}
+		
+		return ticketCategoryListResponse.getTicketCategories();
+		
+	}
+	
 	public List<CyBssFile> getWarnFiles(long warnId)throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));

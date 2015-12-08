@@ -152,12 +152,15 @@ public class TelegramAPI {
 		
 	}
 	
-	public void sendPhoto(String filePath,long chatId,String caption) throws CyUrbanbotException{
+	public void sendPhoto(String filePath,long chatId,long replyToMessageId,String caption) throws CyUrbanbotException{
 		
 		NameValueList nvl=new NameValueList(); 
 		nvl.add("chat_id", (new Long(chatId)).toString());
 		if (caption!=null && !caption.equals(""))
 			nvl.add("caption", caption);
+		if (replyToMessageId!=0)
+			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
+		
 		
 		String response;
 		try {

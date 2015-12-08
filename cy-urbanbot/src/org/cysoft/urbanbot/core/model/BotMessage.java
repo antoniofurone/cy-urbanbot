@@ -17,7 +17,9 @@ public class BotMessage {
 	public static String WARN_LIST_ID="WARN_LIST";
 	public static String WARN_LIST_OP_ID="WARN_LIST_OP";
 	public static String WARN_INVALID_ID="WARN_INVALID_ID";
-	
+	public static String WARN_NO_WARN_ID="WARN_NO_WARN";
+	public static String WARN_DEL_ID="WARN_DEL";
+	public static String WARN_SEL_CATEGORY_ID="WARN_SEL_CATEGORY";
 	
 	
 	private String id="";

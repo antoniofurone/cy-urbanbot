@@ -32,9 +32,14 @@ public class WarnGetTextTask extends TaskAdapter implements Task {
 		
 		if (!warn.equals("")){
 			logger.info("warning text="+warn);
-			
-			long warnId=CyBssCoreAPI.getInstance().addWarn(warn, session.getPersonId());
+			long categoryId=(long)session.getVariable("categoryId");
+			long warnId=CyBssCoreAPI.getInstance().addWarn(warn,categoryId,session.getPersonId());
 			session.putVariable("warnId", warnId);
+			
+			double default_latitude=Double.parseDouble(CyBssCoreAPI.getInstance().getParam("default_latitude").getValue());
+			double default_longitude=Double.parseDouble(CyBssCoreAPI.getInstance().getParam("default_longitude").getValue());
+			
+			CyBssCoreAPI.getInstance().addWarnLoc(warnId, default_latitude, default_longitude);
 			
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());

@@ -7,6 +7,7 @@ import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
+import org.cysoft.urbanbot.core.task.WarnCategoryTask;
 import org.cysoft.urbanbot.core.task.WarnImgLocTask;
 import org.cysoft.urbanbot.core.task.WarnGetTextTask;
 import org.cysoft.urbanbot.core.task.InvalidCommandTask;
@@ -45,7 +46,7 @@ public class WorkflowManager {
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
 				(update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/e") ||
-				 update.getMessage().getText().trim().equalsIgnoreCase("/i") ||
+				 update.getMessage().getText().trim().equalsIgnoreCase("/n") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/m"))
 					){
 					try {
@@ -76,6 +77,9 @@ public class WorkflowManager {
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWOP_STATUS_ID ||
 			session.getSessionStatus().getId()==SessionStatus.WARN_SELOP_STATUS_ID)
 			task=new WarnSelOpTask();
+		
+		if (session.getSessionStatus().getId()==SessionStatus.WARN_CATEGORY_STATUS_ID)
+			task=new WarnCategoryTask();
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_TEXT_STATUS_ID)
 			task=new WarnGetTextTask();
