@@ -12,7 +12,12 @@ public class SessionStatus {
 	public static int WARN_SHOWLIST_STATUS_ID=7;
 	public static int WARN_CATEGORY_STATUS_ID=8;
 	
-	
+
+	public static int TELL_SHOWOP_STATUS_ID=9;
+	public static int TELL_SELOP_STATUS_ID=10;
+	public static int TELL_GETLOC_STATUS_ID=11;
+	public static int TELL_GETTEXT_STATUS_ID=12;
+	public static int TELL_GETMEDIA_STATUS_ID=13;
 	
 	private int id=INIT_STATUS_ID;
 	public int getId() {

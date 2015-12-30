@@ -7,6 +7,8 @@ import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
+import org.cysoft.urbanbot.core.task.TellGetStoryTask;
+import org.cysoft.urbanbot.core.task.TellSelOpTask;
 import org.cysoft.urbanbot.core.task.WarnCategoryTask;
 import org.cysoft.urbanbot.core.task.WarnImgLocTask;
 import org.cysoft.urbanbot.core.task.WarnGetTextTask;
@@ -29,10 +31,19 @@ public class WorkflowManager {
 
 	public void transition(Update update) throws CyUrbanbotException{
 		Task task=null;
+	
+		String textofMsg=update.getMessage().getText()==null?"":update.getMessage().getText();
+		if (textofMsg.trim().equalsIgnoreCase("/start")){
+			task=new WelcomeTask();
+
+			task.exec(update, session);
+			return;
+		}
+			
 		
 		// Init Status
 		if (session.getSessionStatus().getId()==SessionStatus.INIT_STATUS_ID){
-			if (update.getMessage().getText().trim().equalsIgnoreCase("/start"))
+			if (textofMsg.trim().trim().equalsIgnoreCase("/start"))
 				task=new WelcomeTask();
 			
 			if (task==null)
@@ -45,8 +56,6 @@ public class WorkflowManager {
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
 				(update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
-				 update.getMessage().getText().trim().equalsIgnoreCase("/e") ||
-				 update.getMessage().getText().trim().equalsIgnoreCase("/n") ||
 				 update.getMessage().getText().trim().equalsIgnoreCase("/m"))
 					){
 					try {
@@ -67,6 +76,10 @@ public class WorkflowManager {
 				update.getMessage().getText().trim().equalsIgnoreCase("/s"))
 				task=new WarnSelOpTask();
 			
+			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
+				update.getMessage().getText().trim().equalsIgnoreCase("/n"))
+				task=new TellSelOpTask();
+			
 			
 			if (task==null)
 				task=new InvalidCommandTask();
@@ -74,6 +87,7 @@ public class WorkflowManager {
 		}
 		// end Menu Status
 	
+		// warn transition
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWOP_STATUS_ID ||
 			session.getSessionStatus().getId()==SessionStatus.WARN_SELOP_STATUS_ID)
 			task=new WarnSelOpTask();
@@ -90,6 +104,19 @@ public class WorkflowManager {
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWLIST_STATUS_ID)
 			task=new WarnShowDelTask();
+		// end warn transition
+		
+		// tell transition
+		if (session.getSessionStatus().getId()==SessionStatus.TELL_SHOWOP_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.TELL_SELOP_STATUS_ID)
+			task=new TellSelOpTask();
+		
+		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETLOC_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.TELL_GETTEXT_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.TELL_GETMEDIA_STATUS_ID)
+			task=new TellGetStoryTask();
+		// end tell transition
+		
 		
 		if (task==null)
 			task=new InvalidStatusTask();

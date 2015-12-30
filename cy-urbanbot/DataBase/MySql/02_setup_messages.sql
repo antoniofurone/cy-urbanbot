@@ -25,12 +25,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WELCOME_MENU','Benvenuto in Carovigno Smart City Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni;  /n narra ; /e eventi; /t siti turistici; /m mappe;  /l change language.');
+1,'WELCOME_MENU','Benvenuto in Carovigno Smart City Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni;  /n narra ; /t siti turistici; /m mappe;  /l change language.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WELCOME_MENU','Welcome at Carovigno Smart City Bot (Beta version). Send one of following commands: /s warnings; /n tell; /e events; /t tourist sites; /m maps; /l cambia lingua.');
+2,'WELCOME_MENU','Welcome at Carovigno Smart City Bot (Beta version). Send one of following commands: /s warnings; /n tell; /t tourist sites; /m maps; /l cambia lingua.');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -177,3 +177,54 @@ values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'WARN_SEL_CATEGORY','Warning deleted or /b to return back');
 
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TELL_SHOW_OP','/n nuovo racconto; /v visualizza i tuoi racconti o /b per tornare indietro');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TELL_SHOW_OP','/n new story; /v show your stories o /b to return back');
+
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TELL_LOC','Invia una location o /b per tornare indietro');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TELL_LOC','Send location or /b to return back');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TELL_TEXT','Scrivi la storia o /b per tornare indietro');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TELL_TEXT','Write story or /b to return back');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TELL_TEXT_OK','Grazie. Storia acquisita.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TELL_TEXT_OK','Thanks. Story acquired.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TELL_MEDIA','Invia una foto, un video, un messaggio vocale o /b per tornare indietro');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TELL_MEDIA','Send photo, video or audio message or /b to return back');

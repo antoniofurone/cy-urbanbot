@@ -12,6 +12,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -363,5 +366,13 @@ public class CyUrbanBotUtility {
 		return ret;
 
 	}
+	
+	public static Date getCurrentTime(){
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		return now;
+	}
+	
+	
 	
 }

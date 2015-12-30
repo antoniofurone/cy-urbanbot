@@ -1,11 +1,3 @@
-
-delete from BSST_USR_USER where USR_S_USER_ID='urbanbot'; 
-insert into BSST_USR_USER(USR_S_USER_ID,USR_S_PSW,USR_S_NAME,URO_N_ROLE_ID,LAN_N_LANG_ID)
-	values ('urbanbot','urbanbot','urbanbot',
-	(select URO_N_ROLE_ID from BSST_URO_ROLE where URO_S_NAME='Administrator'),
-	(select LAN_N_LANG_ID from BSST_LAN_LANGUAGE where LAN_S_CODE='en')
-	);
-
 delete from BSST_APA_APP_PARAM;
 
 delete from BSST_APP_APP;

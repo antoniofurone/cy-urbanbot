@@ -21,6 +21,12 @@ public class BotMessage {
 	public static String WARN_DEL_ID="WARN_DEL";
 	public static String WARN_SEL_CATEGORY_ID="WARN_SEL_CATEGORY";
 	
+	public static String TELL_LOC_ID="TELL_LOC";
+	public static String TELL_SHOW_OP_ID="TELL_SHOW_OP";
+	public static String TELL_TEXT_ID="TELL_TEXT";
+	public static String TELL_TEXT_OK_ID="TELL_TEXT_OK";
+	public static String TELL_MEDIA_ID="TELL_MEDIA";
+	
 	
 	private String id="";
 	private String text="";

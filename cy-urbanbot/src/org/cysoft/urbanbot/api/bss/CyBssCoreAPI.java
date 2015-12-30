@@ -14,6 +14,7 @@ import org.cysoft.bss.core.web.response.file.FileListResponse;
 import org.cysoft.bss.core.web.response.file.FileResponse;
 import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
+import org.cysoft.bss.core.web.response.rest.LocationResponse;
 import org.cysoft.bss.core.web.response.rest.PersonResponse;
 import org.cysoft.bss.core.web.response.rest.TicketCategoryListResponse;
 import org.cysoft.bss.core.web.response.rest.TicketListResponse;
@@ -31,6 +32,8 @@ public class CyBssCoreAPI {
 	private static final Logger logger = LoggerFactory.getLogger(CyBssCoreAPI.class);
 	
 	private String securityToken="";
+	
+	private final static String STORY_LOC_TYPE="Story Location";
 	
 	private static CyBssCoreAPI instance=null;
 	public static CyBssCoreAPI getInstance(){
@@ -316,6 +319,44 @@ public class CyBssCoreAPI {
 		}
 		
 	}
+	
+	
+	public long addStory(double latitude, double longitude,String description,long personId) 
+			throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("name", personId+","+CyUrbanBotUtility.getCurrentTime().getTime());
+		nvl.add("personId", (new Long(personId)).toString());
+		nvl.add("latitude", (new Double(latitude)).toString());
+		nvl.add("longitude", (new Double(longitude)).toString());
+		nvl.add("description", description);
+		nvl.add("locationType", STORY_LOC_TYPE);
+	
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpPostBodyRequest(
+					coreUrl+"/rest/location/add",
+					headerAttrs,
+					nvl.toJSon());
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		//System.out.println("response="+response);
+		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
+		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		}
+		
+		return locationResponse.getLocation().getId();
+	}
+	
 	
 	public long addWarn(String text,long categoryId,long personId) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
