@@ -9,6 +9,7 @@ import org.cysoft.urbanbot.api.telegram.model.Location;
 import org.cysoft.urbanbot.api.telegram.model.PhotoSize;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
@@ -62,7 +63,7 @@ public class WarnImgLocTask extends TaskAdapter implements Task {
 				
 				String fileId="";
 				for (PhotoSize ph:phs){
-					if (ph.getFile_size()<=PhotoSize.MAX_DOWNLOADABLE_SIZE)
+					if (ph.getFile_size()<=ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
 						fileId=ph.getFile_id();
 				}
 				if (fileId.equals(""))
@@ -72,7 +73,7 @@ public class WarnImgLocTask extends TaskAdapter implements Task {
 				
 				TelegramAPI.getInstance().downloadFile(filePath);
 				long warnId=(long)session.getVariable("warnId");
-				CyBssCoreAPI.getInstance().addWarnImg(warnId, TelegramAPI.getInstance().getDownloadPath()+filePath); 
+				CyBssCoreAPI.getInstance().addWarnFile(warnId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Photo"); 
 				
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();

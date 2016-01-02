@@ -9,6 +9,7 @@ import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
 import org.cysoft.urbanbot.core.task.TellGetStoryTask;
 import org.cysoft.urbanbot.core.task.TellSelOpTask;
+import org.cysoft.urbanbot.core.task.TellShowDelTask;
 import org.cysoft.urbanbot.core.task.WarnCategoryTask;
 import org.cysoft.urbanbot.core.task.WarnImgLocTask;
 import org.cysoft.urbanbot.core.task.WarnGetTextTask;
@@ -115,6 +116,9 @@ public class WorkflowManager {
 			session.getSessionStatus().getId()==SessionStatus.TELL_GETTEXT_STATUS_ID ||
 			session.getSessionStatus().getId()==SessionStatus.TELL_GETMEDIA_STATUS_ID)
 			task=new TellGetStoryTask();
+		
+		if (session.getSessionStatus().getId()==SessionStatus.TELL_SHOWLIST_STATUS_ID)
+			task=new TellShowDelTask();
 		// end tell transition
 		
 		

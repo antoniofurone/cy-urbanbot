@@ -2,8 +2,7 @@ package org.cysoft.urbanbot.core.task;
 
 import java.util.List;
 
-import org.cysoft.bss.core.model.Ticket;
-import org.cysoft.bss.core.model.TicketCategory;
+import org.cysoft.bss.core.model.Location;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
@@ -38,27 +37,25 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
 				update.getMessage().getText().trim().equalsIgnoreCase("/v")){
-						/*
-						List<Ticket> warns=CyBssCoreAPI.getInstance().findWarns(session.getPersonId(),session.getLanguage());
-						String messageList="";
-						if (warns.isEmpty())
-							messageList+=CyBssCoreAPI.getInstance().
-									getMessage(BotMessage.WARN_NO_WARN_ID, session.getLanguage());
-						else
-						{
-							messageList+=CyBssCoreAPI.getInstance().
-									getMessage(BotMessage.WARN_LIST_ID, session.getLanguage())+"\n";
-							for(Ticket warn:warns)
-								messageList+=warn.getId()+" @ "+warn.getCreationDate()+";\n";
-							messageList+=CyBssCoreAPI.getInstance().
-									getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
-						}
+					logger.info("Show list...");
+					List<Location> locs=CyBssCoreAPI.getInstance().findStories(session.getPersonId(),session.getLanguage());
+					String messageList="";
+					if (locs.isEmpty())
+						messageList+=CyBssCoreAPI.getInstance().
+								getMessage(BotMessage.TELL_NO_TELL_ID, session.getLanguage());
+					else
+					{
+						messageList+=CyBssCoreAPI.getInstance().
+								getMessage(BotMessage.TELL_LIST_ID, session.getLanguage())+"\n";
+						for(Location loc:locs)
+							messageList+=loc.getId()+" @ "+loc.getCreationDate()+";\n";
+						messageList+=CyBssCoreAPI.getInstance().
+								getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
+					}
 						
-						
-						TelegramAPI.getInstance().sendMessage(messageList, session.getId(), update.getMessage().getMessage_id());
-						session.getSessionStatus().setId(SessionStatus.WARN_SHOWLIST_STATUS_ID);
-						*/
-						return;
+					TelegramAPI.getInstance().sendMessage(messageList, session.getId(), update.getMessage().getMessage_id());
+					session.getSessionStatus().setId(SessionStatus.TELL_SHOWLIST_STATUS_ID);
+					return;
 					} 
 				
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&

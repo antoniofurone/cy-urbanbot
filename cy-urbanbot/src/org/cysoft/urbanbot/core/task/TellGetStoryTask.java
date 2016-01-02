@@ -1,10 +1,18 @@
 package org.cysoft.urbanbot.core.task;
 
+import java.io.File;
+import java.util.List;
+
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
+import org.cysoft.urbanbot.api.telegram.model.Audio;
 import org.cysoft.urbanbot.api.telegram.model.Location;
+import org.cysoft.urbanbot.api.telegram.model.PhotoSize;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.api.telegram.model.Video;
+import org.cysoft.urbanbot.api.telegram.model.Voice;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
@@ -68,16 +76,97 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 					getMessage(BotMessage.TELL_TEXT_OK_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			
-			message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.TELL_MEDIA_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-			
 			
 			session.getSessionStatus().setId(SessionStatus.TELL_GETMEDIA_STATUS_ID);
 		}
 		
 		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETMEDIA_STATUS_ID){
-			//...
+			
+			Audio audio=update.getMessage().getAudio();
+			if (audio!=null){
+				logger.info("audio="+audio);
+				
+				String filePath=TelegramAPI.getInstance().getFilePath(audio.getFile_id());
+				TelegramAPI.getInstance().downloadFile(filePath);
+				if (audio.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
+					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
+				long storyId=(long)session.getVariable("storyId");
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Audio"); 
+				
+				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
+				file.delete();
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_AUDIOOK_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				
+			}
+			
+			Video video=update.getMessage().getVideo();
+			if (video!=null){
+				logger.info("video="+video);
+				String filePath=TelegramAPI.getInstance().getFilePath(video.getFile_id());
+				TelegramAPI.getInstance().downloadFile(filePath);
+				if (video.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
+					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
+				long storyId=(long)session.getVariable("storyId");
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Video"); 
+				
+				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
+				file.delete();
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_VIDEOOK_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			}
+			
+			Voice voice=update.getMessage().getVoice();
+			if (voice!=null){
+				logger.info("voice="+voice);
+				
+				String filePath=TelegramAPI.getInstance().getFilePath(voice.getFile_id());
+				TelegramAPI.getInstance().downloadFile(filePath);
+				if (voice.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
+					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
+				long storyId=(long)session.getVariable("storyId");
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Voice"); 
+				
+				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
+				file.delete();
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_VOICEOK_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			}
+			
+			List<PhotoSize> phs=update.getMessage().getPhoto();
+			if (phs!=null && phs.size()!=0) {
+				logger.info("photo="+phs);
+				
+				String fileId="";
+				for (PhotoSize ph:phs){
+					if (ph.getFile_size()<=ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
+						fileId=ph.getFile_id();
+				}
+				if (fileId.equals(""))
+					throw new CyUrbanbotException("No file_Id found in images!");
+				
+				String filePath=TelegramAPI.getInstance().getFilePath(fileId);
+				
+				TelegramAPI.getInstance().downloadFile(filePath);
+				long storyId=(long)session.getVariable("storyId");
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Photo"); 
+				
+				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
+				file.delete();
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_IMGOK_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			}
+			
+			String message=CyBssCoreAPI.getInstance().
+					getMessage(BotMessage.TELL_MEDIA_ID, session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			
+			
+			session.getSessionStatus().setId(SessionStatus.TELL_GETMEDIA_STATUS_ID);
 			
 		}
 			

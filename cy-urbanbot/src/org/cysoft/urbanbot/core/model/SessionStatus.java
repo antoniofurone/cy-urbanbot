@@ -18,6 +18,8 @@ public class SessionStatus {
 	public static int TELL_GETLOC_STATUS_ID=11;
 	public static int TELL_GETTEXT_STATUS_ID=12;
 	public static int TELL_GETMEDIA_STATUS_ID=13;
+	public static int TELL_SHOWLIST_STATUS_ID=14;
+	
 	
 	private int id=INIT_STATUS_ID;
 	public int getId() {

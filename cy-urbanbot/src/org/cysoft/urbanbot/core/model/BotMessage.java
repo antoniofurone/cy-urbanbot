@@ -26,7 +26,13 @@ public class BotMessage {
 	public static String TELL_TEXT_ID="TELL_TEXT";
 	public static String TELL_TEXT_OK_ID="TELL_TEXT_OK";
 	public static String TELL_MEDIA_ID="TELL_MEDIA";
-	
+	public static String TELL_VOICEOK_ID="TELL_VOICEOK";
+	public static String TELL_IMGOK_ID="TELL_IMGOK";
+	public static String TELL_VIDEOOK_ID="TELL_VIDEOOK";
+	public static String TELL_AUDIOOK_ID="TELL_AUDIOOK";
+	public static String TELL_NO_TELL_ID="TELL_NO_TELL";
+	public static String TELL_LIST_ID="TELL_LIST";
+	public static String TELL_LIST_OP_ID="TELL_LIST_OP";
 	
 	private String id="";
 	private String text="";

@@ -2,7 +2,6 @@ package org.cysoft.urbanbot.api.telegram.model;
 
 public class PhotoSize {
 	
-	public static final int MAX_DOWNLOADABLE_SIZE=20000000;
 	
 	private String file_id="";
 	public String getFile_id() {

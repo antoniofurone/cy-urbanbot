@@ -27,6 +27,9 @@ public class TelegramAPI {
 	private static final String SENDMESSAGE_METHOD="sendMessage";
 	private static final String SENDLOCATION_METHOD="sendLocation";
 	private static final String SENDPHOTO_METHOD="sendPhoto";
+	private static final String SENDVIDEO_METHOD="sendVideo";
+	private static final String SENDAUDIO_METHOD="sendAudio";
+	private static final String SENDVOICE_METHOD="sendVoice";
 	
 	
 	private TelegramAPI(){};
@@ -183,6 +186,98 @@ public class TelegramAPI {
 		
 	}
 	
+	public void sendVideo(String filePath,long chatId,long replyToMessageId,String caption) throws CyUrbanbotException{
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("chat_id", (new Long(chatId)).toString());
+		if (caption!=null && !caption.equals(""))
+			nvl.add("caption", caption);
+		if (replyToMessageId!=0)
+			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
+		
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					botUrl+SENDVIDEO_METHOD,
+					downloadPath+filePath,
+					null,
+					nvl.toList(),"video");
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		//logger.info("response received="+response);
+		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
+		if (!sendResponse.isOk()){
+			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+		}
+		
+	}
+	
+	
+	public void sendAudio(String filePath,long chatId,long replyToMessageId, String mimeType) throws CyUrbanbotException{
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("chat_id", (new Long(chatId)).toString());
+		if (replyToMessageId!=0)
+			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
+		if (mimeType!=null && !mimeType.equals(""))
+			nvl.add("mime_type", mimeType);
+
+		
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					botUrl+SENDAUDIO_METHOD,
+					downloadPath+filePath,
+					null,
+					nvl.toList(),"audio");
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		logger.info("response received="+response);
+		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
+		if (!sendResponse.isOk()){
+			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+		}
+		
+	}
+	
+	public void sendVoice(String filePath,long chatId,long replyToMessageId) throws CyUrbanbotException{
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("chat_id", (new Long(chatId)).toString());
+		if (replyToMessageId!=0)
+			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
+		
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					botUrl+SENDVOICE_METHOD,
+					downloadPath+filePath,
+					null,
+					nvl.toList(),"voice");
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		logger.info("response received="+response);
+		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
+		if (!sendResponse.isOk()){
+			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+		}
+		
+	}
 	
 	public void downloadFile(String telegramFilePath) throws CyUrbanbotException{
 		CyUrbanBotUtility.httpDownload(botFileUrl+telegramFilePath, downloadPath, telegramFilePath);

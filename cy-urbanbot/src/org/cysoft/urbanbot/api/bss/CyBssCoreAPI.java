@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.AppParam;
 import org.cysoft.bss.core.model.CyBssFile;
+import org.cysoft.bss.core.model.Location;
 import org.cysoft.bss.core.model.Ticket;
 import org.cysoft.bss.core.model.TicketCategory;
 import org.cysoft.bss.core.web.response.ICyBssResultConst;
@@ -14,6 +15,7 @@ import org.cysoft.bss.core.web.response.file.FileListResponse;
 import org.cysoft.bss.core.web.response.file.FileResponse;
 import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
+import org.cysoft.bss.core.web.response.rest.LocationListResponse;
 import org.cysoft.bss.core.web.response.rest.LocationResponse;
 import org.cysoft.bss.core.web.response.rest.PersonResponse;
 import org.cysoft.bss.core.web.response.rest.TicketCategoryListResponse;
@@ -358,6 +360,112 @@ public class CyBssCoreAPI {
 	}
 	
 	
+	public void addStoryFile(long storyId,String filePath,String fileType) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("entityId", (new Long(storyId)).toString());
+		nvl.add("entityName", Location.ENTITY_NAME);
+		nvl.add("fileType", fileType);
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					coreUrl+"/fileservice/file/upload",
+					filePath,
+					headerAttrs,
+					nvl.toList());
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		FileResponse fileResponse = new Gson().fromJson(response, FileResponse.class);
+		if (!fileResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+			throw new CyUrbanbotException(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+		}
+		
+	}
+	
+	public List<Location> findStories(long personId, String languageCode) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		headerAttrs.add(new BasicNameValuePair("Language",languageCode));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?personId="+personId+"&locationType=Story%20Location", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		LocationListResponse locationListResponse = new Gson().fromJson(response, LocationListResponse.class);
+		if (!locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+			throw new CyUrbanbotException(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+		}
+		
+		return locationListResponse.getLocations();
+	}
+
+	public Location getStory(long storyId, String languageCode) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		headerAttrs.add(new BasicNameValuePair("Language",languageCode));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/"+storyId+"/get", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
+		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		}
+		
+		return locationResponse.getLocation();
+	}
+
+	public List<CyBssFile> getStoryFiles(long storyId)throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/"+storyId+"/getFiles", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		FileListResponse filesResponse = new Gson().fromJson(response, FileListResponse.class);
+		if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+		}
+		
+		return filesResponse.getFiles();
+	}
+	
+	
 	public long addWarn(String text,long categoryId,long personId) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
@@ -554,14 +662,14 @@ public class CyBssCoreAPI {
 	
 	}
 	
-	public void addWarnImg(long warnId,String filePath) throws CyUrbanbotException{
+	public void addWarnFile(long warnId,String filePath,String fileType) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
 		
 		NameValueList nvl=new NameValueList(); 
 		nvl.add("entityId", (new Long(warnId)).toString());
 		nvl.add("entityName", Ticket.ENTITY_NAME);
-		nvl.add("fileType", "Image");
+		nvl.add("fileType", fileType);
 		String response;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
