@@ -10,8 +10,9 @@ import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
 import org.cysoft.urbanbot.core.task.TellGetStoryTask;
 import org.cysoft.urbanbot.core.task.TellSelOpTask;
 import org.cysoft.urbanbot.core.task.TellShowDelTask;
+import org.cysoft.urbanbot.core.task.TouristGetLocTask;
 import org.cysoft.urbanbot.core.task.WarnCategoryTask;
-import org.cysoft.urbanbot.core.task.WarnImgLocTask;
+import org.cysoft.urbanbot.core.task.WarnMediaLocTask;
 import org.cysoft.urbanbot.core.task.WarnGetTextTask;
 import org.cysoft.urbanbot.core.task.InvalidCommandTask;
 import org.cysoft.urbanbot.core.task.InvalidStatusTask;
@@ -55,20 +56,6 @@ public class WorkflowManager {
 		// Menu Status
 		if (session.getSessionStatus().getId()==SessionStatus.MAIN_MENU_STATUS_ID){
 			
-			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-				(update.getMessage().getText().trim().equalsIgnoreCase("/t") ||
-				 update.getMessage().getText().trim().equalsIgnoreCase("/m"))
-					){
-					try {
-						TelegramAPI.getInstance().sendMessage("Working in Progress...", session.getId(), update.getMessage().getMessage_id());
-					} catch (CyUrbanbotException e) {
-						// TODO Auto-generated catch block
-						logger.error(e.toString());
-					}
-					return;
-				} // working progress 
-				
-			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/l"))
 				task=new ChangeLanguageTask();
@@ -80,6 +67,10 @@ public class WorkflowManager {
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/n"))
 				task=new TellSelOpTask();
+			
+			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
+				update.getMessage().getText().trim().equalsIgnoreCase("/t"))
+				task=new TouristGetLocTask();
 			
 			
 			if (task==null)
@@ -101,7 +92,7 @@ public class WorkflowManager {
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID ||
 			session.getSessionStatus().getId()==SessionStatus.WARN_IMG_STATUS_ID)
-			task=new WarnImgLocTask();
+			task=new WarnMediaLocTask();
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWLIST_STATUS_ID)
 			task=new WarnShowDelTask();
@@ -119,7 +110,13 @@ public class WorkflowManager {
 		
 		if (session.getSessionStatus().getId()==SessionStatus.TELL_SHOWLIST_STATUS_ID)
 			task=new TellShowDelTask();
-		// end tell transition
+		// end tell transitionTouristSiteLocation
+		
+		// tourist site transition
+		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETLOC_STATUS_ID)
+			task=new TouristGetLocTask();
+		
+		// end tourist site transition
 		
 		
 		if (task==null)

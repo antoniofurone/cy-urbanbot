@@ -8,6 +8,7 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Location;
 import org.cysoft.urbanbot.api.telegram.model.PhotoSize;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.api.telegram.model.Video;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.Task;
@@ -18,9 +19,9 @@ import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WarnImgLocTask extends TaskAdapter implements Task {
+public class WarnMediaLocTask extends TaskAdapter implements Task {
 	
-	private static final Logger logger = LoggerFactory.getLogger(WarnImgLocTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(WarnMediaLocTask.class);
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {
@@ -49,12 +50,29 @@ public class WarnImgLocTask extends TaskAdapter implements Task {
 				
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LOCOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMG_ID, session.getLanguage());
+				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
 				session.getSessionStatus().setId(SessionStatus.WARN_IMG_STATUS_ID);
 				
 				return;
+			}
+			
+			Video video=update.getMessage().getVideo();
+			if (video!=null){
+				logger.info("video="+video);
+				String filePath=TelegramAPI.getInstance().getFilePath(video.getFile_id());
+				TelegramAPI.getInstance().downloadFile(filePath);
+				if (video.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
+					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
+				long warnId=(long)session.getVariable("warnId");
+				CyBssCoreAPI.getInstance().addWarnFile(warnId, TelegramAPI.getInstance().getDownloadPath()+filePath,ICyUrbanbotConst.MEDIA_VIDEO_TYPE); 
+				
+				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
+				file.delete();
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_VIDEOOK_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			}
 			
 			List<PhotoSize> phs=update.getMessage().getPhoto();
@@ -73,7 +91,7 @@ public class WarnImgLocTask extends TaskAdapter implements Task {
 				
 				TelegramAPI.getInstance().downloadFile(filePath);
 				long warnId=(long)session.getVariable("warnId");
-				CyBssCoreAPI.getInstance().addWarnFile(warnId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Photo"); 
+				CyBssCoreAPI.getInstance().addWarnFile(warnId, TelegramAPI.getInstance().getDownloadPath()+filePath,ICyUrbanbotConst.MEDIA_PHOTO_TYPE); 
 				
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
@@ -82,9 +100,9 @@ public class WarnImgLocTask extends TaskAdapter implements Task {
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
 				if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID)
-					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());
+					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
 				else
-					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMG_ID, session.getLanguage());
+					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
 				return;
@@ -92,9 +110,9 @@ public class WarnImgLocTask extends TaskAdapter implements Task {
 			
 			String message=null;
 			if (session.getSessionStatus().getId()==SessionStatus.WARN_IMGLOC_STATUS_ID)
-				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());
+				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
 			else
-				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_IMG_ID, session.getLanguage());
+				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			
 		} 

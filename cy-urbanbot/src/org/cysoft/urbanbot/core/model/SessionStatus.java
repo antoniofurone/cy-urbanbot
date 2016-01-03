@@ -20,6 +20,10 @@ public class SessionStatus {
 	public static int TELL_GETMEDIA_STATUS_ID=13;
 	public static int TELL_SHOWLIST_STATUS_ID=14;
 	
+	public static int TOURIST_GETLOC_STATUS_ID=15;
+	public static int TOURIST_SELLOC_STATUS_ID=16;
+	
+	
 	
 	private int id=INIT_STATUS_ID;
 	public int getId() {

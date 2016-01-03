@@ -42,7 +42,7 @@ public class WarnGetTextTask extends TaskAdapter implements Task {
 			CyBssCoreAPI.getInstance().addWarnLoc(warnId, default_latitude, default_longitude);
 			
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.WARN_IMGLOC_ID, session.getLanguage());
+					getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 		}
 		

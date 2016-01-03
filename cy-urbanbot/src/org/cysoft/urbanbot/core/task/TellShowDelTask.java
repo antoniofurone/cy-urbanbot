@@ -10,6 +10,7 @@ import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
@@ -65,9 +66,9 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 			
 			Location loc=CyBssCoreAPI.getInstance().getStory(storyId,session.getLanguage());
 			if (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() || 
-				loc.getLocationType()==null || !loc.getLocationType().equals("Story Location"))
+				loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_STORY))
 				{
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_INVALID_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_INVALID_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				return;
 				}
@@ -82,22 +83,25 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 			List<CyBssFile> files=CyBssCoreAPI.getInstance().getStoryFiles(storyId);
 			if (files!=null && !files.isEmpty()){
 				for(CyBssFile file:files){
+					
+					logger.info(file.toString());
+					
 					CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
-					if (file.getFileType().equals("Photo"))
+					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
 						TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
 								session.getId(),update.getMessage().getMessage_id(),null);
 					
-					if (file.getFileType().equals("Audio")){
+					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_AUDIO_TYPE)){
 						if (file.getName().endsWith(".mp3")||file.getName().endsWith(".ogg"))
 						TelegramAPI.getInstance().sendAudio(session.getId()+"_"+file.getName(), 
 								session.getId(),update.getMessage().getMessage_id(),null);
 					}
 					
-					if (file.getFileType().equals("Video"))
+					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE))
 						TelegramAPI.getInstance().sendVideo(session.getId()+"_"+file.getName(), 
 								session.getId(),update.getMessage().getMessage_id(),null);
 					
-					if (file.getFileType().equals("Voice")){
+					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VOICE_TYPE)){
 						File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
 						
 						File fr=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName()+".ogg");
@@ -115,32 +119,32 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 			}
 		} // end /v
 		
-		/*
+		
 		if (aSelection[0].equalsIgnoreCase("/d")){
-			long warnId=0;
+			long storyId=0;
 			try {
-				warnId=Long.parseLong(aSelection[1]);
+				storyId=Long.parseLong(aSelection[1]);
 			}
 			catch (NumberFormatException ne){
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				return;
 			}
 			
-			Ticket warn=CyBssCoreAPI.getInstance().getWarn(warnId,session.getLanguage());
-			if (warn.getPersonId()==0 || warn.getPersonId()!=session.getPersonId())
+			Location loc=CyBssCoreAPI.getInstance().getStory(storyId,session.getLanguage());
+			if (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() ||
+				loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_STORY))
 				{
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_INVALID_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_INVALID_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				return;
 				}
 			
-			CyBssCoreAPI.getInstance().removeWarn(warnId);
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_DEL_ID, session.getLanguage());
+			CyBssCoreAPI.getInstance().removeStory(storyId);
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_DEL_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 						
 		} // end /d
-		*/
 	}
 
 }

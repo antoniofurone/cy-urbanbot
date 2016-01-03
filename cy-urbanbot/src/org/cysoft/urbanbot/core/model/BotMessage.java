@@ -10,10 +10,11 @@ public class BotMessage {
 	
 	public static String WARN_SHOW_OP_ID="WARN_SHOW_OP";
 	public static String WARN_TEXT_ID="WARN_TEXT";
-	public static String WARN_IMGLOC_ID="WARN_IMGLOC";
+	public static String WARN_MEDIALOC_ID="WARN_MEDIALOC";
 	public static String WARN_LOCOK_ID="WARN_LOCOK";
-	public static String WARN_IMG_ID="WARN_IMG";
+	public static String WARN_MEDIA_ID="WARN_MEDIA";
 	public static String WARN_IMGOK_ID="WARN_IMGOK";
+	public static String WARN_VIDEOOK_ID="WARN_VIDEOOK";
 	public static String WARN_LIST_ID="WARN_LIST";
 	public static String WARN_LIST_OP_ID="WARN_LIST_OP";
 	public static String WARN_INVALID_ID="WARN_INVALID_ID";
@@ -33,6 +34,13 @@ public class BotMessage {
 	public static String TELL_NO_TELL_ID="TELL_NO_TELL";
 	public static String TELL_LIST_ID="TELL_LIST";
 	public static String TELL_LIST_OP_ID="TELL_LIST_OP";
+	public static String TELL_INVALID_ID="TELL_INVALID_ID";
+	public static String TELL_DEL_ID="TELL_DEL";
+	
+	public static String TOURIST_LOC_ID="TOURIST_LOC";
+	public static String TOURIST_NO_SITE_ID="TOURIST_NO_SITE";
+	public static String TOURIST_LIST_ID="TOURIST_LIST";
+	public static String TOURIST_LIST_OP_ID="TOURIST_LIST_OP";
 	
 	private String id="";
 	private String text="";

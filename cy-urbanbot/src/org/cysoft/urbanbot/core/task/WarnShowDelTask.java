@@ -10,6 +10,7 @@ import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
@@ -78,17 +79,25 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 				
 				List<CyBssFile> files=CyBssCoreAPI.getInstance().getWarnFiles(warnId);
 				if (files!=null && !files.isEmpty()){
-					int nPhoto=1;
+					int nFile=1;
 					for(CyBssFile file:files){
 						CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
-						String caption=warn.getId()+" ["+nPhoto+"/"+files.size()+"] ";
+						String caption=warn.getId()+" ["+nFile+"/"+files.size()+"] ";
 						logger.info("caption="+caption);
-						TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id(),caption);
+						
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
+							TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),caption);
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE))
+							TelegramAPI.getInstance().sendVideo(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),caption);
+						
 						
 						File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
 						f.delete();
-						nPhoto++;
+						nFile++;
 					}
 				}
 				

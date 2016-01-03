@@ -91,7 +91,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				if (audio.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
 					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
 				long storyId=(long)session.getVariable("storyId");
-				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Audio"); 
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,ICyUrbanbotConst.MEDIA_AUDIO_TYPE); 
 				
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
@@ -109,7 +109,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				if (video.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
 					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
 				long storyId=(long)session.getVariable("storyId");
-				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Video"); 
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,ICyUrbanbotConst.MEDIA_VIDEO_TYPE); 
 				
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
@@ -127,7 +127,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				if (voice.getFile_size()>ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE)
 					throw new CyUrbanbotException("File size is greater than "+ICyUrbanbotConst.MAX_DOWNLOADABLE_FILE_SIZE+" bytes !");
 				long storyId=(long)session.getVariable("storyId");
-				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Voice"); 
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,ICyUrbanbotConst.MEDIA_VOICE_TYPE); 
 				
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
@@ -152,7 +152,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				
 				TelegramAPI.getInstance().downloadFile(filePath);
 				long storyId=(long)session.getVariable("storyId");
-				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,"Photo"); 
+				CyBssCoreAPI.getInstance().addStoryFile(storyId, TelegramAPI.getInstance().getDownloadPath()+filePath,ICyUrbanbotConst.MEDIA_PHOTO_TYPE); 
 				
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
