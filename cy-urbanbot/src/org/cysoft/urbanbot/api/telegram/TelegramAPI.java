@@ -30,6 +30,7 @@ public class TelegramAPI {
 	private static final String SENDVIDEO_METHOD="sendVideo";
 	private static final String SENDAUDIO_METHOD="sendAudio";
 	private static final String SENDVOICE_METHOD="sendVoice";
+	private static final String SENDDOCUMENT_METHOD="sendDocument";
 	
 	
 	private TelegramAPI(){};
@@ -150,7 +151,7 @@ public class TelegramAPI {
 		//logger.info("response received="+response);
 		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
 		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+			throw new CyUrbanbotException(SENDLOCATION_METHOD+" nok !");
 		}
 		
 	}
@@ -181,7 +182,7 @@ public class TelegramAPI {
 		//logger.info("response received="+response);
 		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
 		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+			throw new CyUrbanbotException(SENDPHOTO_METHOD+" nok !");
 		}
 		
 	}
@@ -212,7 +213,7 @@ public class TelegramAPI {
 		//logger.info("response received="+response);
 		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
 		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+			throw new CyUrbanbotException(SENDVIDEO_METHOD+" nok !");
 		}
 		
 	}
@@ -245,7 +246,7 @@ public class TelegramAPI {
 		logger.info("response received="+response);
 		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
 		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+			throw new CyUrbanbotException(SENDAUDIO_METHOD+" nok !");
 		}
 		
 	}
@@ -274,10 +275,40 @@ public class TelegramAPI {
 		logger.info("response received="+response);
 		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
 		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+			throw new CyUrbanbotException(SENDVOICE_METHOD+" nok !");
 		}
 		
 	}
+	
+	public void sendDocument(String filePath,long chatId,long replyToMessageId) throws CyUrbanbotException{
+		
+		NameValueList nvl=new NameValueList(); 
+		nvl.add("chat_id", (new Long(chatId)).toString());
+		if (replyToMessageId!=0)
+			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
+		
+		
+		String response;
+		try {
+			response = CyUrbanBotUtility.httpUpload(
+					botUrl+SENDDOCUMENT_METHOD,
+					downloadPath+filePath,
+					null,
+					nvl.toList(),"document");
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		logger.info("response received="+response);
+		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
+		if (!sendResponse.isOk()){
+			throw new CyUrbanbotException(SENDDOCUMENT_METHOD+" nok !");
+		}
+		
+	}
+	
 	
 	public void downloadFile(String telegramFilePath) throws CyUrbanbotException{
 		CyUrbanBotUtility.httpDownload(botFileUrl+telegramFilePath, downloadPath, telegramFilePath);

@@ -2,6 +2,8 @@ package org.cysoft.urbanbot.core.task;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.cysoft.bss.core.model.Location;
@@ -26,6 +28,15 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 	
+		if (update.getMessage()!=null && update.getMessage().getText()!=null &&
+				update.getMessage().getText().trim().equalsIgnoreCase("/b")){
+			String message=CyBssCoreAPI.getInstance().
+					getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
+			return;
+		}
+		
 		if (session.getSessionStatus().getId()==SessionStatus.MAIN_MENU_STATUS_ID){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.TOURIST_LOC_ID, session.getLanguage());
@@ -53,6 +64,8 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 					for(Location loc:locs)
 						locDists.add(new LocDistance(loc,tlLoc.getLatitude(),tlLoc.getLongitude()));
 					
+					Collections.sort(locDists);
+					
 					messageList+=CyBssCoreAPI.getInstance().
 							getMessage(BotMessage.TOURIST_LIST_ID, session.getLanguage())+"\n";
 					for(LocDistance locDist:locDists)
@@ -79,14 +92,7 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 		
 		}
 		
-		if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-				update.getMessage().getText().trim().equalsIgnoreCase("/b")){
-			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-			session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
-			return;
-		}
+		
 		
 	}
 

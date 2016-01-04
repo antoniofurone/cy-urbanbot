@@ -13,12 +13,12 @@ import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 public class WarnSelOpTask extends TaskAdapter implements Task {
 
-	private static final Logger logger = LoggerFactory.getLogger(WarnSelOpTask.class);
+	//private static final Logger logger = LoggerFactory.getLogger(WarnSelOpTask.class);
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {

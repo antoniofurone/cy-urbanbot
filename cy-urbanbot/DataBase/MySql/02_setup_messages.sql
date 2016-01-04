@@ -370,3 +370,23 @@ insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'TOURIST_LIST_OP','Send /v # to show; /b to return back.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TOURIST_INVALID_ID','# non valida !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TOURIST_INVALID_ID','invalid # !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'MAP_URLS','Seleziona uno dei seguenti link:\n [Segnalazioni] (http://localhost:8080/cy-bss-core/maps/ticket.html) \n [Storie] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=StoryLocation) \n [Siti Turistici] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=TouristSiteLocation) ');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'MAP_URLS','Select one of following link:\n [Warnings] (http://localhost:8080/cy-bss-core/maps/ticket.html) \n [Stories] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=StoryLocation) \n [Tourist Sites] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=TouristSiteLocation) ');

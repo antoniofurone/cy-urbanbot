@@ -468,6 +468,56 @@ public class CyBssCoreAPI {
 		return locationResponse.getLocation();
 	}
 
+	public Location getTouristSite(long locId, String languageCode) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		headerAttrs.add(new BasicNameValuePair("Language",languageCode));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/"+locId+"/get", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
+		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		}
+		
+		return locationResponse.getLocation();
+	}
+	
+	public List<CyBssFile> getTouristSiteFiles(long locId)throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/"+locId+"/getFiles", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		FileListResponse filesResponse = new Gson().fromJson(response, FileListResponse.class);
+		if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+			logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+		}
+		
+		return filesResponse.getFiles();
+	}
+	
 	public List<CyBssFile> getStoryFiles(long storyId)throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));

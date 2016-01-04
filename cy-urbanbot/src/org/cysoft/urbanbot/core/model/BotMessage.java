@@ -41,6 +41,9 @@ public class BotMessage {
 	public static String TOURIST_NO_SITE_ID="TOURIST_NO_SITE";
 	public static String TOURIST_LIST_ID="TOURIST_LIST";
 	public static String TOURIST_LIST_OP_ID="TOURIST_LIST_OP";
+	public static String TOURIST_INVALID_ID="TOURIST_INVALID_ID";
+	
+	public static String MAP_URLS_ID="MAP_URLS";
 	
 	private String id="";
 	private String text="";
