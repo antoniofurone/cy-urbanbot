@@ -7,6 +7,7 @@ public class BotMessage {
 	public static String COMMAND_NOT_ID="COMMAND_NOT";
 	public static String ERROR_ID="ERROR";
 	public static String INVALID_SESSION_ID="INVALID_SESSION";
+	public static String SESSION_TIMEOUT_ID="SESSION_TIMEOUT";
 	
 	public static String WARN_SHOW_OP_ID="WARN_SHOW_OP";
 	public static String WARN_TEXT_ID="WARN_TEXT";

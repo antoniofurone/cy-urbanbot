@@ -14,7 +14,7 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'ERROR','Scusa. Si è verificato un errore');
+1,'ERROR','Scusa. Si e'' verificato un errore');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
@@ -53,6 +53,16 @@ insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'INVALID_SESSION','Invalid status. Send /start');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'SESSION_TIMEOUT','Session scaduta. Invia /start se vuoi ricominciare. Ciao !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'SESSION_TIMEOUT','Session timeout. Invia /start to restart. Hi !');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -193,7 +203,7 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'TELL_SHOW_OP','/n nuovo racconto; /v visualizza i tuoi racconti o /b per tornare indietro');
+1,'TELL_SHOW_OP','/n nuova storia; /v visualizza le tue storie o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
@@ -384,9 +394,9 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'MAP_URLS','Seleziona uno dei seguenti link:\n [Segnalazioni] (http://localhost:8080/cy-bss-core/maps/ticket.html) \n [Storie] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=StoryLocation) \n [Siti Turistici] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=TouristSiteLocation) ');
+1,'MAP_URLS','Seleziona uno dei seguenti link:\n [Segnalazioni] (http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html) \n [Storie] (http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html) \n [Siti Turistici] (http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html) ');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'MAP_URLS','Select one of following link:\n [Warnings] (http://localhost:8080/cy-bss-core/maps/ticket.html) \n [Stories] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=StoryLocation) \n [Tourist Sites] (http://localhost:8080/cy-bss-core/maps/location.html?locationType=TouristSiteLocation) ');
+2,'MAP_URLS','Select one of following link:\n [Warnings] (http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html) \n [Stories] (http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html) \n [Tourist Sites] (http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html) ');

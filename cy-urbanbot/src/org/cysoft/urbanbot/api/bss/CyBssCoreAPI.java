@@ -36,8 +36,6 @@ public class CyBssCoreAPI {
 	
 	private String securityToken="";
 	
-	private final static String STORY_LOC_TYPE="Story Location";
-	
 	private static CyBssCoreAPI instance=null;
 	public static CyBssCoreAPI getInstance(){
 		if (instance==null)
@@ -100,10 +98,17 @@ public class CyBssCoreAPI {
 		}
 		
 		
-		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
-		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
-			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		AppResponse appResponse =null;
+		try {
+			appResponse =new Gson().fromJson(response, AppResponse.class);
+			if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+				throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		if (appResponse.getAppVariable()!=null)
@@ -139,12 +144,18 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
-		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
-			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		AppResponse appResponse =null;
+		try{
+			appResponse=new Gson().fromJson(response, AppResponse.class);
+			if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+				throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 	}
 	
 	
@@ -161,10 +172,17 @@ public class CyBssCoreAPI {
 				headerAttrs,
 				jsonString);
 		
-		CyBssAuthLogOn authLogOn = new Gson().fromJson(response, CyBssAuthLogOn.class);
-		if (!authLogOn.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(authLogOn.getResultCode()+":"+authLogOn.getResultDesc());
-			throw new CyUrbanbotException(authLogOn.getResultCode()+":"+authLogOn.getResultDesc());
+		CyBssAuthLogOn authLogOn =null;
+		try {
+			authLogOn=new Gson().fromJson(response, CyBssAuthLogOn.class);
+			if (!authLogOn.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(authLogOn.getResultCode()+":"+authLogOn.getResultDesc());
+				throw new CyUrbanbotException(authLogOn.getResultCode()+":"+authLogOn.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		securityToken=authLogOn.getSecurityToken();
@@ -179,14 +197,24 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
-		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
-			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		AppResponse appResponse =null;
+		try{
+			appResponse=new Gson().fromJson(response, AppResponse.class);
+			if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+				throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			}
 		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
+		
+		if (appResponse.getApp()==null || appResponse.getApp().equals(""))
+			throw new CyUrbanbotException("Urbanbot App not configurated");
+		
 		logger.info(appResponse.getApp().toString());
 		appId=appResponse.getApp().getId();
-		
 		
 	}
 	
@@ -211,10 +239,17 @@ public class CyBssCoreAPI {
 		}
 		
 		
-		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
-		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
-			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		AppResponse appResponse =null;
+		try{
+			appResponse=new Gson().fromJson(response, AppResponse.class);
+			if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+				throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		if (appResponse.getAppParam()!=null)
@@ -242,10 +277,17 @@ public class CyBssCoreAPI {
 		}
 		
 
-		AppResponse appResponse = new Gson().fromJson(response, AppResponse.class);
-		if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
-			throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+		AppResponse appResponse =null;
+		try{
+			appResponse=new Gson().fromJson(response, AppResponse.class);
+			if (!appResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+				throw new CyUrbanbotException(appResponse.getResultCode()+":"+appResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		if (appResponse.getAppMessage()!=null)
@@ -285,10 +327,16 @@ public class CyBssCoreAPI {
 					headerAttrs,
 					nvl.toJSon());
 			
-			personResponse = new Gson().fromJson(response, PersonResponse.class);
-			if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-				logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
-				throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+			try{
+				personResponse = new Gson().fromJson(response, PersonResponse.class);
+				if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+					logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+					throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+				}
+			}
+			catch(Exception e){
+				logger.error(e.toString());
+				throw new CyUrbanbotException(e);
 			}
 			
 			return personResponse.getPerson().getId();
@@ -311,11 +359,16 @@ public class CyBssCoreAPI {
 					coreUrl+"/rest/person/"+ret+"/update",
 					headerAttrs,
 					nvl.toJSon());
-			
-			personResponse = new Gson().fromJson(response, PersonResponse.class);
-			if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-				logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
-				throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+			try{
+				personResponse = new Gson().fromJson(response, PersonResponse.class);
+				if (!personResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+					logger.error(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+					throw new CyUrbanbotException(personResponse.getResultCode()+":"+personResponse.getResultDesc());
+				}
+			}
+			catch(Exception e){
+				logger.error(e.toString());
+				throw new CyUrbanbotException(e);
 			}
 			
 			return ret;
@@ -340,10 +393,17 @@ public class CyBssCoreAPI {
 		}
 		
 
-		LocationListResponse locationListResponse = new Gson().fromJson(response, LocationListResponse.class);
-		if (!locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
-			throw new CyUrbanbotException(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+		LocationListResponse locationListResponse =null;
+		try{
+			locationListResponse=new Gson().fromJson(response, LocationListResponse.class);
+			if (!locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+				throw new CyUrbanbotException(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return locationListResponse.getLocations();
@@ -362,7 +422,7 @@ public class CyBssCoreAPI {
 		nvl.add("latitude", (new Double(latitude)).toString());
 		nvl.add("longitude", (new Double(longitude)).toString());
 		nvl.add("description", description);
-		nvl.add("locationType", STORY_LOC_TYPE);
+		nvl.add("locationType", ICyUrbanbotConst.LOCATION_TYPE_STORY);
 	
 		String response;
 		try {
@@ -377,12 +437,18 @@ public class CyBssCoreAPI {
 		}
 		
 		//System.out.println("response="+response);
-		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
-		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
-			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		LocationResponse locationResponse =null;
+		try{
+			locationResponse=new Gson().fromJson(response, LocationResponse.class);
+			if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+				throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 		return locationResponse.getLocation().getId();
 	}
 	
@@ -408,12 +474,18 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		FileResponse fileResponse = new Gson().fromJson(response, FileResponse.class);
-		if (!fileResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
-			throw new CyUrbanbotException(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+		FileResponse fileResponse =null;
+		try{
+			fileResponse=new Gson().fromJson(response, FileResponse.class);
+			if (!fileResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+				throw new CyUrbanbotException(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 	}
 	
 	public List<Location> findStories(long personId, String languageCode) throws CyUrbanbotException{
@@ -433,10 +505,17 @@ public class CyBssCoreAPI {
 		}
 		
 
-		LocationListResponse locationListResponse = new Gson().fromJson(response, LocationListResponse.class);
-		if (!locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
-			throw new CyUrbanbotException(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+		LocationListResponse locationListResponse =null;
+		try{
+			locationListResponse=new Gson().fromJson(response, LocationListResponse.class);
+			if (!locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+				throw new CyUrbanbotException(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return locationListResponse.getLocations();
@@ -459,10 +538,17 @@ public class CyBssCoreAPI {
 		}
 		
 
-		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
-		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
-			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		LocationResponse locationResponse =null;
+		try{
+			locationResponse=new Gson().fromJson(response, LocationResponse.class);
+			if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+				throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return locationResponse.getLocation();
@@ -485,10 +571,17 @@ public class CyBssCoreAPI {
 		}
 		
 
-		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
-		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
-			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		LocationResponse locationResponse =null;
+		try{
+			locationResponse=new Gson().fromJson(response, LocationResponse.class);
+			if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+				throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return locationResponse.getLocation();
@@ -509,10 +602,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		FileListResponse filesResponse = new Gson().fromJson(response, FileListResponse.class);
-		if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
-			throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+		FileListResponse filesResponse =null;
+		try{
+			filesResponse=new Gson().fromJson(response, FileListResponse.class);
+			if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+				throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return filesResponse.getFiles();
@@ -533,10 +633,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		FileListResponse filesResponse = new Gson().fromJson(response, FileListResponse.class);
-		if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
-			throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+		FileListResponse filesResponse =null;
+		try{
+			filesResponse=new Gson().fromJson(response, FileListResponse.class);
+			if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+				throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return filesResponse.getFiles();
@@ -557,10 +664,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 	
-		LocationResponse locationResponse = new Gson().fromJson(response, LocationResponse.class);
-		if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
-			throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+		LocationResponse locationResponse =null;
+		try{
+			locationResponse=new Gson().fromJson(response, LocationResponse.class);
+			if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+				throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 	}
@@ -590,10 +704,17 @@ public class CyBssCoreAPI {
 		
 		
 		//System.out.println("response="+response);
-		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
-		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
-			throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+		TicketResponse ticketResponse = null;
+		try {
+			ticketResponse=new Gson().fromJson(response, TicketResponse.class);
+			if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+				throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return ticketResponse.getTicket().getId();
@@ -614,10 +735,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 	
-		TicketListResponse ticketListResponse = new Gson().fromJson(response, TicketListResponse.class);
-		if (!ticketListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
-			throw new CyUrbanbotException(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+		TicketListResponse ticketListResponse =null;
+		try{
+			ticketListResponse=new Gson().fromJson(response, TicketListResponse.class);
+			if (!ticketListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+				throw new CyUrbanbotException(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 	}
@@ -639,10 +767,17 @@ public class CyBssCoreAPI {
 		}
 		
 
-		TicketListResponse ticketListResponse = new Gson().fromJson(response, TicketListResponse.class);
-		if (!ticketListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
-			throw new CyUrbanbotException(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+		TicketListResponse ticketListResponse =null;
+		try{
+			ticketListResponse=new Gson().fromJson(response, TicketListResponse.class);
+			if (!ticketListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+				throw new CyUrbanbotException(ticketListResponse.getResultCode()+":"+ticketListResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return ticketListResponse.getTickets();
@@ -664,11 +799,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-
-		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
-		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
-			throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+		TicketResponse ticketResponse =null;
+		try{
+			ticketResponse=new Gson().fromJson(response, TicketResponse.class);
+			if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+				throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return ticketResponse.getTicket();
@@ -691,12 +832,18 @@ public class CyBssCoreAPI {
 		}
 		
 
-		TicketCategoryListResponse ticketCategoryListResponse = new Gson().fromJson(response, TicketCategoryListResponse.class);
-		if (!ticketCategoryListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(ticketCategoryListResponse.getResultCode()+":"+ticketCategoryListResponse.getResultDesc());
-			throw new CyUrbanbotException(ticketCategoryListResponse.getResultCode()+":"+ticketCategoryListResponse.getResultDesc());
+		TicketCategoryListResponse ticketCategoryListResponse = null;
+		try{
+			ticketCategoryListResponse=new Gson().fromJson(response, TicketCategoryListResponse.class);
+			if (!ticketCategoryListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(ticketCategoryListResponse.getResultCode()+":"+ticketCategoryListResponse.getResultDesc());
+				throw new CyUrbanbotException(ticketCategoryListResponse.getResultCode()+":"+ticketCategoryListResponse.getResultDesc());
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 		return ticketCategoryListResponse.getTicketCategories();
 		
 	}
@@ -716,10 +863,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		FileListResponse filesResponse = new Gson().fromJson(response, FileListResponse.class);
-		if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
-			throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+		FileListResponse filesResponse =null;
+		try{
+			filesResponse=new Gson().fromJson(response, FileListResponse.class);
+			if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+				throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return filesResponse.getFiles();
@@ -753,12 +907,18 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		TicketResponse ticketResponse = new Gson().fromJson(response, TicketResponse.class);
-		if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
-			throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+		TicketResponse ticketResponse =null;
+		try{
+			ticketResponse=new Gson().fromJson(response, TicketResponse.class);
+			if (!ticketResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+				throw new CyUrbanbotException(ticketResponse.getResultCode()+":"+ticketResponse.getResultDesc());
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 	
 	}
 	
@@ -783,10 +943,17 @@ public class CyBssCoreAPI {
 			throw new CyUrbanbotException(e);
 		}
 		
-		FileResponse fileResponse = new Gson().fromJson(response, FileResponse.class);
-		if (!fileResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
-			logger.error(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
-			throw new CyUrbanbotException(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+		FileResponse fileResponse =null;
+		try{
+			fileResponse=new Gson().fromJson(response, FileResponse.class);
+			if (!fileResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+				throw new CyUrbanbotException(fileResponse.getResultCode()+":"+fileResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 	
 		

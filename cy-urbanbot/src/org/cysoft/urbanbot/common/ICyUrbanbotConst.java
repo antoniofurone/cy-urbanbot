@@ -11,4 +11,5 @@ public interface ICyUrbanbotConst {
 	public static final String LOCATION_TYPE_STORY="StoryLocation";
 	public static final String LOCATION_TYPE_TOURIST_SITE="TouristSiteLocation";
 	
+	public static final long SESSION_TIME_OUT=600000;
 }

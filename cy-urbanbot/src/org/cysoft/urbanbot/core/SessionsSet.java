@@ -1,6 +1,8 @@
 package org.cysoft.urbanbot.core;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cysoft.urbanbot.core.model.Session;
@@ -29,4 +31,11 @@ public abstract class SessionsSet {
 		return sessionsMap.get(id);
 	}
 	
+	public List<Session> getSessionsList(){
+		List<Session> ret=new ArrayList<Session>();
+		for (Map.Entry<Long,Session> entry : sessionsMap.entrySet()) {
+			ret.add(entry.getValue());
+		}
+		return ret;
+	}
 }

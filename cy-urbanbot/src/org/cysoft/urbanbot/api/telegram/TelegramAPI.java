@@ -81,11 +81,17 @@ public class TelegramAPI {
 			throw e1;
 		}
 		
-		GetUpdatesResponse updResponse = new Gson().fromJson(response, GetUpdatesResponse.class);
-		if (!updResponse.isOk()){
-			throw new CyUrbanbotException(GETUPDATES_METHOD+" nok !");
+		GetUpdatesResponse updResponse =null;
+		try{
+			updResponse=new Gson().fromJson(response, GetUpdatesResponse.class);
+			if (!updResponse.isOk()){
+				throw new CyUrbanbotException(GETUPDATES_METHOD+" nok !");
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 		return updResponse.getResult();
 	
 	}
@@ -118,9 +124,16 @@ public class TelegramAPI {
 		}
 		
 		//logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDMESSAGE_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 	}
 
@@ -149,11 +162,17 @@ public class TelegramAPI {
 		}
 		
 		//logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDLOCATION_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDLOCATION_METHOD+" nok !");
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 	}
 	
 	public void sendPhoto(String filePath,long chatId,long replyToMessageId,String caption) throws CyUrbanbotException{
@@ -180,9 +199,16 @@ public class TelegramAPI {
 		}
 		
 		//logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDPHOTO_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDPHOTO_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 	}
@@ -211,9 +237,16 @@ public class TelegramAPI {
 		}
 		
 		//logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDVIDEO_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDVIDEO_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 	}
@@ -227,8 +260,6 @@ public class TelegramAPI {
 			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
 		if (mimeType!=null && !mimeType.equals(""))
 			nvl.add("mime_type", mimeType);
-
-		
 		
 		String response;
 		try {
@@ -244,9 +275,16 @@ public class TelegramAPI {
 		}
 		
 		logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDAUDIO_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDAUDIO_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 	}
@@ -273,11 +311,17 @@ public class TelegramAPI {
 		}
 		
 		logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDVOICE_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDVOICE_METHOD+" nok !");
+			}
 		}
-		
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
+		}
 	}
 	
 	public void sendDocument(String filePath,long chatId,long replyToMessageId) throws CyUrbanbotException{
@@ -302,9 +346,16 @@ public class TelegramAPI {
 		}
 		
 		logger.info("response received="+response);
-		SendMessageResponse sendResponse = new Gson().fromJson(response, SendMessageResponse.class);
-		if (!sendResponse.isOk()){
-			throw new CyUrbanbotException(SENDDOCUMENT_METHOD+" nok !");
+		SendMessageResponse sendResponse =null;
+		try{
+			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
+			if (!sendResponse.isOk()){
+				throw new CyUrbanbotException(SENDDOCUMENT_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 	}
@@ -326,9 +377,16 @@ public class TelegramAPI {
 			throw e1;
 		}
 		
-		GetFileResponse fileResponse = new Gson().fromJson(response, GetFileResponse.class);
-		if (!fileResponse.isOk()){
-			throw new CyUrbanbotException(GETFILE_METHOD+" nok !");
+		GetFileResponse fileResponse =null;
+		try{
+			fileResponse=new Gson().fromJson(response, GetFileResponse.class);
+			if (!fileResponse.isOk()){
+				throw new CyUrbanbotException(GETFILE_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			throw new CyUrbanbotException(e);
 		}
 		
 		return fileResponse.getResult().getFile_path();

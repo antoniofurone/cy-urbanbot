@@ -5,12 +5,18 @@ import java.util.List;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TransferQueue;
 
+import org.cysoft.bss.core.model.AppParam;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.common.ICyUrbanbotConst;
+import org.cysoft.urbanbot.core.LiveSessions;
 import org.cysoft.urbanbot.core.UpdateDispatcher;
 import org.cysoft.urbanbot.core.UpdateDispatcherListener;
+import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +118,6 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 			return;
 		}
 		
-		
 		long updatesOffSet=0;
 		try {
 			updatesOffSet = bssCoreAPI.getUpdatesOffSet();
@@ -123,9 +128,26 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		
 		TelegramAPI telegramAPI=TelegramAPI.getInstance();
 		try {
-			telegramAPI.setBotUrl(bssCoreAPI.getParam("bot_url").getValue());
-			telegramAPI.setDownloadPath(bssCoreAPI.getParam("download_path").getValue());
-			telegramAPI.setBotFileUrl(bssCoreAPI.getParam("bot_file_url").getValue());
+			AppParam param=bssCoreAPI.getParam("bot_url");
+			if (param==null){
+				logger.error("Param bot_url not configurated");
+				throw new CyUrbanbotException("Param bot_url not configurated");
+			}
+			telegramAPI.setBotUrl(param.getValue());
+			
+			param=bssCoreAPI.getParam("download_path");
+			if (param==null){
+				logger.error("Param download_path not configurated");
+				throw new CyUrbanbotException("Param download_path not configurated");
+			}
+			telegramAPI.setDownloadPath(param.getValue());
+			
+			param=bssCoreAPI.getParam("bot_file_url");
+			if (param==null){
+				logger.error("Param bot_file_url not configurated");
+				throw new CyUrbanbotException("Param bot_file_url not configurated");
+			}
+			telegramAPI.setBotFileUrl(param.getValue());
 			
 			bssCoreAPI.setDownloadPath(telegramAPI.getDownloadPath());
 			
@@ -142,6 +164,7 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		
 		List<Update> telegramUpdates=null;
 		
+		int loop=0;
 		while(true){
 			
 			try {
@@ -159,20 +182,33 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 					bssCoreAPI.setUpdatesOffSet(updatesOffSet);
 				}
 				
+				loop++;
+				if (loop>=50){
+					bssCoreAPI.setUpdatesOffSet(updatesOffSet); //no bss-core session timeout
+					loop=0;
+				}
+				
+				//Discard session
+				long currentTime=CyUrbanBotUtility.getCurrentTime().getTime();
+				for(Session session:LiveSessions.getInstance().getSessionsList()){
+					//logger.info("session="+session.toString());
+					if ((currentTime-session.getCreationTime())>=ICyUrbanbotConst.SESSION_TIME_OUT){
+						String message=CyBssCoreAPI.getInstance().
+								getMessage(BotMessage.SESSION_TIMEOUT_ID, session.getLanguage());
+						TelegramAPI.getInstance().sendMessage(message, session.getId(), 0);
+						LiveSessions.getInstance().remove(session.getId());
+					}
+				}
+				
+				
+				Thread.sleep(3000);
+				
 			} catch (CyUrbanbotException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.warn(e.toString());
 			}
 			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error(e.toString());
-				break;
-			}
 		} // end while
 		
 		
