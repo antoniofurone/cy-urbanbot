@@ -1,10 +1,11 @@
 package org.cysoft.urbanbot.core.task;
 
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.cysoft.bss.core.model.Location;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
@@ -69,7 +70,13 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 					messageList+=CyBssCoreAPI.getInstance().
 							getMessage(BotMessage.TOURIST_LIST_ID, session.getLanguage())+"\n";
 					for(LocDistance locDist:locDists)
-						messageList+=locDist.getLocation().getId()+" -> "+locDist.getLocation().getName()+" @ "+(int)locDist.getDistance()+" mt;\n";
+						messageList+="/v"+locDist.getLocation().getId()+" -> "+locDist.getLocation().getName()+" @ "+
+					(session.getLanguage().equals("it")?
+						NumberFormat.getNumberInstance(Locale.ITALIAN).format((int)locDist.getDistance()):
+						NumberFormat.getNumberInstance(Locale.US).format((int)locDist.getDistance())	
+					)
+					+
+					" mt;\n";
 					
 					messageList+=CyBssCoreAPI.getInstance().
 							getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());

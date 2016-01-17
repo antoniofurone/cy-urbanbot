@@ -34,9 +34,7 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 			return;
 		}
 		
-		String[] aSelection=selection.split(" ");
-		
-		if (aSelection[0].equalsIgnoreCase("/b")){
+		if (selection.equalsIgnoreCase("/b")){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.TELL_SHOW_OP_ID, session.getLanguage());
 			
@@ -45,24 +43,34 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 			return;
 		}
 		
+		if (selection.length()<3){
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			return;
+		}
 		
-		if (aSelection.length!=2 || (!aSelection[0].equalsIgnoreCase("/v") && !aSelection[0].equalsIgnoreCase("/d"))){
+		String command=selection.substring(0,2);
+		String sStoryId=selection.substring(2);
+		logger.info("command="+command+";storyId="+sStoryId);
+		
+		long storyId=0;
+		try {
+			storyId=Long.parseLong(sStoryId);
+		}
+		catch (NumberFormatException ne){
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			return;
+		}
+		
+		if (!command.equalsIgnoreCase("/v") && !command.equalsIgnoreCase("/d")){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			return;
 		}
 		
 		
-		if (aSelection[0].equalsIgnoreCase("/v")){
-			long storyId=0;
-			try {
-				storyId=Long.parseLong(aSelection[1]);
-			}
-			catch (NumberFormatException ne){
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-				return;
-			}
+		if (command.equalsIgnoreCase("/v")){
 			
 			Location loc=CyBssCoreAPI.getInstance().getStory(storyId,session.getLanguage());
 			if (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() || 
@@ -120,16 +128,7 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 		} // end /v
 		
 		
-		if (aSelection[0].equalsIgnoreCase("/d")){
-			long storyId=0;
-			try {
-				storyId=Long.parseLong(aSelection[1]);
-			}
-			catch (NumberFormatException ne){
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-				return;
-			}
+		if (command.equalsIgnoreCase("/d")){
 			
 			Location loc=CyBssCoreAPI.getInstance().getStory(storyId,session.getLanguage());
 			if (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() ||

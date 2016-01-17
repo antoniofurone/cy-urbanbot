@@ -48,7 +48,7 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 						messageList+=CyBssCoreAPI.getInstance().
 								getMessage(BotMessage.TELL_LIST_ID, session.getLanguage())+"\n";
 						for(Location loc:locs)
-							messageList+=loc.getId()+" @ "+loc.getCreationDate()+";\n";
+							messageList+="/v"+loc.getId()+" @ "+loc.getCreationDate()+" /d"+loc.getId()+";\n";
 						messageList+=CyBssCoreAPI.getInstance().
 								getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
 					}

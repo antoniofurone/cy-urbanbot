@@ -25,12 +25,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WELCOME_MENU','Benvenuto in Carovigno Smart City Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni;  /n narra ; /t siti turistici; /m mappe;  /l change language.');
+1,'WELCOME_MENU','Benvenuto in Carovigno Smart City Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni;  /n storie ; /t siti turistici; /m mappe;  /l change language.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WELCOME_MENU','Welcome at Carovigno Smart City Bot (Beta version). Send one of following commands: /s warnings; /n tell; /t tourist sites; /m maps; /l cambia lingua.');
+2,'WELCOME_MENU','Welcome at Carovigno Smart City Bot (Beta version). Send one of following commands: /s warnings; /n stories; /t tourist sites; /m maps; /l cambia lingua.');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -68,12 +68,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_SHOW_OP','/n nuova segnalazione; /v visualizza le tue segnalazione o /b per tornare indietro');
+1,'WARN_SHOW_OP','/n nuova segnalazione; /v visualizza le tue segnalazioni o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_SHOW_OP','/n new warning; /v show your warning o /b to return back');
+2,'WARN_SHOW_OP','/n new warning; /v show your warnings o /b to return back');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -152,12 +152,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_LIST_OP','Invia /v # per visualizzare; /d # per cancellare; /b per tornare indietro.');
+1,'WARN_LIST_OP','Invia /v# per visualizzare; /d# per cancellare; /b per tornare indietro.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_LIST_OP','Send /v # to show; /d # to delete; /b to return back.');
+2,'WARN_LIST_OP','Send /v# to show; /d# to delete; /b to return back.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
@@ -314,12 +314,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'TELL_LIST_OP','Invia /v # per visualizzare; /d # per cancellare; /b per tornare indietro.');
+1,'TELL_LIST_OP','Invia /v# per visualizzare; /d# per cancellare; /b per tornare indietro.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'TELL_LIST_OP','Send /v # to show; /d # to delete; /b to return back.');
+2,'TELL_LIST_OP','Send /v# to show; /d# to delete; /b to return back.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
@@ -374,12 +374,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'TOURIST_LIST_OP','Invia /v # per visualizzare; /b per tornare indietro.');
+1,'TOURIST_LIST_OP','Invia /v# per visualizzare; /b per tornare indietro.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'TOURIST_LIST_OP','Send /v # to show; /b to return back.');
+2,'TOURIST_LIST_OP','Send /v# to show; /b to return back.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (

@@ -33,8 +33,7 @@ public class TouristShowTask extends TaskAdapter implements Task{
 			return;
 		}
 		
-		String[] aSelection=selection.split(" ");
-		if (aSelection[0].equalsIgnoreCase("/b")){
+		if (selection.equalsIgnoreCase("/b")){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
@@ -42,23 +41,34 @@ public class TouristShowTask extends TaskAdapter implements Task{
 			return;
 		}
 		
-		if (aSelection.length!=2 || (!aSelection[0].equalsIgnoreCase("/v") )){
+		if (selection.length()<3){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			return;
 		}
 		
-		if (aSelection[0].equalsIgnoreCase("/v")){
-			long locId=0;
-			try {
-				locId=Long.parseLong(aSelection[1]);
-			}
-			catch (NumberFormatException ne){
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
-				return;
-			}
-			
+		String command=selection.substring(0,2);
+		String sLocId=selection.substring(2);
+		logger.info("command="+command+";locId="+sLocId);
+		
+		long locId=0;
+		try {
+			locId=Long.parseLong(sLocId);
+		}
+		catch (NumberFormatException ne){
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			return;
+		}
+		
+		
+		if (!command.equalsIgnoreCase("/v")){
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			return;
+		}
+		
+		if (command.equalsIgnoreCase("/v")){
 			Location loc=CyBssCoreAPI.getInstance().getTouristSite(locId,session.getLanguage());
 			if (loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_TOURIST_SITE))
 				{
