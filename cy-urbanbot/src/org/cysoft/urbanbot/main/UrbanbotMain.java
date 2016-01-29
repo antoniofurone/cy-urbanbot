@@ -184,6 +184,7 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 				
 				loop++;
 				if (loop>=50){
+					logger.info("loop="+loop+"; call setUpdatesOffSet("+updatesOffSet+")");
 					bssCoreAPI.setUpdatesOffSet(updatesOffSet); //no bss-core session timeout
 					loop=0;
 				}
