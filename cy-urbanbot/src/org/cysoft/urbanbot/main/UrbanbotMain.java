@@ -212,8 +212,6 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 			
 		} // end while
 		
-		
-		bssCoreAPI.logOff();
 		logger.info(">>> End Main Thread...");
 		
 	}

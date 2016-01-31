@@ -59,8 +59,19 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 					long personId=0;
 					
 					try {
-						personId=CyBssCoreAPI.getInstance().updatePerson("tlg:"+user.getUsername(), 
+						String code=null;
+						if (user.getUsername()==null || user.getUsername().equals(""))
+							code="tlgn:"+(user.getFirst_name()==null?"":user.getFirst_name())+
+									(user.getLast_name()==null?"":user.getLast_name());
+						else
+							code="tlg:"+user.getUsername();
+							
+						personId=CyBssCoreAPI.getInstance().updatePerson(code, 
 								user.getFirst_name(), user.getLast_name());
+						
+						TelegramAPI.getInstance().sendMessage("Ciao "+user.getFirst_name()+"!", 
+								chatId, update.getMessage().getMessage_id());
+						
 					} catch (CyUrbanbotException e) {
 						// TODO Auto-generated catch block
 						logger.error(e.toString());
@@ -73,7 +84,8 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 					session.setSecondName(user.getLast_name());
 					session.setLocked(true);
 					logger.info("new session ="+session);
-				    LiveSessions.getInstance().add(session);		
+				    LiveSessions.getInstance().add(session);	
+				    
 				}
 				else
 				{
