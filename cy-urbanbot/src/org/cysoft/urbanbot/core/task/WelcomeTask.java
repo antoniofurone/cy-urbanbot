@@ -1,5 +1,7 @@
 package org.cysoft.urbanbot.core.task;
 
+
+
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
@@ -17,7 +19,11 @@ public class WelcomeTask extends TaskAdapter implements Task {
 		// TODO Auto-generated method stub
 		String message=CyBssCoreAPI.getInstance().
 				getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
-		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+		
+		TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+				update.getMessage().getMessage_id(),
+				BotMessage.WELCOME_MENU_KEYB);
+		
 		session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 	}
 

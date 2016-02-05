@@ -286,9 +286,9 @@ public class CyUrbanBotUtility {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new CyUrbanbotException(e);
 		}
         
-		
 		logger.info("<<< httpDownload:"+url+";"+downloadPath+";"+filePath);
 			
 	}	

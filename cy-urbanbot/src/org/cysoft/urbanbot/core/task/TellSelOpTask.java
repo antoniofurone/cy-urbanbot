@@ -28,7 +28,8 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.TELL_SHOW_OP_ID, session.getLanguage());
 			
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
 			session.getSessionStatus().setId(SessionStatus.TELL_SELOP_STATUS_ID);
 			return;
 		}
@@ -53,7 +54,8 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 								getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
 					}
 						
-					TelegramAPI.getInstance().sendMessage(messageList, session.getId(), update.getMessage().getMessage_id());
+					TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
+							update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 					session.getSessionStatus().setId(SessionStatus.TELL_SHOWLIST_STATUS_ID);
 					return;
 					} 
@@ -63,7 +65,8 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.TELL_LOC_ID, session.getLanguage());
 				
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				session.getSessionStatus().setId(SessionStatus.TELL_GETLOC_STATUS_ID);
 				return;
 			}
@@ -72,7 +75,8 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 					update.getMessage().getText().trim().equalsIgnoreCase("/b")){
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.WELCOME_MENU_KEYB);
 				session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 				return;
 			}

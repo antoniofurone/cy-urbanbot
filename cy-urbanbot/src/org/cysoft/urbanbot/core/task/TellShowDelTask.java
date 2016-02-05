@@ -30,7 +30,8 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 		String selection=update.getMessage().getText()==null?"":update.getMessage().getText();
 		if (selection.equals("")){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
@@ -38,14 +39,16 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.TELL_SHOW_OP_ID, session.getLanguage());
 			
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
 			session.getSessionStatus().setId(SessionStatus.TELL_SELOP_STATUS_ID);
 			return;
 		}
 		
 		if (selection.length()<3){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
@@ -59,13 +62,15 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 		}
 		catch (NumberFormatException ne){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
 		if (!command.equalsIgnoreCase("/v") && !command.equalsIgnoreCase("/d")){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
@@ -77,12 +82,14 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 				loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_STORY))
 				{
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_INVALID_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				return;
 				}
 			
 			if (loc.getDescription()!=null && !loc.getDescription().equals(""))
-				TelegramAPI.getInstance().sendMessage(loc.getDescription(), session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(loc.getDescription(), session.getId(), 
+						update.getMessage().getMessage_id());
 			// Invia Location
 			TelegramAPI.getInstance().sendLocation(loc.getLatitude(), loc.getLongitude(), 
 						session.getId(), update.getMessage().getMessage_id());
@@ -135,13 +142,15 @@ public class TellShowDelTask extends TaskAdapter implements Task{
 				loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_STORY))
 				{
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_INVALID_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				return;
 				}
 			
 			CyBssCoreAPI.getInstance().removeStory(storyId);
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_DEL_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 						
 		} // end /d
 	}

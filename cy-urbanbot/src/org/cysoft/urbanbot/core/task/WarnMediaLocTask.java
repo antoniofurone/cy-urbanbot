@@ -35,7 +35,8 @@ public class WarnMediaLocTask extends TaskAdapter implements Task {
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 				
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 				return;
 			}
@@ -49,9 +50,11 @@ public class WarnMediaLocTask extends TaskAdapter implements Task {
 				CyBssCoreAPI.getInstance().addWarnLoc(warnId, loc.getLatitude(),loc.getLongitude()); 
 				
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LOCOK_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id());
 				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				
 				session.getSessionStatus().setId(SessionStatus.WARN_IMG_STATUS_ID);
 				
@@ -72,7 +75,8 @@ public class WarnMediaLocTask extends TaskAdapter implements Task {
 				file.delete();
 				
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_VIDEOOK_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			}
 			
 			List<PhotoSize> phs=update.getMessage().getPhoto();
@@ -103,7 +107,8 @@ public class WarnMediaLocTask extends TaskAdapter implements Task {
 					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
 				else
 					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				
 				return;
 			}
@@ -113,7 +118,8 @@ public class WarnMediaLocTask extends TaskAdapter implements Task {
 				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
 			else
 				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			
 		} 
 				

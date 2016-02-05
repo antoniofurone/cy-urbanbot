@@ -27,7 +27,7 @@
 	<echo>-- 2. Compile --</echo>
 	<delete dir="${dist.classes.dir}"/>
 	<mkdir dir="${dist.classes.dir}"/>
-	<javac includeantruntime="false" destdir="${dist.classes.dir}" srcdir="${src.classes.dir}">
+	<javac includeantruntime="false" target="1.7"  source="1.7" destdir="${dist.classes.dir}" srcdir="${src.classes.dir}">
 		<classpath>
 			<fileset dir="${dist.lib.dir}">
 				<include name="*"/>

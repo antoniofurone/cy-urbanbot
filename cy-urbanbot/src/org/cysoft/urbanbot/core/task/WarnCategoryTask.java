@@ -24,7 +24,8 @@ public class WarnCategoryTask extends TaskAdapter implements Task {
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
 		}
@@ -34,8 +35,10 @@ public class WarnCategoryTask extends TaskAdapter implements Task {
 			categoryId=Long.parseLong(sel);
 		}
 		catch (NumberFormatException ne){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_SEL_CATEGORY_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_SEL_CATEGORY_ID, 
+					session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B14_KEYB);
 			return;
 		}
 		
@@ -49,8 +52,10 @@ public class WarnCategoryTask extends TaskAdapter implements Task {
 		}
 			
 		if (!found){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_SEL_CATEGORY_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_SEL_CATEGORY_ID, 
+					session.getLanguage());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B14_KEYB);
 			return;
 		}
 
@@ -58,7 +63,8 @@ public class WarnCategoryTask extends TaskAdapter implements Task {
 		String message=CyBssCoreAPI.getInstance().
 				getMessage(BotMessage.WARN_TEXT_ID, session.getLanguage());
 		
-		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+		TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+				update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 		session.getSessionStatus().setId(SessionStatus.WARN_TEXT_STATUS_ID);
 	}
 

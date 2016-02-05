@@ -38,7 +38,7 @@ public class UpdateWorker implements Runnable{
 				l.onUpdateWorkerError(session, update);
 		
 		try {
-			TelegramAPI.getInstance().sendMessage("Sorry. Errror is verified :-(", 
+			TelegramAPI.getInstance().sendMessage("Sorry. Errror is verified \uD83D\uDE15", 
 					session.getId(), update.getMessage().getMessage_id());
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block

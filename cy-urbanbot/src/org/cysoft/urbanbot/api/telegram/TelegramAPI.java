@@ -2,8 +2,11 @@ package org.cysoft.urbanbot.api.telegram;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.api.telegram.response.GetFileResponse;
 import org.cysoft.urbanbot.api.telegram.response.GetUpdatesResponse;
@@ -15,6 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public class TelegramAPI {
 	
@@ -31,6 +37,9 @@ public class TelegramAPI {
 	private static final String SENDAUDIO_METHOD="sendAudio";
 	private static final String SENDVOICE_METHOD="sendVoice";
 	private static final String SENDDOCUMENT_METHOD="sendDocument";
+	
+	public static final String MESSAGE_PARSEMODE_MARKDOWN="Markdown";
+	public static final String MESSAGE_PARSEMODE_HTML="HTML";
 	
 	
 	private TelegramAPI(){};
@@ -97,31 +106,63 @@ public class TelegramAPI {
 	}
 	
 	public void sendMessage(String text,long chatId) throws CyUrbanbotException{
-		sendMessage(text,chatId,0);
+		sendMessage(text,chatId,0,null,null);
 	}
 	
 	public void sendMessage(String text,long chatId,long replyToMessageId) throws CyUrbanbotException{
+		sendMessage(text,chatId,replyToMessageId,null,null);
+	}
+	
+	public void sendMessage(String text,long chatId,long replyToMessageId,List<List<String>> keyboard) throws CyUrbanbotException{
+		sendMessage(text,chatId,replyToMessageId,null,keyboard);
+	}
+	
+	public void sendMessage(String text,long chatId,long replyToMessageId,String parseMode) throws CyUrbanbotException{
+		sendMessage(text,chatId,replyToMessageId,parseMode,null);
+	}
+	
+	public void sendMessage(String text,long chatId,long replyToMessageId,String parseMode,List<List<String>> keyboard) throws CyUrbanbotException{
 		String response=null;
 		try {
-			  
-			response=CyUrbanBotUtility.httpGet(
-					botUrl+SENDMESSAGE_METHOD+"?chat_id="+chatId+"&text="+
-					URLEncoder.encode(text,java.nio.charset.StandardCharsets.UTF_8.toString())+
-					"&parse_mode=Markdown"+
-					(replyToMessageId!=0?"&reply_to_message_id="+replyToMessageId:""),
-					null
-					);
+			
+			List<NameValuePair> parms = new ArrayList<NameValuePair>();
+			parms.add(new BasicNameValuePair("chat_id", chatId + ""));
+			parms.add(new BasicNameValuePair("text", text));
+			if (parseMode!=null && !parseMode.equals(""))
+				parms.add(new BasicNameValuePair("parse_mode", parseMode));
+			if (replyToMessageId!=0)
+				parms.add(new BasicNameValuePair("reply_to_message_id", replyToMessageId+""));
+			if (keyboard!=null && !keyboard.isEmpty()){
+				JsonObject jsonObject = new JsonObject();
+
+		        /// Convert the List<List<String>> to JSONArray
+		        JsonArray jsonkeyboard = new JsonArray();
+		        for (List<String> innerRow : keyboard) {
+		            JsonArray innerJSONKeyboard = new JsonArray();
+		            for (String element: innerRow) {
+		                innerJSONKeyboard.add(new JsonPrimitive(element));
+		            }
+		            jsonkeyboard.add(innerJSONKeyboard);
+		        }
+		        jsonObject.add("keyboard", jsonkeyboard);
+		        jsonObject.add("one_time_keyboard", new JsonPrimitive(true));
+		        jsonObject.add("resize_keyboard",new JsonPrimitive(true));
+		       
+		        parms.add(new BasicNameValuePair("reply_markup", jsonObject.toString()));
+		        
+		        //logger.info("reply_markup="+jsonObject.toString());
+			        
+			}// end if keyboard
+			
+			
+			response=CyUrbanBotUtility.httpPost(botUrl+SENDMESSAGE_METHOD, null, parms);
+			
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e.toString());
 			throw e;
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e.toString());
-			throw new CyUrbanbotException(e);
-		}
+		} 
 		
 		//logger.info("response received="+response);
 		SendMessageResponse sendResponse =null;

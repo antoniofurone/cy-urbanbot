@@ -34,7 +34,8 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.TELL_SHOW_OP_ID, session.getLanguage());
 			
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
 			session.getSessionStatus().setId(SessionStatus.TELL_SELOP_STATUS_ID);
 			return;
 		}
@@ -50,7 +51,8 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.TELL_TEXT_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				session.getSessionStatus().setId(SessionStatus.TELL_GETTEXT_STATUS_ID);
 			}
 			else
@@ -58,7 +60,8 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.TELL_LOC_ID, session.getLanguage());
 				
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				session.getSessionStatus().setId(SessionStatus.TELL_GETLOC_STATUS_ID);
 			}
 			
@@ -67,17 +70,31 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 		
 		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETTEXT_STATUS_ID){
 		
-			Location loc=(Location)session.getVariable("storyLoc");
-			long storyId=CyBssCoreAPI.getInstance().addStory(loc.getLatitude(), loc.getLongitude(), text, session.getPersonId()); 
-			session.putVariable("storyId", storyId);
+			if (text!=null && !text.equals("")){
+				
+				Location loc=(Location)session.getVariable("storyLoc");
+				long storyId=CyBssCoreAPI.getInstance().addStory(loc.getLatitude(), loc.getLongitude(), text, session.getPersonId()); 
+				session.putVariable("storyId", storyId);
 			
 			
-			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.TELL_TEXT_OK_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				String message=CyBssCoreAPI.getInstance().
+						getMessage(BotMessage.TELL_TEXT_OK_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+				
+				session.getSessionStatus().setId(SessionStatus.TELL_GETMEDIA_STATUS_ID);
+			}
+			else
+			{
+				String message=CyBssCoreAPI.getInstance().
+						getMessage(BotMessage.TELL_TEXT_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+				session.getSessionStatus().setId(SessionStatus.TELL_GETTEXT_STATUS_ID);
+				
+			}
 			
 			
-			session.getSessionStatus().setId(SessionStatus.TELL_GETMEDIA_STATUS_ID);
 		}
 		
 		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETMEDIA_STATUS_ID){

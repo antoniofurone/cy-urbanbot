@@ -9,9 +9,7 @@ import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.api.telegram.model.User;
-import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
-import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
@@ -69,7 +67,7 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 						personId=CyBssCoreAPI.getInstance().updatePerson(code, 
 								user.getFirst_name(), user.getLast_name());
 						
-						TelegramAPI.getInstance().sendMessage("Ciao "+user.getFirst_name()+"!", 
+						TelegramAPI.getInstance().sendMessage("Ciao "+user.getFirst_name()+"!"+" \uD83D\uDE00", 
 								chatId, update.getMessage().getMessage_id());
 						
 					} catch (CyUrbanbotException e) {

@@ -1,9 +1,21 @@
 package org.cysoft.urbanbot.core.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BotMessage {
 	
+	
+	public static List<List<String>> WELCOME_MENU_KEYB=Arrays.asList(Arrays.asList("/s", "/n", "/t"),Arrays.asList("/m", "/l"));
+	public static List<List<String>> NVB_KEYB=Arrays.asList(Arrays.asList("/n", "/v", "/b"));
+	public static List<List<String>> VB_KEYB=Arrays.asList(Arrays.asList( "/v", "/b"));
+	public static List<List<String>> B_KEYB=Arrays.asList(Arrays.asList("/b"));
+	public static List<List<String>> B14_KEYB=Arrays.asList(Arrays.asList("1", "2", "3","4"),Arrays.asList("/b"));
+	
 	public static String WAIT_LOCK_SESSION_ID="WAIT_LOCK_SESSION";
+	
 	public static String WELCOME_MENU_ID="WELCOME_MENU";
+	
 	public static String COMMAND_NOT_ID="COMMAND_NOT";
 	public static String ERROR_ID="ERROR";
 	public static String INVALID_SESSION_ID="INVALID_SESSION";

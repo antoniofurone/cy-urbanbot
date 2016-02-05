@@ -25,7 +25,8 @@ public class WarnGetTextTask extends TaskAdapter implements Task {
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
 			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
 		}
@@ -43,10 +44,20 @@ public class WarnGetTextTask extends TaskAdapter implements Task {
 			
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+			session.getSessionStatus().setId(SessionStatus.WARN_IMGLOC_STATUS_ID);
+		}
+		else
+		{
+			String message=CyBssCoreAPI.getInstance().
+					getMessage(BotMessage.WARN_TEXT_ID, session.getLanguage());
+			
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+			session.getSessionStatus().setId(SessionStatus.WARN_TEXT_STATUS_ID);
 		}
 		
-		session.getSessionStatus().setId(SessionStatus.WARN_IMGLOC_STATUS_ID);
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.cysoft.urbanbot.core.task;
 
+
 import java.util.List;
 
 import org.cysoft.bss.core.model.Ticket;
@@ -29,7 +30,9 @@ public class WarnSelOpTask extends TaskAdapter implements Task {
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
+			
 			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
 		}
@@ -54,7 +57,8 @@ public class WarnSelOpTask extends TaskAdapter implements Task {
 						}
 						
 						
-						TelegramAPI.getInstance().sendMessage(messageList, session.getId(), update.getMessage().getMessage_id());
+						TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
+								update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 						session.getSessionStatus().setId(SessionStatus.WARN_SHOWLIST_STATUS_ID);
 						return;
 					} 
@@ -70,7 +74,8 @@ public class WarnSelOpTask extends TaskAdapter implements Task {
 				
 				session.putVariable("WarnCategories", categories);
 				
-				TelegramAPI.getInstance().sendMessage(categoriesMessage, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(categoriesMessage, session.getId(), 
+						update.getMessage().getMessage_id(),BotMessage.B14_KEYB);
 				session.getSessionStatus().setId(SessionStatus.WARN_CATEGORY_STATUS_ID);
 				return;
 			}
@@ -79,7 +84,9 @@ public class WarnSelOpTask extends TaskAdapter implements Task {
 					update.getMessage().getText().trim().equalsIgnoreCase("/b")){
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
-				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),
+						BotMessage.WELCOME_MENU_KEYB);
 				session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 				return;
 			}
