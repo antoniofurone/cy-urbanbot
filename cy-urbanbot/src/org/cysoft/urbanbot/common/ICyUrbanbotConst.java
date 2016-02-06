@@ -1,7 +1,7 @@
 package org.cysoft.urbanbot.common;
 
 public interface ICyUrbanbotConst {
-	public static final int MAX_DOWNLOADABLE_FILE_SIZE=40000000;
+	public static final int MAX_DOWNLOADABLE_FILE_SIZE=20000000;
 	
 	public static final String MEDIA_VIDEO_TYPE="Video";
 	public static final String MEDIA_VOICE_TYPE="Voice";

@@ -24,7 +24,7 @@ import org.cysoft.bss.core.web.response.rest.TicketResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
-import org.cysoft.urbanbot.core.NameValueList;
+import org.cysoft.urbanbot.common.NameValueList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +97,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -115,6 +116,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -139,7 +141,7 @@ public class CyBssCoreAPI {
 				+",\"type\":\"N\""
 				+ "}";
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpPostBodyRequest(
 					coreUrl+"/rest/app/"+appId+"/putVariable",
@@ -148,6 +150,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -165,6 +168,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	}
@@ -196,6 +200,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -208,6 +213,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -221,6 +227,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -252,6 +259,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -272,6 +280,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -290,6 +299,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -314,6 +324,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -332,6 +343,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -355,10 +367,21 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
-		PersonResponse personResponse = new Gson().fromJson(response, PersonResponse.class);
+		PersonResponse personResponse =null; 
+		try{
+			personResponse=	new Gson().fromJson(response, PersonResponse.class);
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+			
 		if (personResponse.getResultCode().equals(ICyBssResultConst.RESULT_NOT_FOUND)){
 			// add
 				
@@ -384,6 +407,7 @@ public class CyBssCoreAPI {
 			}
 			catch(Exception e){
 				logger.error(e.toString());
+				logger.error("response="+response);
 				throw new CyUrbanbotException(e);
 			}
 			
@@ -424,6 +448,7 @@ public class CyBssCoreAPI {
 			}
 			catch(Exception e){
 				logger.error(e.toString());
+				logger.error("response="+response);
 				throw new CyUrbanbotException(e);
 			}
 			
@@ -445,6 +470,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -463,6 +489,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -484,7 +511,7 @@ public class CyBssCoreAPI {
 		nvl.add("description", description);
 		nvl.add("locationType", ICyUrbanbotConst.LOCATION_TYPE_STORY);
 	
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpPostBodyRequest(
 					coreUrl+"/rest/location/add",
@@ -493,6 +520,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -511,6 +539,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		return locationResponse.getLocation().getId();
@@ -525,7 +554,7 @@ public class CyBssCoreAPI {
 		nvl.add("entityId", (new Long(storyId)).toString());
 		nvl.add("entityName", Location.ENTITY_NAME);
 		nvl.add("fileType", fileType);
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					coreUrl+"/fileservice/file/upload",
@@ -535,6 +564,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -550,6 +580,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	}
@@ -567,6 +598,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -585,6 +617,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -604,6 +637,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -622,6 +656,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -641,6 +676,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -660,6 +696,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -678,6 +715,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -695,6 +733,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -713,6 +752,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -730,6 +770,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -748,6 +789,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	
@@ -765,6 +807,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -781,7 +824,7 @@ public class CyBssCoreAPI {
 		nvl.add("personId", (new Long(personId)).toString());
 		nvl.add("categoryId", (new Long(categoryId)).toString());
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpPostBodyRequest(
 					coreUrl+"/rest/ticket/add",
@@ -790,6 +833,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -809,6 +853,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -827,6 +872,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	
@@ -844,6 +890,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -862,6 +909,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -880,6 +928,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -899,6 +948,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -916,6 +966,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -935,6 +986,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -953,6 +1005,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		return ticketCategoryListResponse.getTicketCategories();
@@ -971,6 +1024,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -988,6 +1042,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -1010,7 +1065,7 @@ public class CyBssCoreAPI {
 		nvl.add("latitude", (new Double(latitude)).toString());
 		nvl.add("longitude", (new Double(longitude)).toString());
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpPostBodyRequest(
 					coreUrl+"/rest/ticket/"+warnId+"/setLocation",
@@ -1019,6 +1074,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -1037,6 +1093,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	
@@ -1050,7 +1107,7 @@ public class CyBssCoreAPI {
 		nvl.add("entityId", (new Long(warnId)).toString());
 		nvl.add("entityName", Ticket.ENTITY_NAME);
 		nvl.add("fileType", fileType);
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					coreUrl+"/fileservice/file/upload",
@@ -1060,6 +1117,7 @@ public class CyBssCoreAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -1077,6 +1135,7 @@ public class CyBssCoreAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	

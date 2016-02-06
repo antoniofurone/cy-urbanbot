@@ -1,16 +1,23 @@
 package org.cysoft.urbanbot.core.task;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.Location;
+import org.cysoft.bss.core.web.response.rest.PersonResponse;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
+import org.cysoft.urbanbot.api.google.model.GeoLocation;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
@@ -20,6 +27,8 @@ import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
 
 public class TouristGetLocTask extends TaskAdapter implements Task{
 
@@ -51,11 +60,56 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 		}
 		
 		if (session.getSessionStatus().getId()==SessionStatus.TOURIST_GETLOC_STATUS_ID){
+			org.cysoft.urbanbot.api.telegram.model.Location rifLoc=null;
+			
+			if (update.getMessage()!=null && update.getMessage().getText()!=null){
+				String textLoc=update.getMessage().getText();
+				String response=null;
+				try {
+					response=CyUrbanBotUtility.httpGet("http://maps.googleapis.com/maps/api/geocode/json?address="
+							+URLEncoder.encode(textLoc, "UTF-8"), 
+							null);
+				} catch (CyUrbanbotException | UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					logger.error(e.toString());
+					logger.error("response="+response);
+					throw new CyUrbanbotException(e);
+				}
+				
+				GeoLocation geoLocation =null; 
+				try{
+					geoLocation=	new Gson().fromJson(response, GeoLocation.class);
+				}
+				catch(Exception e){
+					logger.error(e.toString());
+					logger.error("response="+response);
+					throw new CyUrbanbotException(e);
+				}
+				
+				//logger.info("GeoLocation="+geoLocation);
+				if (geoLocation!=null && geoLocation.getStatus()!=null 
+					&& geoLocation.getStatus().equals("OK") && geoLocation.getResults()!=null 
+					&& !geoLocation.getResults().isEmpty()
+					)
+					if (geoLocation.getResults().get(0).getGeometry()!=null
+						&& geoLocation.getResults().get(0).getGeometry().getLocation()!=null){
+						rifLoc=new org.cysoft.urbanbot.api.telegram.model.Location();
+						rifLoc.setLatitude(geoLocation.getResults().get(0).
+								getGeometry().getLocation().getLat());
+						rifLoc.setLongitude(geoLocation.getResults().get(0).
+								getGeometry().getLocation().getLng());
+						
+					}
+				
+			} // text location
+			
 			org.cysoft.urbanbot.api.telegram.model.Location tlLoc=update.getMessage().getLocation();
 			if (tlLoc!=null)
-			{
-				logger.info("location="+tlLoc);
-				
+				rifLoc=tlLoc;
+			
+			logger.info("location="+rifLoc);
+			
+			if (rifLoc!=null){
 				List<Location> locs=CyBssCoreAPI.getInstance().findTouristSites(session.getLanguage());
 				String messageList="";
 				if (locs.isEmpty())
@@ -66,7 +120,7 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 					
 					List<LocDistance> locDists=new ArrayList<LocDistance>();
 					for(Location loc:locs)
-						locDists.add(new LocDistance(loc,tlLoc.getLatitude(),tlLoc.getLongitude()));
+						locDists.add(new LocDistance(loc,rifLoc.getLatitude(),rifLoc.getLongitude()));
 					
 					Collections.sort(locDists);
 					

@@ -1,4 +1,4 @@
-package org.cysoft.urbanbot.core;
+package org.cysoft.urbanbot.common;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -30,7 +30,7 @@ public class TouristShowTask extends TaskAdapter implements Task{
 		if (selection.equals("")){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.VB_KEYB);
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
@@ -46,7 +46,7 @@ public class TouristShowTask extends TaskAdapter implements Task{
 		if (selection.length()<3){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.VB_KEYB);
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
@@ -61,7 +61,7 @@ public class TouristShowTask extends TaskAdapter implements Task{
 		catch (NumberFormatException ne){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.VB_KEYB);
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		
@@ -69,7 +69,7 @@ public class TouristShowTask extends TaskAdapter implements Task{
 		if (!command.equalsIgnoreCase("/v")){
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.VB_KEYB);
+					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 			return;
 		}
 		

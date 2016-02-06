@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UpdateDispatcher.class);
-	
+	private static final short ERROR_SESSION_MAX=3;
 	
 	private TransferQueue<Update> updateQueue = null;
 	public UpdateDispatcher(TransferQueue<Update> updateQueue){
@@ -44,7 +44,10 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 		// TODO Auto-generated method stub
 		logger.info(">>> Start Dispatcher Thread...");
 		
+		short sessionErrorCont=0;
 		while (true){
+			boolean sessionError=false;
+			
 			try {
 				Update update=updateQueue.take();
 				Session session=null;
@@ -73,8 +76,11 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 					} catch (CyUrbanbotException e) {
 						// TODO Auto-generated catch block
 						logger.error(e.toString());
-						doStop();
-						break;
+						sessionError=true;
+						sessionErrorCont++;
+						if (sessionErrorCont>=ERROR_SESSION_MAX)
+							doStop();
+						continue;
 					}
 					session=new Session(chatId);
 					session.setPersonId(personId);
@@ -97,8 +103,11 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 						} catch (CyUrbanbotException e) {
 							// TODO Auto-generated catch block
 							logger.error(e.toString());
-							doStop();
-							break;
+							sessionError=true;
+							sessionErrorCont++;
+							if (sessionErrorCont>=ERROR_SESSION_MAX)
+								doStop();
+							
 						}
 						continue;
 					}
@@ -122,7 +131,10 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 				break;
 			}
 				
-		}
+		if (!sessionError)
+			sessionErrorCont=0;
+		} // end while
+		
 		logger.info(">>> Stop Dispatcher Thread...");
 	}
 	@Override

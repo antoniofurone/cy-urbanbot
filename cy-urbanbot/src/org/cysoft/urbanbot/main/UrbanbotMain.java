@@ -96,9 +96,8 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		}
 		
 		
-		
 		logger.info("<<< End Urbanbot...");
-		
+		System.exit(1);
 	}
 	@Override
 	public void run() {
@@ -157,30 +156,50 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		}
 		
 		TransferQueue<Update> queue =new LinkedTransferQueue<Update>();
-		UpdateDispatcher updateDispatcher=new UpdateDispatcher(queue); 
+		UpdateDispatcher updateDispatcher=new UpdateDispatcher(queue);
+		updateDispatcher.addUpdateDispatcherListener(this);
 		Thread t=new Thread(updateDispatcher);
 		t.start();
-		
 		
 		List<Update> telegramUpdates=null;
 		
 		int loop=0;
+		short updErrorCount=0;
+		
 		while(true){
+			boolean updError=false;
 			
 			try {
 				if (stopNow) break;
-				telegramUpdates = telegramAPI.getUpdates(updatesOffSet);
-				for(Update update:telegramUpdates){
-					logger.info("Received:"+update);
-					queue.transfer(update);
-				}
 				
-				if (stopNow) break;
-				int updatesSize=telegramUpdates.size();
-				if (updatesSize>0){
-					updatesOffSet=telegramUpdates.get(updatesSize-1).getUpdate_id()+1;
-					bssCoreAPI.setUpdatesOffSet(updatesOffSet);
+				try{
+					telegramUpdates = telegramAPI.getUpdates(updatesOffSet);
+					for(Update update:telegramUpdates){
+						logger.info("Received:"+update);
+						queue.transfer(update);
+					}
+			
+				} catch (CyUrbanbotException e){
+					logger.error("getUpdates error:"+e.getMessage()+ "... sleeping for 1 min.");
+					Thread.sleep(60000);
+					loop=50; // force updateOffset
+					updErrorCount++;
+					updError=true;
+					if (updErrorCount>=60){
+						logger.error("updErrorCount:"+updErrorCount);
+						break;
+					}
 				}
+				if (!updError)
+					updErrorCount=0;
+				
+				if (telegramUpdates!=null){
+					int updatesSize=telegramUpdates.size();
+					if (updatesSize>0){
+						updatesOffSet=telegramUpdates.get(updatesSize-1).getUpdate_id()+1;
+						bssCoreAPI.setUpdatesOffSet(updatesOffSet);
+					}
+				}	
 				
 				loop++;
 				if (loop>=50){
@@ -212,8 +231,9 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 			
 		} // end while
 		
-		logger.info(">>> End Main Thread...");
+		t.interrupt();
 		
+		logger.info(">>> End Main Thread...");
 	}
 	@Override
 	public void onUpdateDispatcherStop() {

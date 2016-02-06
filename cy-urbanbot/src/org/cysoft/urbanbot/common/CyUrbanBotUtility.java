@@ -230,7 +230,7 @@ public class CyUrbanBotUtility {
 
 		if (response.getStatusLine().getStatusCode() != 200) {
 			logger.error(response.toString());
-			throw new RuntimeException("Failed : HTTP error code : "
+			throw new CyUrbanbotException("Failed : HTTP error code : "
 			   + response.getStatusLine().getStatusCode());
 		}
 		

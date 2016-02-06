@@ -13,7 +13,7 @@ import org.cysoft.urbanbot.api.telegram.response.GetUpdatesResponse;
 import org.cysoft.urbanbot.api.telegram.response.SendMessageResponse;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
-import org.cysoft.urbanbot.core.NameValueList;
+import org.cysoft.urbanbot.common.NameValueList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +99,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		return updResponse.getResult();
@@ -161,6 +162,7 @@ public class TelegramAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw e;
 		} 
 		
@@ -174,6 +176,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	}
@@ -194,11 +197,13 @@ public class TelegramAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw e;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -212,6 +217,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	}
@@ -226,7 +232,7 @@ public class TelegramAPI {
 			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
 		
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					botUrl+SENDPHOTO_METHOD,
@@ -236,6 +242,7 @@ public class TelegramAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -249,6 +256,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -264,7 +272,7 @@ public class TelegramAPI {
 			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
 		
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					botUrl+SENDVIDEO_METHOD,
@@ -274,6 +282,7 @@ public class TelegramAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -287,6 +296,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -302,7 +312,7 @@ public class TelegramAPI {
 		if (mimeType!=null && !mimeType.equals(""))
 			nvl.add("mime_type", mimeType);
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					botUrl+SENDAUDIO_METHOD,
@@ -312,6 +322,7 @@ public class TelegramAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -325,6 +336,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -338,7 +350,7 @@ public class TelegramAPI {
 			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
 		
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					botUrl+SENDVOICE_METHOD,
@@ -348,10 +360,11 @@ public class TelegramAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
-		logger.info("response received="+response);
+		//logger.info("response received="+response);
 		SendMessageResponse sendResponse =null;
 		try{
 			sendResponse=new Gson().fromJson(response, SendMessageResponse.class);
@@ -361,6 +374,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 	}
@@ -373,7 +387,7 @@ public class TelegramAPI {
 			nvl.add("reply_to_message_id", (new Long(replyToMessageId)).toString());
 		
 		
-		String response;
+		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
 					botUrl+SENDDOCUMENT_METHOD,
@@ -383,6 +397,7 @@ public class TelegramAPI {
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -396,6 +411,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
@@ -415,6 +431,8 @@ public class TelegramAPI {
 		} catch (CyUrbanbotException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			logger.error(e1.toString());
+			logger.error("response="+response);
 			throw e1;
 		}
 		
@@ -427,6 +445,7 @@ public class TelegramAPI {
 		}
 		catch(Exception e){
 			logger.error(e.toString());
+			logger.error("response="+response);
 			throw new CyUrbanbotException(e);
 		}
 		
