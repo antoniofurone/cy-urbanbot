@@ -150,6 +150,12 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 			
 			bssCoreAPI.setDownloadPath(telegramAPI.getDownloadPath());
 			
+			param=bssCoreAPI.getParam("media_mediation");
+			if (param!=null && !param.equals("")){
+				bssCoreAPI.setMediaMediation(param.getValue());
+			}
+				
+			
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
 			System.exit(1);

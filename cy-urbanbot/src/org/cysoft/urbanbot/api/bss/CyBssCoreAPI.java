@@ -39,6 +39,20 @@ public class CyBssCoreAPI {
 	private String userId="";
 	private String pwd="";
 	
+	private String mediaMediation="N";
+	public String getMediaMediation() {
+		return mediaMediation;
+	}
+	public void setMediaMediation(String mediaMediation) {
+		this.mediaMediation = mediaMediation;
+	}
+	
+	public boolean isMediaMediation(){
+		return mediaMediation.equals("Y");
+	}
+
+
+
 	private static CyBssCoreAPI instance=null;
 	public static CyBssCoreAPI getInstance(){
 		if (instance==null)
@@ -554,6 +568,9 @@ public class CyBssCoreAPI {
 		nvl.add("entityId", (new Long(storyId)).toString());
 		nvl.add("entityName", Location.ENTITY_NAME);
 		nvl.add("fileType", fileType);
+		if (isMediaMediation())
+			nvl.add("visibility", CyBssFile.VISIBILITY_RESERVED);
+		
 		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(
@@ -1107,6 +1124,9 @@ public class CyBssCoreAPI {
 		nvl.add("entityId", (new Long(warnId)).toString());
 		nvl.add("entityName", Ticket.ENTITY_NAME);
 		nvl.add("fileType", fileType);
+		if (isMediaMediation())
+			nvl.add("visibility", CyBssFile.VISIBILITY_RESERVED);
+		
 		String response=null;
 		try {
 			response = CyUrbanBotUtility.httpUpload(

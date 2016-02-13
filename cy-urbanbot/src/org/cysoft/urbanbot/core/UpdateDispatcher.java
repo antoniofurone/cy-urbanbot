@@ -61,12 +61,15 @@ public class UpdateDispatcher implements Runnable, UpdateWorkerListener{
 					
 					try {
 						String code=null;
-						if (user.getUsername()==null || user.getUsername().equals(""))
-							code="tlgn:"+(user.getFirst_name()==null?"":user.getFirst_name())+
-									(user.getLast_name()==null?"":user.getLast_name());
+						if (user.getId()!=0)
+							code="tlgid:"+user.getId();
 						else
-							code="tlg:"+user.getUsername();
-							
+							if (user.getUsername()==null || user.getUsername().equals(""))
+								code="tlgn:"+(user.getFirst_name()==null?"":user.getFirst_name())+
+										(user.getLast_name()==null?"":user.getLast_name());
+							else
+								code="tlg:"+user.getUsername();
+								
 						personId=CyBssCoreAPI.getInstance().updatePerson(code, 
 								user.getFirst_name(), user.getLast_name());
 						
