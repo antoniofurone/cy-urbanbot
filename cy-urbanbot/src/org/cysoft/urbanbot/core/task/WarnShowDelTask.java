@@ -96,19 +96,23 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 			List<CyBssFile> files=CyBssCoreAPI.getInstance().getWarnFiles(warnId);
 			if (files!=null && !files.isEmpty()){
 				for(CyBssFile file:files){
-					CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
-					
-					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
-						TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id(),null);
-					
-					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE))
-						TelegramAPI.getInstance().sendVideo(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id(),null);
-					
-					
-					File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
-					f.delete();
+					if (file.getVisibility().equals(CyBssFile.VISIBILITY_PUBLIC)){
+						CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
+							TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),null);
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE))
+							TelegramAPI.getInstance().sendVideo(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),null);
+						
+						
+						File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
+						f.delete();
+					}
+					else
+						logger.warn(file.toString()+": not visible !");
 				}
 			}
 				

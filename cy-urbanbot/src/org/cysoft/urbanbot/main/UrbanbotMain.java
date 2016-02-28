@@ -221,8 +221,10 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 					if ((currentTime-session.getLastUseTime())>=ICyUrbanbotConst.SESSION_TIME_OUT){
 						String message=CyBssCoreAPI.getInstance().
 								getMessage(BotMessage.SESSION_TIMEOUT_ID, session.getLanguage());
-						TelegramAPI.getInstance().sendMessage(message, session.getId(), 0);
+						long sessionRemoved=session.getId();
 						LiveSessions.getInstance().remove(session.getId());
+						TelegramAPI.getInstance().sendMessage(message, sessionRemoved, 0);
+						
 					}
 				}
 				

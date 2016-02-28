@@ -267,7 +267,7 @@ public class CyUrbanBotUtility {
 		return ret;
 	}
 	
-	public static void httpDownload(String url,String downloadPath,String filePath) 
+	public static void httpDownload(String url,String downloadPath,String filePath,short errorCount) 
 			throws CyUrbanbotException{
 	
 		logger.info(">>> httpDownload:"+url+";"+downloadPath+";"+filePath);
@@ -286,7 +286,15 @@ public class CyUrbanBotUtility {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new CyUrbanbotException(e);
+			logger.error(e.toString());
+			if (errorCount>=3)
+				throw new CyUrbanbotException(e);
+			else
+				{
+				errorCount++;
+				logger.info("retry download:"+errorCount);
+				httpDownload(url,downloadPath,filePath,errorCount);
+				}
 		}
         
 		logger.info("<<< httpDownload:"+url+";"+downloadPath+";"+filePath);

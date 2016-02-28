@@ -6,8 +6,8 @@ CLASSPATH=$CLASSPATH:./lib/httpmime-4.4.jar:./lib/logback-classic-1.1.2.jar:./li
 
 APPID=UrbanBot
 CORE_URL=http://localhost:8080/cy-bss-core
-USER_ID=cybss
-PWD=cybss
+USER_ID=urbanbot
+PWD=urbabot
 
 
 echo 'CLASSPATH='$CLASSPATH

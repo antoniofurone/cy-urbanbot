@@ -5,8 +5,8 @@ set "CLASSPATH=%CLASSPATH%;.\lib\httpmime-4.4.jar;.\lib\logback-classic-1.1.2.ja
 
 set "APPID=UrbanBot"
 set "CORE_URL=http://localhost:8080/cy-bss-core"
-set "USER_ID=cybss"
-set "PWD=cybss"
+set "USER_ID=urbanbot"
+set "PWD=urbanbot"
 
 
 echo CLASSPATH=%CLASSPATH%

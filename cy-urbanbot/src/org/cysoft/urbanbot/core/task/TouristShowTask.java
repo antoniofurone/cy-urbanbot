@@ -96,50 +96,56 @@ public class TouristShowTask extends TaskAdapter implements Task{
 					
 					logger.info(file.toString());
 					
-					String caption=file.getNote();
+					if (file.getVisibility().equals(CyBssFile.VISIBILITY_PUBLIC)){
 					
-					//if (file.getNote()!=null && !file.getNote().equals(""))
-					//	TelegramAPI.getInstance().sendMessage(file.getNote(), session.getId(), update.getMessage().getMessage_id());
+						String caption=file.getNote();
+						
+						//if (file.getNote()!=null && !file.getNote().equals(""))
+						//	TelegramAPI.getInstance().sendMessage(file.getNote(), session.getId(), update.getMessage().getMessage_id());
+						
+						CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
+						
+						if (file.getFileType()==null || file.getFileType().equals("") || (
+							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE) &&
+							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_AUDIO_TYPE) &&
+							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE) &&
+							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_VOICE_TYPE))
+							)
+							TelegramAPI.getInstance().sendDocument(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id());
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
+							TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),caption);
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_AUDIO_TYPE)){
+							if (file.getName().endsWith(".mp3")||file.getName().endsWith(".ogg"))
+							TelegramAPI.getInstance().sendAudio(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),null);
+						}
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE))
+							TelegramAPI.getInstance().sendVideo(session.getId()+"_"+file.getName(), 
+									session.getId(),update.getMessage().getMessage_id(),caption);
+						
+						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VOICE_TYPE)){
+							File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
+							
+							File fr=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName()+".ogg");
+							f.renameTo(fr);
+							
+							TelegramAPI.getInstance().sendVoice(session.getId()+"_"+file.getName()+".ogg", 
+									session.getId(),update.getMessage().getMessage_id());
+							
+							fr.delete();
+						}
 					
-					CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
-					
-					if (file.getFileType()==null || file.getFileType().equals("") || (
-						!file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE) &&
-						!file.getFileType().equals(ICyUrbanbotConst.MEDIA_AUDIO_TYPE) &&
-						!file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE) &&
-						!file.getFileType().equals(ICyUrbanbotConst.MEDIA_VOICE_TYPE))
-						)
-						TelegramAPI.getInstance().sendDocument(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id());
-					
-					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
-						TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id(),caption);
-					
-					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_AUDIO_TYPE)){
-						if (file.getName().endsWith(".mp3")||file.getName().endsWith(".ogg"))
-						TelegramAPI.getInstance().sendAudio(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id(),null);
-					}
-					
-					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE))
-						TelegramAPI.getInstance().sendVideo(session.getId()+"_"+file.getName(), 
-								session.getId(),update.getMessage().getMessage_id(),caption);
-					
-					if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_VOICE_TYPE)){
 						File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
-						
-						File fr=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName()+".ogg");
-						f.renameTo(fr);
-						
-						TelegramAPI.getInstance().sendVoice(session.getId()+"_"+file.getName()+".ogg", 
-								session.getId(),update.getMessage().getMessage_id());
-						
-						fr.delete();
+						f.delete();
 					}
-				
-					File f=new File(TelegramAPI.getInstance().getDownloadPath()+session.getId()+"_"+file.getName());
-					f.delete();
+					else
+						logger.warn(file.toString()+": not visible !");
+					
 				}
 			}
 						

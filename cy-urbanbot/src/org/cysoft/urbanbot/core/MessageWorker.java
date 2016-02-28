@@ -10,22 +10,22 @@ import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UpdateWorker implements Runnable{
+public class MessageWorker implements Runnable{
 
-	private static final Logger logger = LoggerFactory.getLogger(UpdateWorker.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessageWorker.class);
 	private Update update=null;
 	private Session session=null;
 	
-	private List<UpdateWorkerListener> listeners=new ArrayList<UpdateWorkerListener>();
-	public void addUpdateWorkerListener(UpdateWorkerListener l){
+	private List<MessageWorkerListener> listeners=new ArrayList<MessageWorkerListener>();
+	public void addUpdateWorkerListener(MessageWorkerListener l){
 		listeners.add(l);
 	}
-	public void removeUpdateWorkerListener(UpdateWorkerListener l){
+	public void removeUpdateWorkerListener(MessageWorkerListener l){
 		listeners.remove(l);
 	}
 	
 	
-	public UpdateWorker(Session session,Update update){
+	public MessageWorker(Session session,Update update){
 		this.update=update;
 		this.session=session;
 	}
@@ -34,7 +34,7 @@ public class UpdateWorker implements Runnable{
 		logger.info("doError() >>>");
 		session.setLocked(false);
 		if (!listeners.isEmpty())
-			for(UpdateWorkerListener l:listeners)
+			for(MessageWorkerListener l:listeners)
 				l.onUpdateWorkerError(session, update);
 		
 		try {
@@ -54,7 +54,7 @@ public class UpdateWorker implements Runnable{
 		// TODO Auto-generated method stub
 		logger.info(">>> Start UpdateWorker Thread...");
 		
-		WorkflowManager wf=new WorkflowManager(session);
+		MessageWorkflowManager wf=new MessageWorkflowManager(session);
 		try {
 			wf.transition(update);
 		} catch (CyUrbanbotException e) {

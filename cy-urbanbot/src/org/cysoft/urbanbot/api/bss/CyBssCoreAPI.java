@@ -1067,7 +1067,8 @@ public class CyBssCoreAPI {
 	}
 	
 	public void downloadFile(long fileId,String fileName) throws CyUrbanbotException{
-		CyUrbanBotUtility.httpDownload(coreUrl+"/fileservice/file/"+fileId+"/download", downloadPath, fileName);
+		CyUrbanBotUtility.httpDownload(coreUrl+"/fileservice/file/"+fileId+"/download", downloadPath, 
+				fileName,(short)0);
 	}
 	
 	

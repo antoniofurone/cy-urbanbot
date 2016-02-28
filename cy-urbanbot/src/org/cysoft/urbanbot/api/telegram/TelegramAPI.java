@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.cysoft.urbanbot.api.telegram.model.InlineQueryResult;
 import org.cysoft.urbanbot.api.telegram.model.Update;
+import org.cysoft.urbanbot.api.telegram.response.AnswerInlineQueryResponse;
 import org.cysoft.urbanbot.api.telegram.response.GetFileResponse;
 import org.cysoft.urbanbot.api.telegram.response.GetUpdatesResponse;
 import org.cysoft.urbanbot.api.telegram.response.SendMessageResponse;
@@ -37,6 +39,7 @@ public class TelegramAPI {
 	private static final String SENDAUDIO_METHOD="sendAudio";
 	private static final String SENDVOICE_METHOD="sendVoice";
 	private static final String SENDDOCUMENT_METHOD="sendDocument";
+	private static final String ANSWERINLINEQUERY_METHOD="answerInlineQuery";
 	
 	public static final String MESSAGE_PARSEMODE_MARKDOWN="Markdown";
 	public static final String MESSAGE_PARSEMODE_HTML="HTML";
@@ -105,6 +108,49 @@ public class TelegramAPI {
 		return updResponse.getResult();
 	
 	}
+	
+	
+	public void answerInlineQuery(String inline_query_id, List<InlineQueryResult> inLineResults) 
+			throws CyUrbanbotException{
+		
+		String response=null;
+		
+		try {
+			List<NameValuePair> parms = new ArrayList<NameValuePair>();
+			
+			parms.add(new BasicNameValuePair("inline_query_id", inline_query_id + ""));
+			JsonArray jsInLineResults = new JsonArray();
+			Gson gson=new Gson();
+			for(InlineQueryResult result:inLineResults){
+				jsInLineResults.add(gson.toJsonTree(result, result.getClass()));
+		    }
+			parms.add(new BasicNameValuePair("results",jsInLineResults.toString()));
+			//System.out.println("params="+parms);
+			response=CyUrbanBotUtility.httpPost(botUrl+ANSWERINLINEQUERY_METHOD, null, parms);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw e;
+		}
+		
+		//logger.info("response received="+response);
+		AnswerInlineQueryResponse answerResponse =null;
+		try{
+			answerResponse=new Gson().fromJson(response, AnswerInlineQueryResponse.class);
+			if (!answerResponse.isOk()){
+				throw new CyUrbanbotException(ANSWERINLINEQUERY_METHOD+" nok !");
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+
+	}
+	
 	
 	public void sendMessage(String text,long chatId) throws CyUrbanbotException{
 		sendMessage(text,chatId,0,null,null);
@@ -419,7 +465,7 @@ public class TelegramAPI {
 	
 	
 	public void downloadFile(String telegramFilePath) throws CyUrbanbotException{
-		CyUrbanBotUtility.httpDownload(botFileUrl+telegramFilePath, downloadPath, telegramFilePath);
+		CyUrbanBotUtility.httpDownload(botFileUrl+telegramFilePath, downloadPath, telegramFilePath,(short)0);
 	}
 	
 	public String getFilePath(String fileId) throws CyUrbanbotException{

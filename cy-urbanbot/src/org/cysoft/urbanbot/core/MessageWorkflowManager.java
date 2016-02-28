@@ -23,12 +23,12 @@ import org.cysoft.urbanbot.core.task.WelcomeTask;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-public class WorkflowManager {
+public class MessageWorkflowManager {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(WorkflowManager.class);
 	
 	private Session session=null;
-	public WorkflowManager(Session s){
+	public MessageWorkflowManager(Session s){
 		this.session=s;
 	}
 
