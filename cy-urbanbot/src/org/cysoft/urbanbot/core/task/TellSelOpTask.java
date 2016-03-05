@@ -39,7 +39,7 @@ public class TellSelOpTask extends TaskAdapter implements Task {
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
 				update.getMessage().getText().trim().equalsIgnoreCase("/v")){
 					logger.info("Show list...");
-					List<Location> locs=CyBssCoreAPI.getInstance().findStories(session.getPersonId(),session.getLanguage());
+					List<Location> locs=CyBssCoreAPI.getInstance().findStories(session.getPersonId(),"",session.getLanguage());
 					String messageList="";
 					if (locs.isEmpty())
 						messageList+=CyBssCoreAPI.getInstance().

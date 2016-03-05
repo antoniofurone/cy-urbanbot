@@ -17,7 +17,7 @@ public class MapsTask extends TaskAdapter implements Task {
 		// TODO Auto-generated method stub
 		String message=CyBssCoreAPI.getInstance().
 				getMessage(BotMessage.MAP_URLS_ID, session.getLanguage());
-		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id(),TelegramAPI.MESSAGE_PARSEMODE_HTML);
 		session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 	}
 

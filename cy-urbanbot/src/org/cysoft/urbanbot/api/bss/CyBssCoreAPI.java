@@ -1,5 +1,7 @@
 package org.cysoft.urbanbot.api.bss;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -471,7 +473,7 @@ public class CyBssCoreAPI {
 		
 	}
 
-	public List<Location> findTouristSites(String languageCode) throws CyUrbanbotException{
+	public List<Location> findTouristSites(String name, String description,String languageCode) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
@@ -479,9 +481,10 @@ public class CyBssCoreAPI {
 
 		String response=null;
 		try {
-			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?locationType="+ICyUrbanbotConst.LOCATION_TYPE_TOURIST_SITE, 
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?name="+
+					URLEncoder.encode(name, "UTF-8")+"&description="+URLEncoder.encode(description, "UTF-8")+"&locationType="+ICyUrbanbotConst.LOCATION_TYPE_TOURIST_SITE, 
 					headerAttrs);
-		} catch (CyUrbanbotException e) {
+		} catch (CyUrbanbotException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
 			logger.error("response="+response);
@@ -602,7 +605,7 @@ public class CyBssCoreAPI {
 		}
 	}
 	
-	public List<Location> findStories(long personId, String languageCode) throws CyUrbanbotException{
+	public List<Location> findStories(long personId,String description,String languageCode) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
@@ -610,9 +613,10 @@ public class CyBssCoreAPI {
 
 		String response=null;
 		try {
-			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?personId="+personId+"&locationType="+ICyUrbanbotConst.LOCATION_TYPE_STORY, 
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?personId="+personId+
+					"&description="+URLEncoder.encode(description, "UTF-8")+"&locationType="+ICyUrbanbotConst.LOCATION_TYPE_STORY, 
 					headerAttrs);
-		} catch (CyUrbanbotException e) {
+		} catch (CyUrbanbotException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
 			logger.error("response="+response);
@@ -913,7 +917,7 @@ public class CyBssCoreAPI {
 		
 	}
 	
-	public List<Ticket> findWarns(long personId, String languageCode) throws CyUrbanbotException{
+	public List<Ticket> findWarns(long personId, String text,String languageCode) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
@@ -921,9 +925,9 @@ public class CyBssCoreAPI {
 
 		String response=null;
 		try {
-			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/find?personId="+personId, 
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/find?personId="+personId+"&text="+URLEncoder.encode(text, "UTF-8"), 
 					headerAttrs);
-		} catch (CyUrbanbotException e) {
+		} catch (CyUrbanbotException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.toString());
 			logger.error("response="+response);

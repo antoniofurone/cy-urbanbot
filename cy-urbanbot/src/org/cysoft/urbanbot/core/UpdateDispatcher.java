@@ -3,14 +3,13 @@ package org.cysoft.urbanbot.core;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TransferQueue;
 
 import org.cysoft.bss.core.model.ICyBssConst;
-import org.cysoft.bss.core.model.Location;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.InlineQueryResult;
-import org.cysoft.urbanbot.api.telegram.model.InlineQueryResultArticle;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.api.telegram.model.User;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
@@ -23,6 +22,14 @@ public class UpdateDispatcher implements Runnable, MessageWorkerListener{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UpdateDispatcher.class);
 	private static final short ERROR_SESSION_MAX=3;
+	
+	private InlineQueryServer inLineServer=null;
+	private InlineQueryServer getInlineServer(){
+		if (inLineServer==null)
+			inLineServer=new InlineQueryServer();
+		return inLineServer;
+	}
+	
 	
 	private TransferQueue<Update> updateQueue = null;
 	public UpdateDispatcher(TransferQueue<Update> updateQueue){
@@ -66,16 +73,7 @@ public class UpdateDispatcher implements Runnable, MessageWorkerListener{
 						long personId=0;
 						
 						try {
-							String code=null;
-							if (user.getId()!=0)
-								code="tlgid:"+user.getId();
-							else
-								if (user.getUsername()==null || user.getUsername().equals(""))
-									code="tlgn:"+(user.getFirst_name()==null?"":user.getFirst_name())+
-											(user.getLast_name()==null?"":user.getLast_name());
-								else
-									code="tlg:"+user.getUsername();
-									
+							String code=this.getPersonCode(user);
 							personId=CyBssCoreAPI.getInstance().updatePerson(code, 
 									user.getFirst_name(), user.getLast_name());
 							
@@ -137,47 +135,68 @@ public class UpdateDispatcher implements Runnable, MessageWorkerListener{
 				if (update.getInline_query()!=null){
 					// manage Inline query
 					
-					String query=update.getInline_query().getQuery();
-					logger.info("Inline_query:"+update.getInline_query().toString());
-					if (query==null || query.equals("")){
-						// getAll Location
-						List<Location> locs=null;
-						try {
-							locs=CyBssCoreAPI.getInstance().findTouristSites(ICyBssConst.LOCALE_IT);
-						} catch (CyUrbanbotException e) {
-							// TODO Auto-generated catch block
-							logger.error(e.toString());
-							sessionError=true;
-							sessionErrorCont++;
-							if (sessionErrorCont>=ERROR_SESSION_MAX)
-								doStop();
-							continue;
-						}
-						List<InlineQueryResult> inLineResults=new ArrayList<InlineQueryResult>();
-						for(Location loc:locs){
-							InlineQueryResultArticle inRes=new InlineQueryResultArticle();
-							inRes.setId(""+loc.getId());
-							inRes.setTitle(loc.getName());
-							String message="<strong>"+loc.getName()+"</strong>\n";
-							message+=loc.getDescription();
-							inRes.setMessage_text(message);
-							inRes.setParse_mode(TelegramAPI.MESSAGE_PARSEMODE_HTML);
-							
-							inLineResults.add(inRes);
-						}
-						
-						try {
-							TelegramAPI.getInstance().answerInlineQuery(update.getInline_query().getId(), inLineResults);
-						} catch (CyUrbanbotException e) {
-							// TODO Auto-generated catch block
-							logger.error(e.toString());
-							sessionError=true;
-							sessionErrorCont++;
-							if (sessionErrorCont>=ERROR_SESSION_MAX)
-								doStop();
-							continue;
-						}
-						
+					long personId=0;
+					User user=update.getInline_query().getFrom();
+					String code=this.getPersonCode(user);
+					
+					try {
+						personId=CyBssCoreAPI.getInstance().updatePerson(code, 
+								user.getFirst_name(), user.getLast_name());
+						logger.info("InlineQuery from personId="+personId);
+					} catch (CyUrbanbotException e) {
+						// TODO Auto-generated catch block
+						logger.error(e.toString());
+						sessionError=true;
+						sessionErrorCont++;
+						if (sessionErrorCont>=ERROR_SESSION_MAX)
+							doStop();
+						continue;
+					}
+					
+					String queryforSearch="";
+					String queryReceived=update.getInline_query().getQuery();
+					String langCode="";
+					if (queryReceived!=null && !queryReceived.equals("")){
+						StringTokenizer st = new StringTokenizer(queryReceived);
+					     while (st.hasMoreTokens()) {
+					    	 String token=st.nextToken();
+					    	 String token_lc=token.toLowerCase();
+					    	 if (token_lc.startsWith("lang=")){
+					    		 langCode=token_lc.substring(5);
+					    		 logger.info("langCode found <"+langCode+"> !");
+					    	 }
+					    	 else
+					    		 queryforSearch+=queryforSearch.equals("")?token:" "+token;
+					     }
+					}
+					
+					if (langCode.equals("") || langCode.equalsIgnoreCase(ICyBssConst.LOCALE_IT))
+						langCode=ICyBssConst.LOCALE_IT;
+					else
+						langCode=ICyBssConst.LOCALE_EN;
+					
+					List<InlineQueryResult> inLineResults=null;
+					try {
+						inLineResults=this.getInlineServer().getTouristSite(queryforSearch, langCode);
+					} catch (CyUrbanbotException e) {
+						// TODO Auto-generated catch block
+						logger.error(e.toString());
+						sessionError=true;
+						sessionErrorCont++;
+						if (sessionErrorCont>=ERROR_SESSION_MAX)
+							doStop();
+						continue;
+					}
+					try {
+						TelegramAPI.getInstance().answerInlineQuery(update.getInline_query().getId(), inLineResults);
+					} catch (CyUrbanbotException e) {
+						// TODO Auto-generated catch block
+						logger.error(e.toString());
+						sessionError=true;
+						sessionErrorCont++;
+						if (sessionErrorCont>=ERROR_SESSION_MAX)
+							doStop();
+						continue;
 					}
 					
 				}
@@ -203,6 +222,20 @@ public class UpdateDispatcher implements Runnable, MessageWorkerListener{
 		
 		logger.info(">>> Stop Dispatcher Thread...");
 	}
+	
+	private String getPersonCode(User user){
+		String code="";
+		if (user.getId()!=0)
+			code="tlgid:"+user.getId();
+		else
+			if (user.getUsername()==null || user.getUsername().equals(""))
+				code="tlgn:"+(user.getFirst_name()==null?"":user.getFirst_name())+
+						(user.getLast_name()==null?"":user.getLast_name());
+			else
+				code="tlg:"+user.getUsername();
+		return code;
+	}
+	
 	@Override
 	public void onUpdateWorkerError(Session session,Update update) {
 		// TODO Auto-generated method stub

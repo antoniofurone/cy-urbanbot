@@ -9,10 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.Location;
-import org.cysoft.bss.core.web.response.rest.PersonResponse;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.google.model.GeoLocation;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
@@ -110,7 +107,7 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 			logger.info("location="+rifLoc);
 			
 			if (rifLoc!=null){
-				List<Location> locs=CyBssCoreAPI.getInstance().findTouristSites(session.getLanguage());
+				List<Location> locs=CyBssCoreAPI.getInstance().findTouristSites("","",session.getLanguage());
 				String messageList="";
 				if (locs.isEmpty())
 					messageList+=CyBssCoreAPI.getInstance().

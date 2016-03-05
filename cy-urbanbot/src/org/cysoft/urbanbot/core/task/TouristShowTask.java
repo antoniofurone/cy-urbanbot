@@ -84,8 +84,8 @@ public class TouristShowTask extends TaskAdapter implements Task{
 				}
 			
 			if (loc.getDescription()!=null && !loc.getDescription().equals(""))
-				TelegramAPI.getInstance().sendMessage(loc.getDescription(), session.getId(), 
-						update.getMessage().getMessage_id());
+				TelegramAPI.getInstance().sendMessage("<strong>"+loc.getName()+"</strong>\n"+loc.getDescription(), session.getId(), 
+						update.getMessage().getMessage_id(),TelegramAPI.MESSAGE_PARSEMODE_HTML);
 			// Invia Location
 			TelegramAPI.getInstance().sendLocation(loc.getLatitude(), loc.getLongitude(), 
 						session.getId(), update.getMessage().getMessage_id());

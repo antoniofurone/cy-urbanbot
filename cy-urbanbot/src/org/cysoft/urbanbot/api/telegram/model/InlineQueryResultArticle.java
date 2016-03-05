@@ -40,10 +40,19 @@ public class InlineQueryResultArticle implements InlineQueryResult{
 	public void setParse_mode(String parse_mode) {
 		this.parse_mode = parse_mode;
 	}
+	
+	private String description;
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	@Override
 	public String toString() {
 		return "InlineQueryResultArticle [type=" + type + ", id=" + id + ", title=" + title + ", message_text="
-				+ message_text + ", parse_mode=" + parse_mode + "]";
+				+ message_text + ", parse_mode=" + parse_mode + ", description=" + description + "]";
 	}
 	
 	
