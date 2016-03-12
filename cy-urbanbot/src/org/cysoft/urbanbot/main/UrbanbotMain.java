@@ -12,6 +12,7 @@ import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
+import org.cysoft.urbanbot.core.FilesCache;
 import org.cysoft.urbanbot.core.LiveSessions;
 import org.cysoft.urbanbot.core.UpdateDispatcher;
 import org.cysoft.urbanbot.core.UpdateDispatcherListener;
@@ -154,7 +155,13 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 			if (param!=null && !param.equals("")){
 				bssCoreAPI.setMediaMediation(param.getValue());
 			}
-				
+		
+			param=bssCoreAPI.getParam("external_url_core");
+			if (param==null){
+				logger.error("Param external_url_core configurated");
+				throw new CyUrbanbotException("Param external_url_core not configurated");
+			}
+			bssCoreAPI.setExternalCoreUrl(param.getValue());
 			
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
@@ -171,6 +178,8 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 		
 		int loop=0;
 		short updErrorCount=0;
+		
+		FilesCache.getInstance();
 		
 		while(true){
 			boolean updError=false;

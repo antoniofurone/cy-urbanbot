@@ -52,7 +52,7 @@ public class MessageWorker implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		logger.info(">>> Start UpdateWorker Thread...");
+		logger.info(">>> UpdateWorker Thread...");
 		
 		MessageWorkflowManager wf=new MessageWorkflowManager(session);
 		try {
@@ -64,7 +64,7 @@ public class MessageWorker implements Runnable{
 		}
 		
 		session.setLocked(false);
-		logger.info("<<< Start UpdateWorker Thread...");
+		logger.info("<<< UpdateWorker Thread...");
 	}
 
 }

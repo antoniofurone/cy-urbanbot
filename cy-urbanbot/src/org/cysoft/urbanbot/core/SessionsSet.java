@@ -11,7 +11,7 @@ public abstract class SessionsSet {
 	
 	protected Map <Long,Session> sessionsMap=null;
 
-	public SessionsSet(){
+	protected SessionsSet(){
 		sessionsMap =  new LinkedHashMap<Long,Session>();
 	}
 	

@@ -110,7 +110,7 @@ public class TelegramAPI {
 	}
 	
 	
-	public void answerInlineQuery(String inline_query_id, List<InlineQueryResult> inLineResults) 
+	public void answerInlineQuery(String inline_query_id, List<InlineQueryResult> inLineResults,String nextOffSet) 
 			throws CyUrbanbotException{
 		
 		String response=null;
@@ -119,6 +119,9 @@ public class TelegramAPI {
 			List<NameValuePair> parms = new ArrayList<NameValuePair>();
 			
 			parms.add(new BasicNameValuePair("inline_query_id", inline_query_id + ""));
+			if (nextOffSet!=null && nextOffSet.equals(""))
+				parms.add(new BasicNameValuePair("next_offset", nextOffSet));
+			
 			JsonArray jsInLineResults = new JsonArray();
 			Gson gson=new Gson();
 			for(InlineQueryResult result:inLineResults){

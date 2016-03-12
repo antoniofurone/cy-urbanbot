@@ -3,13 +3,10 @@ package org.cysoft.urbanbot.core;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.concurrent.TransferQueue;
 
-import org.cysoft.bss.core.model.ICyBssConst;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.api.telegram.TelegramAPI;
-import org.cysoft.urbanbot.api.telegram.model.InlineQueryResult;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.api.telegram.model.User;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
@@ -22,13 +19,6 @@ public class UpdateDispatcher implements Runnable, MessageWorkerListener{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UpdateDispatcher.class);
 	private static final short ERROR_SESSION_MAX=3;
-	
-	private InlineQueryServer inLineServer=null;
-	private InlineQueryServer getInlineServer(){
-		if (inLineServer==null)
-			inLineServer=new InlineQueryServer();
-		return inLineServer;
-	}
 	
 	
 	private TransferQueue<Update> updateQueue = null;
@@ -152,52 +142,11 @@ public class UpdateDispatcher implements Runnable, MessageWorkerListener{
 							doStop();
 						continue;
 					}
+			
 					
-					String queryforSearch="";
-					String queryReceived=update.getInline_query().getQuery();
-					String langCode="";
-					if (queryReceived!=null && !queryReceived.equals("")){
-						StringTokenizer st = new StringTokenizer(queryReceived);
-					     while (st.hasMoreTokens()) {
-					    	 String token=st.nextToken();
-					    	 String token_lc=token.toLowerCase();
-					    	 if (token_lc.startsWith("lang=")){
-					    		 langCode=token_lc.substring(5);
-					    		 logger.info("langCode found <"+langCode+"> !");
-					    	 }
-					    	 else
-					    		 queryforSearch+=queryforSearch.equals("")?token:" "+token;
-					     }
-					}
-					
-					if (langCode.equals("") || langCode.equalsIgnoreCase(ICyBssConst.LOCALE_IT))
-						langCode=ICyBssConst.LOCALE_IT;
-					else
-						langCode=ICyBssConst.LOCALE_EN;
-					
-					List<InlineQueryResult> inLineResults=null;
-					try {
-						inLineResults=this.getInlineServer().getTouristSite(queryforSearch, langCode);
-					} catch (CyUrbanbotException e) {
-						// TODO Auto-generated catch block
-						logger.error(e.toString());
-						sessionError=true;
-						sessionErrorCont++;
-						if (sessionErrorCont>=ERROR_SESSION_MAX)
-							doStop();
-						continue;
-					}
-					try {
-						TelegramAPI.getInstance().answerInlineQuery(update.getInline_query().getId(), inLineResults);
-					} catch (CyUrbanbotException e) {
-						// TODO Auto-generated catch block
-						logger.error(e.toString());
-						sessionError=true;
-						sessionErrorCont++;
-						if (sessionErrorCont>=ERROR_SESSION_MAX)
-							doStop();
-						continue;
-					}
+					InlineQueryWorker worker=new InlineQueryWorker(update.getInline_query());
+					Thread t=new Thread(worker);
+					t.start();
 					
 				}
 				

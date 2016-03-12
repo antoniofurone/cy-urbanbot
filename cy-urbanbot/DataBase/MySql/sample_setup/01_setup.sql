@@ -16,6 +16,11 @@ values (
 insert into BSST_APA_APP_PARAM(APP_N_APP_ID,APA_S_NAME,APA_S_VALUE,APA_C_TYPE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+'external_url_core','http://localhost:8080/cy-bss-core','S');
+
+insert into BSST_APA_APP_PARAM(APP_N_APP_ID,APA_S_NAME,APA_S_VALUE,APA_C_TYPE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 'download_path','/home/antonio/cy-urbanbot/downloads/','S');
 
 insert into BSST_APA_APP_PARAM(APP_N_APP_ID,APA_S_NAME,APA_S_VALUE,APA_C_TYPE)

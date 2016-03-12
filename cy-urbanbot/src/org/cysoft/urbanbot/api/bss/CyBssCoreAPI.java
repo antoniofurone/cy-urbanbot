@@ -80,8 +80,6 @@ public class CyBssCoreAPI {
 		this.appName = appName;
 	}
 
-
-
 	private String coreUrl="";
 	public String getCoreUrl() {
 		return coreUrl;
@@ -90,6 +88,14 @@ public class CyBssCoreAPI {
 		this.coreUrl = coreUrl;
 	}
 	
+	private String externalCoreUrl="";
+	public String getExternalCoreUrl() {
+		return externalCoreUrl;
+	}
+	public void setExternalCoreUrl(String externalCoreUrl) {
+		this.externalCoreUrl = externalCoreUrl;
+	}
+
 	private String downloadPath="";
 	public String getDownloadPath() {
 		return downloadPath;
@@ -760,6 +766,45 @@ public class CyBssCoreAPI {
 		
 		return filesResponse.getFiles();
 	}
+	
+	public List<CyBssFile> getFiles(String entityName)throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+	
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/fileservice/file/find?entityName="+entityName, 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		FileListResponse filesResponse =null;
+		try{
+			filesResponse=new Gson().fromJson(response, FileListResponse.class);
+			if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+				
+				if (filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_SESSION_NOK))
+					relogOn();
+				
+				throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		return filesResponse.getFiles();
+		
+	}
+	
 	
 	public List<CyBssFile> getStoryFiles(long storyId)throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
