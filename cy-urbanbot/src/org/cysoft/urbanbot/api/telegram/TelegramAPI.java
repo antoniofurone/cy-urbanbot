@@ -119,7 +119,7 @@ public class TelegramAPI {
 			List<NameValuePair> parms = new ArrayList<NameValuePair>();
 			
 			parms.add(new BasicNameValuePair("inline_query_id", inline_query_id + ""));
-			if (nextOffSet!=null && nextOffSet.equals(""))
+			if (nextOffSet!=null && !nextOffSet.equals(""))
 				parms.add(new BasicNameValuePair("next_offset", nextOffSet));
 			
 			JsonArray jsInLineResults = new JsonArray();

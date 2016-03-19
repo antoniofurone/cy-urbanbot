@@ -611,7 +611,12 @@ public class CyBssCoreAPI {
 		}
 	}
 	
+	
 	public List<Location> findStories(long personId,String description,String languageCode) throws CyUrbanbotException{
+		return findStories(personId,description,languageCode,0,0);
+	}
+	
+	public List<Location> findStories(long personId,String description,String languageCode,int offSet, int size) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
@@ -619,8 +624,13 @@ public class CyBssCoreAPI {
 
 		String response=null;
 		try {
+			
+			String offSetQuery="";
+			if (offSet!=0 && size!=0)
+				offSetQuery="&offset="+offSet+"&size="+size;
+			
 			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?personId="+personId+
-					"&description="+URLEncoder.encode(description, "UTF-8")+"&locationType="+ICyUrbanbotConst.LOCATION_TYPE_STORY, 
+					"&description="+URLEncoder.encode(description, "UTF-8")+"&locationType="+ICyUrbanbotConst.LOCATION_TYPE_STORY+offSetQuery, 
 					headerAttrs);
 		} catch (CyUrbanbotException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -962,7 +972,12 @@ public class CyBssCoreAPI {
 		
 	}
 	
+	
 	public List<Ticket> findWarns(long personId, String text,String languageCode) throws CyUrbanbotException{
+		return findWarns(personId,text,languageCode,0,0);
+	}
+		
+	public List<Ticket> findWarns(long personId, String text,String languageCode, int offSet, int size) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
 		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
@@ -970,7 +985,12 @@ public class CyBssCoreAPI {
 
 		String response=null;
 		try {
-			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/find?personId="+personId+"&text="+URLEncoder.encode(text, "UTF-8"), 
+			
+			String offSetQuery="";
+			if (offSet!=0 && size!=0)
+				offSetQuery="&offset="+offSet+"&size="+size;
+			
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/ticket/find?personId="+personId+"&text="+URLEncoder.encode(text, "UTF-8")+offSetQuery, 
 					headerAttrs);
 		} catch (CyUrbanbotException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

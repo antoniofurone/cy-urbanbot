@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.cysoft.bss.core.model.CyBssFile;
 import org.cysoft.bss.core.model.Location;
+import org.cysoft.bss.core.model.Ticket;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.slf4j.Logger;
@@ -23,7 +24,9 @@ public class FilesCache implements Runnable{
 	
 	private static FilesCache instance=null;
 	
-	private Map <Long,List<CyBssFile>> filesMap=new LinkedHashMap<Long,List<CyBssFile>>();
+	private Map <Long,List<CyBssFile>> locFilesMap=new LinkedHashMap<Long,List<CyBssFile>>();
+	private Map <Long,List<CyBssFile>> ticketFilesMap=new LinkedHashMap<Long,List<CyBssFile>>();
+	
 	
 	private FilesCache(){
 		
@@ -38,9 +41,15 @@ public class FilesCache implements Runnable{
 	}
 	
 	public List<CyBssFile> getLocationFiles(long entityId){
-		if (filesMap==null)
+		if (locFilesMap==null)
 			return null;
-		return filesMap.get(entityId);
+		return locFilesMap.get(entityId);
+	}
+	
+	public List<CyBssFile> getTicketFiles(long entityId){
+		if (ticketFilesMap==null)
+			return null;
+		return ticketFilesMap.get(entityId);
 	}
 	
 	@Override
@@ -57,27 +66,26 @@ public class FilesCache implements Runnable{
 			List<CyBssFile> files=null;
 			boolean error=false;
 			
-			filesMap =  new LinkedHashMap<Long,List<CyBssFile>>();
-			filesMap.clear();
+			locFilesMap.clear();
 			
 			try {
 				files=CyBssCoreAPI.getInstance().getFiles(Location.ENTITY_NAME);
 				
-				logger.info("files.size="+files.size());
+				logger.info("location files.size="+files.size());
 				
 				for (CyBssFile file:files){
 					if (file.getVisibility().equals(CyBssFile.VISIBILITY_PUBLIC) && 
 						file.getEntityId()!=0){
-						if (!filesMap.containsKey(file.getEntityId())){
+						if (!locFilesMap.containsKey(file.getEntityId())){
 							//logger.info("add1 file="+file);
 							List<CyBssFile> fileList=new ArrayList<CyBssFile>();
 							fileList.add(file);
-							filesMap.put(file.getEntityId(), fileList);
+							locFilesMap.put(file.getEntityId(), fileList);
 						}
 						else
 						{
 							//logger.info("add2 file="+file);
-							List<CyBssFile> fileList=filesMap.get(file.getEntityId());
+							List<CyBssFile> fileList=locFilesMap.get(file.getEntityId());
 							fileList.add(file);	
 						}
 					
@@ -96,7 +104,49 @@ public class FilesCache implements Runnable{
 				if (errorCount>=ERROR_MAX)
 					break;
 			}
-			logger.info("<<< Loading Location Files - filesMap.size = "+filesMap.size());
+			logger.info("<<< Loading Location Files - locFilesMap.size = "+locFilesMap.size());
+			
+			
+			logger.info("Loading Ticket Files....");
+			ticketFilesMap.clear();
+			
+			try {
+				files=CyBssCoreAPI.getInstance().getFiles(Ticket.ENTITY_NAME);
+				
+				logger.info("ticket files.size="+files.size());
+				
+				for (CyBssFile file:files){
+					if (file.getVisibility().equals(CyBssFile.VISIBILITY_PUBLIC) && 
+						file.getEntityId()!=0){
+						if (!ticketFilesMap.containsKey(file.getEntityId())){
+							//logger.info("add1 file="+file);
+							List<CyBssFile> fileList=new ArrayList<CyBssFile>();
+							fileList.add(file);
+							ticketFilesMap.put(file.getEntityId(), fileList);
+						}
+						else
+						{
+							List<CyBssFile> fileList=ticketFilesMap.get(file.getEntityId());
+							fileList.add(file);	
+						}
+					
+					}
+				}
+				
+				
+			} catch (CyUrbanbotException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e.toString());
+				sleep=SLEEP_ERROR;
+				errorCount++;
+				error=true;
+				
+				if (errorCount>=ERROR_MAX)
+					break;
+			}
+			logger.info("<<< Loading Ticket Files - ticketfilesMap.size = "+ticketFilesMap.size());
+			
 			
 			try {
 				if (!error)
