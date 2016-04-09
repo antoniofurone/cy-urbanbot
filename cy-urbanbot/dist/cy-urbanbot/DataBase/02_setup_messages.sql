@@ -62,19 +62,18 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'SESSION_TIMEOUT','Session timeout. Send /start to restart. Hi !');
+2,'SESSION_TIMEOUT','Session timeout. Invia /start to restart. Hi !');
+
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_SHOW_OP','/n nuova segnalazione; /r ricerca; /v visualizza le tue segnalazioni o /b per tornare indietro');
+1,'WARN_SHOW_OP','/n nuova segnalazione; /v visualizza le tue segnalazioni o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_SHOW_OP','/n new warning; /r search; /v show your warnings o /b to return back');
-
-
+2,'WARN_SHOW_OP','/n new warning; /v show your warnings o /b to return back');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -86,17 +85,6 @@ insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'WARN_TEXT','Write warning o /b to return back');
-
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_GET_SEARCH','Inserisci il testo di ricerca (! per vedere tutto) o /b per tornare indietro');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_GET_SEARCH','Insert text search (! for all) o /b to return back');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -149,6 +137,18 @@ values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'WARN_VIDEOOK','Thanks. Video acquired.');
 
+
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'WARN_LIST','Le tue segnalazioni sono le seguenti:');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'WARN_LIST','Your warnings are the following:');
+
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
@@ -157,37 +157,7 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_LIST_OP_N','Invia /v# per visualizzare; /d# per cancellare; /s successive; /b per tornare indietro.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_LIST_OP_P','Invia /v# per visualizzare; /d# per cancellare; /p precedenti; /b per tornare indietro.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WARN_LIST_OP_NP','Invia /v# per visualizzare; /d# per cancellare; /s successive; /p precedenti; /b per tornare indietro.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'WARN_LIST_OP','Send /v# to show; /d# to delete; /b to return back.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_LIST_OP_N','Send /v# to show; /d# to delete; /s next; /b to return back.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_LIST_OP_P','Send /v# to show; /d# to delete; /p previous; /b to return back.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WARN_LIST_OP_NP','Send /v# to show; /d# to delete; /s next; /p previous; /b to return back.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
@@ -233,175 +203,138 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_SHOW_OP','/n nuova storia; /r ricerca; /v visualizza le tue storie o /b per tornare indietro');
+1,'TELL_SHOW_OP','/n nuova storia; /v visualizza le tue storie o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_SHOW_OP','/n new warning; /r search; /v show your warnings o /b to return back');
-
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_LOC','Invia una location o /b per tornare indietro');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_LOC','Send location or /b to return back');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_TEXT','Scrivi la storia o /b per tornare indietro');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_TEXT','Write story or /b to return back');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_TEXT_OK','Grazie. Storia acquisita.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_TEXT_OK','Thanks. Story acquired.');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_GET_SEARCH','Inserisci il testo di ricerca (! per vedere tutto) o /b per tornare indietro');
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_GET_SEARCH','Insert text search (! for all) o /b to return back');
+2,'TELL_SHOW_OP','/n new story; /v show your stories o /b to return back');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_MEDIA','Invia una foto, un video, un messaggio vocale, un audio (.ogg, .mp3) o /b per tornare indietro');
+1,'TELL_LOC','Invia una location o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_MEDIA','Send photo, video, audio message, audio (.ogg, .mp3) or /b to return back');
+2,'TELL_LOC','Send location or /b to return back');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_VOICEOK','Grazie. Messaggio vocale acquisito.');
+1,'TELL_TEXT','Scrivi la storia o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_VOICEOK','Thanks. Vocal message acquired.');
+2,'TELL_TEXT','Write story or /b to return back');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_IMGOK','Grazie. Foto acquisita.');
+1,'TELL_TEXT_OK','Grazie. Storia acquisita.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_IMGOK','Thanks. Photo acquired.');
+2,'TELL_TEXT_OK','Thanks. Story acquired.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_VIDEOOK','Grazie. Video acquisito.');
+1,'TELL_MEDIA','Invia una foto, un video, un messaggio vocale, un audio (.ogg, .mp3) o /b per tornare indietro');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_VIDEOOK','Thanks. Video acquired.');
+2,'TELL_MEDIA','Send photo, video, audio message, audio (.ogg, .mp3) or /b to return back');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_AUDIOOK','Grazie. Audio acquisito.');
+1,'TELL_VOICEOK','Grazie. Messaggio vocale acquisito.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_AUDIOOK','Thanks. Audio acquired.');
+2,'TELL_VOICEOK','Thanks. Vocal message acquired.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_NO_STORY','Non hai nessuna storia; /b per tornare indietro.');
+1,'TELL_IMGOK','Grazie. Foto acquisita.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_NO_STORY','You don''t have stories; /b to return back.');
+2,'TELL_IMGOK','Thanks. Photo acquired.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_LIST','Le tue storie sono le seguenti:');
+1,'TELL_VIDEOOK','Grazie. Video acquisito.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_LIST','Your stories are the following:');
+2,'TELL_VIDEOOK','Thanks. Video acquired.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_LIST_OP','Invia /v# per visualizzare; /d# per cancellare; /b per tornare indietro.');
+1,'TELL_AUDIOOK','Grazie. Audio acquisito.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_LIST_OP_N','Invia /v# per visualizzare; /d# per cancellare; /s successive; /b per tornare indietro.');
+2,'TELL_AUDIOOK','Thanks. Audio acquired.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_LIST_OP_P','Invia /v# per visualizzare; /d# per cancellare; /p precedenti; /b per tornare indietro.');
+1,'TELL_NO_TELL','Non hai nessuna storia; /b per tornare indietro.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_LIST_OP_NP','Invia /v# per visualizzare; /d# per cancellare; /s successive; /p precedenti; /b per tornare indietro.');
+2,'TELL_NO_TELL','You don''t have stories; /b to return back.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_LIST_OP_N','Send /v# to show; /d# to delete; /s next; /b to return back.');
+1,'TELL_LIST','Le tue storie sono le seguenti:');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_LIST_OP_P','Send /v# to show; /d# to delete; /p previous; /b to return back.');
+2,'TELL_LIST','Your stories are the following:');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_LIST_OP_NP','Send /v# to show; /d# to delete; /s next; /p previous; /b to return back.');
-
-
-insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
-values (
-(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_INVALID_ID','# non valida !');
+1,'TELL_LIST_OP','Invia /v# per visualizzare; /d# per cancellare; /b per tornare indietro.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_INVALID_ID','invalid # !');
+2,'TELL_LIST_OP','Send /v# to show; /d# to delete; /b to return back.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'STORY_DEL','Storia cancellata');
+1,'TELL_INVALID_ID','# non valida !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'TELL_INVALID_ID','invalid # !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'TELL_DEL','Storia cancellata');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
@@ -461,9 +394,9 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'MAP_URLS','Seleziona uno dei seguenti link:\n\n<strong>Segnalazioni</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Storie</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Siti Turistici</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');
+1,'MAP_URLS','Seleziona uno dei seguenti link:\n\n<strong>Segnalazioni</strong>\n Google Maps: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Storie</strong>\n Google Maps: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Siti Turistici</strong>\n Google Maps: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'MAP_URLS','Select one of following links:\n\n<strong>Warnings</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Stories</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Tourist Sites</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');
+2,'MAP_URLS','Select one of following links:\n\n<strong>Warnings</strong>\n Google Maps: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Stories</strong>\n Google Maps: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Tourist Sites</strong>\n Google Maps: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://52.28.186.101:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');

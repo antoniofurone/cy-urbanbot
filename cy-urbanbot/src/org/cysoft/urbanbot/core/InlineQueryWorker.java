@@ -93,7 +93,8 @@ public class InlineQueryWorker implements Runnable{
 		for(Ticket ticket:tickets){
 			InlineQueryResultArticle inRes=new InlineQueryResultArticle();
 			inRes.setId(""+ticket.getId());
-			inRes.setTitle(ticket.getId()+". ["+ticket.getCategoryName()+","+ticket.getStatusName()+"]");
+			inRes.setTitle(ticket.getCategoryName().substring(1,1)+
+					ticket.getId()+". ["+ticket.getCategoryName()+","+ticket.getStatusName()+"]");
 		
 			String message="<strong>"+inRes.getTitle()+"</strong>\n";
 			message+="<strong>"+ticket.getCreationDate()+"</strong>: "+ ticket.getText();

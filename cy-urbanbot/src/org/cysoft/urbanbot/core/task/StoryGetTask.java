@@ -13,17 +13,15 @@ import org.cysoft.urbanbot.api.telegram.model.Video;
 import org.cysoft.urbanbot.api.telegram.model.Voice;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
-import org.cysoft.urbanbot.core.Task;
-import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TellGetStoryTask extends TaskAdapter implements Task{
+public class StoryGetTask extends StoryTaskAdapter{
 
-	private static final Logger logger = LoggerFactory.getLogger(TellGetStoryTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(StoryGetTask.class);
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {
@@ -32,16 +30,16 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 		String text=update.getMessage().getText()==null?"":update.getMessage().getText();
 		if (text.equalsIgnoreCase("/b")){
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.TELL_SHOW_OP_ID, session.getLanguage());
+					getMessage(BotMessage.STORY_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
-			session.getSessionStatus().setId(SessionStatus.TELL_SELOP_STATUS_ID);
+			session.getSessionStatus().setId(SessionStatus.STORY_SELOP_STATUS_ID);
 			return;
 		}
 		
 		
-		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETLOC_STATUS_ID){
+		if (session.getSessionStatus().getId()==SessionStatus.STORY_GETLOC_STATUS_ID){
 			
 			Location loc=update.getMessage().getLocation();
 			if (loc!=null)
@@ -50,25 +48,25 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				session.putVariable("storyLoc", loc);
 				
 				String message=CyBssCoreAPI.getInstance().
-						getMessage(BotMessage.TELL_TEXT_ID, session.getLanguage());
+						getMessage(BotMessage.STORY_TEXT_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
-				session.getSessionStatus().setId(SessionStatus.TELL_GETTEXT_STATUS_ID);
+				session.getSessionStatus().setId(SessionStatus.STORY_GETTEXT_STATUS_ID);
 			}
 			else
 			{
 				String message=CyBssCoreAPI.getInstance().
-						getMessage(BotMessage.TELL_LOC_ID, session.getLanguage());
+						getMessage(BotMessage.STORY_LOC_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
-				session.getSessionStatus().setId(SessionStatus.TELL_GETLOC_STATUS_ID);
+				session.getSessionStatus().setId(SessionStatus.STORY_GETLOC_STATUS_ID);
 			}
 			
 			return;
 		}
 		
-		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETTEXT_STATUS_ID){
+		if (session.getSessionStatus().getId()==SessionStatus.STORY_GETTEXT_STATUS_ID){
 		
 			if (text!=null && !text.equals("")){
 				
@@ -78,26 +76,26 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 			
 			
 				String message=CyBssCoreAPI.getInstance().
-						getMessage(BotMessage.TELL_TEXT_OK_ID, session.getLanguage());
+						getMessage(BotMessage.STORY_TEXT_OK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				
-				session.getSessionStatus().setId(SessionStatus.TELL_GETMEDIA_STATUS_ID);
+				session.getSessionStatus().setId(SessionStatus.STORY_GETMEDIA_STATUS_ID);
 			}
 			else
 			{
 				String message=CyBssCoreAPI.getInstance().
-						getMessage(BotMessage.TELL_TEXT_ID, session.getLanguage());
+						getMessage(BotMessage.STORY_TEXT_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
-				session.getSessionStatus().setId(SessionStatus.TELL_GETTEXT_STATUS_ID);
+				session.getSessionStatus().setId(SessionStatus.STORY_GETTEXT_STATUS_ID);
 				
 			}
 			
 			
 		}
 		
-		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETMEDIA_STATUS_ID){
+		if (session.getSessionStatus().getId()==SessionStatus.STORY_GETMEDIA_STATUS_ID){
 			
 			Audio audio=update.getMessage().getAudio();
 			if (audio!=null){
@@ -113,7 +111,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
 				
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_AUDIOOK_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_AUDIOOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 				
 			}
@@ -131,7 +129,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
 				
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_VIDEOOK_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_VIDEOOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			}
 			
@@ -149,7 +147,7 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
 				
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_VOICEOK_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_VOICEOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			}
 			
@@ -174,16 +172,16 @@ public class TellGetStoryTask extends TaskAdapter implements Task{
 				File file=new File(TelegramAPI.getInstance().getDownloadPath()+filePath);
 				file.delete();
 				
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TELL_IMGOK_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_IMGOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			}
 			
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.TELL_MEDIA_ID, session.getLanguage());
+					getMessage(BotMessage.STORY_MEDIA_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
 			
 			
-			session.getSessionStatus().setId(SessionStatus.TELL_GETMEDIA_STATUS_ID);
+			session.getSessionStatus().setId(SessionStatus.STORY_GETMEDIA_STATUS_ID);
 			
 		}
 			

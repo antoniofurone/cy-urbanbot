@@ -7,9 +7,9 @@ import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
 import org.cysoft.urbanbot.core.task.MapsTask;
-import org.cysoft.urbanbot.core.task.TellGetStoryTask;
-import org.cysoft.urbanbot.core.task.TellSelOpTask;
-import org.cysoft.urbanbot.core.task.TellShowDelTask;
+import org.cysoft.urbanbot.core.task.StoryGetTask;
+import org.cysoft.urbanbot.core.task.StorySelOpTask;
+import org.cysoft.urbanbot.core.task.StoryShowDelTask;
 import org.cysoft.urbanbot.core.task.TouristGetLocTask;
 import org.cysoft.urbanbot.core.task.TouristShowTask;
 import org.cysoft.urbanbot.core.task.WarnCategoryTask;
@@ -67,7 +67,7 @@ public class MessageWorkflowManager {
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/n"))
-				task=new TellSelOpTask();
+				task=new StorySelOpTask();
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/t"))
@@ -86,7 +86,8 @@ public class MessageWorkflowManager {
 	
 		// warn transition
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SHOWOP_STATUS_ID ||
-			session.getSessionStatus().getId()==SessionStatus.WARN_SELOP_STATUS_ID)
+			session.getSessionStatus().getId()==SessionStatus.WARN_SELOP_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.WARN_SEARCH_STATUS_ID)
 			task=new WarnSelOpTask();
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_CATEGORY_STATUS_ID)
@@ -103,19 +104,20 @@ public class MessageWorkflowManager {
 			task=new WarnShowDelTask();
 		// end warn transition
 		
-		// tell transition
-		if (session.getSessionStatus().getId()==SessionStatus.TELL_SHOWOP_STATUS_ID ||
-			session.getSessionStatus().getId()==SessionStatus.TELL_SELOP_STATUS_ID)
-			task=new TellSelOpTask();
+		// STORY transition
+		if (session.getSessionStatus().getId()==SessionStatus.STORY_SHOWOP_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.STORY_SELOP_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.STORY_SEARCH_STATUS_ID)
+			task=new StorySelOpTask();
 		
-		if (session.getSessionStatus().getId()==SessionStatus.TELL_GETLOC_STATUS_ID ||
-			session.getSessionStatus().getId()==SessionStatus.TELL_GETTEXT_STATUS_ID ||
-			session.getSessionStatus().getId()==SessionStatus.TELL_GETMEDIA_STATUS_ID)
-			task=new TellGetStoryTask();
+		if (session.getSessionStatus().getId()==SessionStatus.STORY_GETLOC_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.STORY_GETTEXT_STATUS_ID ||
+			session.getSessionStatus().getId()==SessionStatus.STORY_GETMEDIA_STATUS_ID)
+			task=new StoryGetTask();
 		
-		if (session.getSessionStatus().getId()==SessionStatus.TELL_SHOWLIST_STATUS_ID)
-			task=new TellShowDelTask();
-		// end tell transitionTouristSiteLocation
+		if (session.getSessionStatus().getId()==SessionStatus.STORY_SHOWLIST_STATUS_ID)
+			task=new StoryShowDelTask();
+		// end STORY transitionTouristSiteLocation
 		
 		// tourist site transition
 		if (session.getSessionStatus().getId()==SessionStatus.TOURIST_GETLOC_STATUS_ID)

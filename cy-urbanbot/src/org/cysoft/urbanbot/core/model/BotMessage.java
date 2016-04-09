@@ -6,57 +6,70 @@ import java.util.List;
 public class BotMessage {
 	
 	
-	public static List<List<String>> WELCOME_MENU_KEYB=Arrays.asList(Arrays.asList("/s", "/n", "/t"),Arrays.asList("/m", "/l"));
-	public static List<List<String>> NVB_KEYB=Arrays.asList(Arrays.asList("/n", "/v", "/b"));
-	public static List<List<String>> VB_KEYB=Arrays.asList(Arrays.asList( "/v", "/b"));
-	public static List<List<String>> B_KEYB=Arrays.asList(Arrays.asList("/b"));
-	public static List<List<String>> B14_KEYB=Arrays.asList(Arrays.asList("1", "2", "3","4"),Arrays.asList("/b"));
+	public static final List<List<String>> WELCOME_MENU_KEYB=Arrays.asList(Arrays.asList("/s", "/n", "/t"),Arrays.asList("/m", "/l"));
+	public static final List<List<String>> NVB_KEYB=Arrays.asList(Arrays.asList("/n", "/v", "/b"));
+	public static final List<List<String>> NRVB_KEYB=Arrays.asList(Arrays.asList("/n","/r", "/v", "/b"));
+	public static final List<List<String>> VB_KEYB=Arrays.asList(Arrays.asList( "/v", "/b"));
+	public static final List<List<String>> B_KEYB=Arrays.asList(Arrays.asList("/b"));
+	public static final List<List<String>> BN_KEYB=Arrays.asList(Arrays.asList("/s","/b"));
+	public static final List<List<String>> BP_KEYB=Arrays.asList(Arrays.asList("/p","/b"));
+	public static final List<List<String>> BNP_KEYB=Arrays.asList(Arrays.asList("/s","/p","/b"));
+	public static final List<List<String>> B14_KEYB=Arrays.asList(Arrays.asList("1", "2", "3","4"),Arrays.asList("/b"));
 	
-	public static String WAIT_LOCK_SESSION_ID="WAIT_LOCK_SESSION";
+	public static final String WAIT_LOCK_SESSION_ID="WAIT_LOCK_SESSION";
 	
-	public static String WELCOME_MENU_ID="WELCOME_MENU";
+	public static final String WELCOME_MENU_ID="WELCOME_MENU";
 	
-	public static String COMMAND_NOT_ID="COMMAND_NOT";
-	public static String ERROR_ID="ERROR";
-	public static String INVALID_SESSION_ID="INVALID_SESSION";
-	public static String SESSION_TIMEOUT_ID="SESSION_TIMEOUT";
+	public static final String COMMAND_NOT_ID="COMMAND_NOT";
+	public static final String ERROR_ID="ERROR";
+	public static final String INVALID_SESSION_ID="INVALID_SESSION";
+	public static final String SESSION_TIMEOUT_ID="SESSION_TIMEOUT";
 	
-	public static String WARN_SHOW_OP_ID="WARN_SHOW_OP";
-	public static String WARN_TEXT_ID="WARN_TEXT";
-	public static String WARN_MEDIALOC_ID="WARN_MEDIALOC";
-	public static String WARN_LOCOK_ID="WARN_LOCOK";
-	public static String WARN_MEDIA_ID="WARN_MEDIA";
-	public static String WARN_IMGOK_ID="WARN_IMGOK";
-	public static String WARN_VIDEOOK_ID="WARN_VIDEOOK";
-	public static String WARN_LIST_ID="WARN_LIST";
-	public static String WARN_LIST_OP_ID="WARN_LIST_OP";
-	public static String WARN_INVALID_ID="WARN_INVALID_ID";
-	public static String WARN_NO_WARN_ID="WARN_NO_WARN";
-	public static String WARN_DEL_ID="WARN_DEL";
-	public static String WARN_SEL_CATEGORY_ID="WARN_SEL_CATEGORY";
+	public static final String WARN_SHOW_OP_ID="WARN_SHOW_OP";
+	public static final String WARN_TEXT_ID="WARN_TEXT";
+	public static final String WARN_MEDIALOC_ID="WARN_MEDIALOC";
+	public static final String WARN_LOCOK_ID="WARN_LOCOK";
+	public static final String WARN_MEDIA_ID="WARN_MEDIA";
+	public static final String WARN_IMGOK_ID="WARN_IMGOK";
+	public static final String WARN_VIDEOOK_ID="WARN_VIDEOOK";
+	public static final String WARN_LIST_OP_ID="WARN_LIST_OP";
+	public static final String WARN_LIST_OP_ID_N="WARN_LIST_OP_N";
+	public static final String WARN_LIST_OP_ID_P="WARN_LIST_OP_P";
+	public static final String WARN_LIST_OP_ID_NP="WARN_LIST_OP_NP";
+	public static final String WARN_INVALID_ID="WARN_INVALID_ID";
+	public static final String WARN_NO_WARN_ID="WARN_NO_WARN";
+	public static final String WARN_DEL_ID="WARN_DEL";
+	public static final String WARN_SEL_CATEGORY_ID="WARN_SEL_CATEGORY";
+	public static final String WARN_GET_SEARCH_ID = "WARN_GET_SEARCH";
+
 	
-	public static String TELL_LOC_ID="TELL_LOC";
-	public static String TELL_SHOW_OP_ID="TELL_SHOW_OP";
-	public static String TELL_TEXT_ID="TELL_TEXT";
-	public static String TELL_TEXT_OK_ID="TELL_TEXT_OK";
-	public static String TELL_MEDIA_ID="TELL_MEDIA";
-	public static String TELL_VOICEOK_ID="TELL_VOICEOK";
-	public static String TELL_IMGOK_ID="TELL_IMGOK";
-	public static String TELL_VIDEOOK_ID="TELL_VIDEOOK";
-	public static String TELL_AUDIOOK_ID="TELL_AUDIOOK";
-	public static String TELL_NO_TELL_ID="TELL_NO_TELL";
-	public static String TELL_LIST_ID="TELL_LIST";
-	public static String TELL_LIST_OP_ID="TELL_LIST_OP";
-	public static String TELL_INVALID_ID="TELL_INVALID_ID";
-	public static String TELL_DEL_ID="TELL_DEL";
+	public static final String STORY_LOC_ID="STORY_LOC";
+	public static final String STORY_SHOW_OP_ID="STORY_SHOW_OP";
+	public static final String STORY_TEXT_ID="STORY_TEXT";
+	public static final String STORY_TEXT_OK_ID="STORY_TEXT_OK";
+	public static final String STORY_MEDIA_ID="STORY_MEDIA";
+	public static final String STORY_VOICEOK_ID="STORY_VOICEOK";
+	public static final String STORY_IMGOK_ID="STORY_IMGOK";
+	public static final String STORY_VIDEOOK_ID="STORY_VIDEOOK";
+	public static final String STORY_AUDIOOK_ID="STORY_AUDIOOK";
+	public static final String STORY_NO_STORY_ID="STORY_NO_STORY";
+	public static final String STORY_LIST_ID="STORY_LIST";
+	public static final String STORY_LIST_OP_ID="STORY_LIST_OP";
+	public static final String STORY_LIST_OP_ID_N="STORY_LIST_OP_N";
+	public static final String STORY_LIST_OP_ID_P="STORY_LIST_OP_P";
+	public static final String STORY_LIST_OP_ID_NP="STORY_LIST_OP_NP";
+	public static final String STORY_INVALID_ID="STORY_INVALID_ID";
+	public static final String STORY_DEL_ID="STORY_DEL";
+	public static final String STORY_GET_SEARCH_ID = "STORY_GET_SEARCH";
 	
-	public static String TOURIST_LOC_ID="TOURIST_LOC";
-	public static String TOURIST_NO_SITE_ID="TOURIST_NO_SITE";
-	public static String TOURIST_LIST_ID="TOURIST_LIST";
-	public static String TOURIST_LIST_OP_ID="TOURIST_LIST_OP";
-	public static String TOURIST_INVALID_ID="TOURIST_INVALID_ID";
 	
-	public static String MAP_URLS_ID="MAP_URLS";
+	public static final String TOURIST_LOC_ID="TOURIST_LOC";
+	public static final String TOURIST_NO_SITE_ID="TOURIST_NO_SITE";
+	public static final String TOURIST_LIST_ID="TOURIST_LIST";
+	public static final String TOURIST_LIST_OP_ID="TOURIST_LIST_OP";
+	public static final String TOURIST_INVALID_ID="TOURIST_INVALID_ID";
+	
+	public static final String MAP_URLS_ID="MAP_URLS";
 	
 	private String id="";
 	private String text="";

@@ -11,15 +11,13 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
-import org.cysoft.urbanbot.core.Task;
-import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WarnShowDelTask extends TaskAdapter implements Task{
+public class WarnShowDelTask extends WarnTaskAdapter{
 
 	private static final Logger logger = LoggerFactory.getLogger(WarnShowDelTask.class);
 
@@ -28,10 +26,15 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 		// TODO Auto-generated method stub
 		
 		String selection=update.getMessage().getText()==null?"":update.getMessage().getText();
-		if (selection.equals("")){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+		if (selection.equals("") || (selection.length()<3 
+				&& !selection.equalsIgnoreCase("/b")
+				&& !selection.equalsIgnoreCase("/s")
+				&& !selection.equalsIgnoreCase("/p")
+				)){
+			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),
+					msgKb.getKeyboard());
 			return;
 		}
 		
@@ -40,17 +43,23 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
+					update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
 			
 			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
 		}
 		
+		if (selection.equalsIgnoreCase("/s")){
+			ListOptionMsgKb msgKb=this.getListMsgKb(session, true);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),msgKb.getKeyboard());
+			return;
+		}
 		
-		if (selection.length()<3){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+		if (selection.equalsIgnoreCase("/p")){
+			ListOptionMsgKb msgKb=this.getListMsgKb(session, false);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
@@ -63,30 +72,33 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 			warnId=Long.parseLong(sWarnId);
 		}
 		catch (NumberFormatException ne){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),
+					msgKb.getKeyboard());
 			return;
 		}
 		
 		if (!command.equalsIgnoreCase("/v") && !command.equalsIgnoreCase("/d")){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
+			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),
+					msgKb.getKeyboard());
 			return;
 		}
 		
 		if (command.equalsIgnoreCase("/v")){
 			Ticket warn=CyBssCoreAPI.getInstance().getWarn(warnId,session.getLanguage());
-			if (warn.getPersonId()==0 || warn.getPersonId()!=session.getPersonId())
+			if (!session.isSearch() && (warn.getPersonId()==0 || warn.getPersonId()!=session.getPersonId()))
 				{
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_INVALID_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),
+						this.getListOptionMsgKb(session).getKeyboard());
 				return;
 				}
 			
-			TelegramAPI.getInstance().sendMessage(warn.getText()+" {"+(warn.getCategoryName()==null?"":warn.getCategoryName())+";"+warn.getStatusName()+"}", session.getId(), update.getMessage().getMessage_id());
+			TelegramAPI.getInstance().sendMessage(warn.getText()+" ["+(warn.getCategoryName()==null?"":warn.getCategoryName())+","+warn.getStatusName()+"]", session.getId(), update.getMessage().getMessage_id());
 			if (warn.getLocation()!=null){
 				// Invia Location
 				TelegramAPI.getInstance().sendLocation(warn.getLocation().getLatitude(), warn.getLocation().getLongitude(), 
@@ -125,17 +137,19 @@ public class WarnShowDelTask extends TaskAdapter implements Task{
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_INVALID_ID, 
 						session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),
+						getListOptionMsgKb(session).getKeyboard());
 				return;
 				}
 			
 			CyBssCoreAPI.getInstance().removeWarn(warnId);
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_DEL_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+					update.getMessage().getMessage_id(),
+					getListOptionMsgKb(session).getKeyboard());
 						
 		} // end /d
 	
 	}
-
+	
 }

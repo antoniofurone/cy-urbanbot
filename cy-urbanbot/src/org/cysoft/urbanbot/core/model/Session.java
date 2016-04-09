@@ -2,6 +2,7 @@ package org.cysoft.urbanbot.core.model;
 
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cysoft.bss.core.model.ICyBssConst;
@@ -9,6 +10,9 @@ import org.cysoft.bss.core.model.ICyBssConst;
 public class Session {
 	
 	private Map <String,Object> sessionVariabiles=null;
+	
+	private List<?> cachedItems=null;
+	private int cachedItemsOffset=0;
 	
 	public Session(long id){
 		this.id=id;
@@ -133,6 +137,30 @@ public class Session {
 				+ firstName + ", secondName=" + secondName + "]";
 	}
 
+	public List<?> getCachedItems() {
+		return cachedItems;
+	}
 
+	public void setCachedItems(List<?> cachedItems) {
+		this.cachedItems = cachedItems;
+	}
 
+	public int getCachedItemsOffset() {
+		return cachedItemsOffset;
+	}
+
+	public void setCachedItemsOffset(int cachedItemsOffset) {
+		this.cachedItemsOffset = cachedItemsOffset;
+	}
+
+	private boolean isSearch=false;
+	public void setIsSearch(boolean value) {
+		this.isSearch=value;
+	}
+
+	public boolean isSearch(){
+		return isSearch;
+	}
+	
+	
 }

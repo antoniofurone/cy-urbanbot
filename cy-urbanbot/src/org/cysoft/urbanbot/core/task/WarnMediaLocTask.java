@@ -11,15 +11,13 @@ import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.api.telegram.model.Video;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
-import org.cysoft.urbanbot.core.Task;
-import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WarnMediaLocTask extends TaskAdapter implements Task {
+public class WarnMediaLocTask extends WarnTaskAdapter {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WarnMediaLocTask.class);
 
