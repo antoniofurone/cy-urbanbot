@@ -53,7 +53,6 @@ public class BotMessage {
 	public static final String STORY_VIDEOOK_ID="STORY_VIDEOOK";
 	public static final String STORY_AUDIOOK_ID="STORY_AUDIOOK";
 	public static final String STORY_NO_STORY_ID="STORY_NO_STORY";
-	public static final String STORY_LIST_ID="STORY_LIST";
 	public static final String STORY_LIST_OP_ID="STORY_LIST_OP";
 	public static final String STORY_LIST_OP_ID_N="STORY_LIST_OP_N";
 	public static final String STORY_LIST_OP_ID_P="STORY_LIST_OP_P";
@@ -65,9 +64,12 @@ public class BotMessage {
 	
 	public static final String TOURIST_LOC_ID="TOURIST_LOC";
 	public static final String TOURIST_NO_SITE_ID="TOURIST_NO_SITE";
-	public static final String TOURIST_LIST_ID="TOURIST_LIST";
 	public static final String TOURIST_LIST_OP_ID="TOURIST_LIST_OP";
 	public static final String TOURIST_INVALID_ID="TOURIST_INVALID_ID";
+	public static final String TOURIST_LIST_OP_ID_P = "TOURIST_LIST_OP_P";
+	public static final String TOURIST_LIST_OP_ID_N = "TOURIST_LIST_OP_N";
+	public static final String TOURIST_LIST_OP_ID_NP = "TOURIST_LIST_OP_NP";
+	
 	
 	public static final String MAP_URLS_ID="MAP_URLS";
 	

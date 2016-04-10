@@ -10,15 +10,13 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
-import org.cysoft.urbanbot.core.Task;
-import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TouristShowTask extends TaskAdapter implements Task{
+public class TouristShowTask extends TouristTaskAdapter{
 
 	private static final Logger logger = LoggerFactory.getLogger(TouristShowTask.class);
 
@@ -27,10 +25,15 @@ public class TouristShowTask extends TaskAdapter implements Task{
 		// TODO Auto-generated method stub
 		
 		String selection=update.getMessage().getText()==null?"":update.getMessage().getText();
-		if (selection.equals("")){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+		if (selection.equals("") || (selection.length()<3 
+				&& !selection.equalsIgnoreCase("/b")
+				&& !selection.equalsIgnoreCase("/s")
+				&& !selection.equalsIgnoreCase("/p")
+				)){
+			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),
+					msgKb.getKeyboard());
 			return;
 		}
 		
@@ -43,10 +46,17 @@ public class TouristShowTask extends TaskAdapter implements Task{
 			return;
 		}
 		
-		if (selection.length()<3){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+		if (selection.equalsIgnoreCase("/s")){
+			ListOptionMsgKb msgKb=this.getListMsgKb(session, true);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),msgKb.getKeyboard());
+			return;
+		}
+		
+		if (selection.equalsIgnoreCase("/p")){
+			ListOptionMsgKb msgKb=this.getListMsgKb(session, false);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
@@ -59,17 +69,17 @@ public class TouristShowTask extends TaskAdapter implements Task{
 			locId=Long.parseLong(sLocId);
 		}
 		catch (NumberFormatException ne){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
 		
 		if (!command.equalsIgnoreCase("/v")){
-			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
@@ -79,7 +89,7 @@ public class TouristShowTask extends TaskAdapter implements Task{
 				{
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_INVALID_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),getListOptionMsgKb(session).getKeyboard());
 				return;
 				}
 			

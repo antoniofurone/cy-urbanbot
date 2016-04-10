@@ -34,7 +34,7 @@ public class WarnMediaLocTask extends WarnTaskAdapter {
 						getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.NVB_KEYB);
+						update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
 				session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 				return;
 			}

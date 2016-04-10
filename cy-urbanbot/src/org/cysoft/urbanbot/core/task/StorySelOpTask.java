@@ -117,7 +117,7 @@ public class StorySelOpTask extends StoryTaskAdapter {
 					TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 							update.getMessage().getMessage_id(),msgKb.getKeyboard());
 					
-					}
+				}
 				
 				session.getSessionStatus().setId(SessionStatus.STORY_SHOWLIST_STATUS_ID);
 				return;

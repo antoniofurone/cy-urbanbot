@@ -11,12 +11,9 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
-import org.cysoft.urbanbot.core.Task;
-import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
-import org.cysoft.urbanbot.core.task.WarnTaskAdapter.ListOptionMsgKb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,16 +72,14 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 		}
 		catch (NumberFormatException ne){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
-			String message=CyBssCoreAPI.getInstance().getMessage(msgKb.getMessage(), session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
 		if (!command.equalsIgnoreCase("/v") && !command.equalsIgnoreCase("/d")){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
-			String message=CyBssCoreAPI.getInstance().getMessage(msgKb.getMessage(), session.getLanguage());
-			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
@@ -98,7 +93,7 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 				{
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_INVALID_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),this.getListOptionMsgKb(session).getKeyboard());
+						update.getMessage().getMessage_id(),getListOptionMsgKb(session).getKeyboard());
 				return;
 				}
 			

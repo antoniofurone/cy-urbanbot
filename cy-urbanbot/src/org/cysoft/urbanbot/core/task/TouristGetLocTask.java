@@ -16,18 +16,17 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
-import org.cysoft.urbanbot.core.Task;
-import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
 import org.cysoft.urbanbot.core.model.LocDistance;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
+import org.cysoft.urbanbot.core.task.StoryTaskAdapter.ListOptionMsgKb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-public class TouristGetLocTask extends TaskAdapter implements Task{
+public class TouristGetLocTask extends TouristTaskAdapter{
 
 	private static final Logger logger = LoggerFactory.getLogger(TouristGetLocTask.class);
 
@@ -108,10 +107,13 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 			
 			if (rifLoc!=null){
 				List<Location> locs=CyBssCoreAPI.getInstance().findTouristSites("","",session.getLanguage());
-				String messageList="";
-				if (locs.isEmpty())
-					messageList+=CyBssCoreAPI.getInstance().
+				if (locs.isEmpty()){
+					String messageList=CyBssCoreAPI.getInstance().
 							getMessage(BotMessage.TOURIST_NO_SITE_ID, session.getLanguage());
+					
+					TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
+							update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+				}
 				else
 				{
 					
@@ -121,8 +123,20 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 					
 					Collections.sort(locDists);
 					
+					session.setCachedItems(locDists);
+					session.setCachedItemsOffset(TOURIST_NUM_SHOW*-1);
+					session.setIsSearch(false);
+					
+					ListOptionMsgKb msgKb=this.getListMsgKb(session, true);
+					TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
+							update.getMessage().getMessage_id(),msgKb.getKeyboard());
+					
+					
+					/*
 					messageList+=CyBssCoreAPI.getInstance().
 							getMessage(BotMessage.TOURIST_LIST_ID, session.getLanguage())+"\n";
+					
+					
 					for(LocDistance locDist:locDists)
 						messageList+="/v"+locDist.getLocation().getId()+" -> "+locDist.getLocation().getName()+" @ "+
 					(session.getLanguage().equals("it")?
@@ -134,10 +148,9 @@ public class TouristGetLocTask extends TaskAdapter implements Task{
 					
 					messageList+=CyBssCoreAPI.getInstance().
 							getMessage(BotMessage.TOURIST_LIST_OP_ID, session.getLanguage());
+					*/
 				}
 					
-				TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
 				session.getSessionStatus().setId(SessionStatus.TOURIST_SELLOC_STATUS_ID);
 			}
 			else

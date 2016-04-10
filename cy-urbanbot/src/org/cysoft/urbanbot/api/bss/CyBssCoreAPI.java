@@ -10,6 +10,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.cysoft.bss.core.model.AppParam;
 import org.cysoft.bss.core.model.CyBssFile;
 import org.cysoft.bss.core.model.Location;
+import org.cysoft.bss.core.model.Person;
 import org.cysoft.bss.core.model.Ticket;
 import org.cysoft.bss.core.model.TicketCategory;
 import org.cysoft.bss.core.web.response.ICyBssResultConst;
@@ -19,6 +20,7 @@ import org.cysoft.bss.core.web.response.rest.AppResponse;
 import org.cysoft.bss.core.web.response.rest.CyBssAuthLogOn;
 import org.cysoft.bss.core.web.response.rest.LocationListResponse;
 import org.cysoft.bss.core.web.response.rest.LocationResponse;
+import org.cysoft.bss.core.web.response.rest.PersonListResponse;
 import org.cysoft.bss.core.web.response.rest.PersonResponse;
 import org.cysoft.bss.core.web.response.rest.TicketCategoryListResponse;
 import org.cysoft.bss.core.web.response.rest.TicketListResponse;
@@ -1230,6 +1232,43 @@ public class CyBssCoreAPI {
 		}
 	
 		
+	}
+	
+	public List<Person> findPersonsAll() throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/person/find", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		PersonListResponse personListResponse =null;
+		try{
+			personListResponse=new Gson().fromJson(response, PersonListResponse.class);
+			if (!personListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(personListResponse.getResultCode()+":"+personListResponse.getResultDesc());
+				
+				if (personListResponse.getResultCode().equals(ICyBssResultConst.RESULT_SESSION_NOK))
+					relogOn();
+				
+				throw new CyUrbanbotException(personListResponse.getResultCode()+":"+personListResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		return personListResponse.getPersons();
 	}
 	
 	@Override
