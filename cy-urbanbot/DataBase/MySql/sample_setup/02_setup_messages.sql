@@ -241,7 +241,7 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'STORY_SHOW_OP','/n new warning; /r search; /v show your stories o /b to return back');
+2,'STORY_SHOW_OP','/n new story; /r search; /v show your stories o /b to return back');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)

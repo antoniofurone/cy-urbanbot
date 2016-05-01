@@ -1,7 +1,7 @@
-Urbanbot is a telegram bot through which citizen can send warnings to city administration, tell story lived
+Urbanbot is a framework to build telegram bot through which citizen can send warnings to city administration, tell story lived
 in a particulare place and find tourist sites around them.
 
-Urbanbot is based on other two open source projects: cy-bss-core (https://github.com/antoniofurone/cy-bss-core.git)
+Urbanbot is based on others two open source projects: cy-bss-core (https://github.com/antoniofurone/cy-bss-core.git)
 and cy-bss-ironhorse (https://github.com/antoniofurone/cy-bss-ironhorse.git).
 
 Installation
