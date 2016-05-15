@@ -1,5 +1,6 @@
 package org.cysoft.urbanbot.core.task;
 
+
 import java.io.File;
 import java.util.List;
 
@@ -16,9 +17,9 @@ import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TouristShowTask extends TouristTaskAdapter{
+public class EventShowTask extends EventTaskAdapter{
 
-	private static final Logger logger = LoggerFactory.getLogger(TouristShowTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(EventShowTask.class);
 
 	@Override
 	public void exec(Update update, Session session) throws CyUrbanbotException {
@@ -38,6 +39,7 @@ public class TouristShowTask extends TouristTaskAdapter{
 		}
 		
 		if (selection.equalsIgnoreCase("/b")){
+			
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
@@ -61,12 +63,12 @@ public class TouristShowTask extends TouristTaskAdapter{
 		}
 		
 		String command=selection.substring(0,2);
-		String sLocId=selection.substring(2);
-		logger.info("command="+command+";locId="+sLocId);
+		String sEventId=selection.substring(2);
+		logger.info("command="+command+";EventId="+sEventId);
 		
-		long locId=0;
+		long eventId=0;
 		try {
-			locId=Long.parseLong(sLocId);
+			eventId=Long.parseLong(sEventId);
 		}
 		catch (NumberFormatException ne){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
@@ -75,7 +77,6 @@ public class TouristShowTask extends TouristTaskAdapter{
 			return;
 		}
 		
-		
 		if (!command.equalsIgnoreCase("/v")){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
@@ -83,11 +84,14 @@ public class TouristShowTask extends TouristTaskAdapter{
 			return;
 		}
 		
+		
 		if (command.equalsIgnoreCase("/v")){
-			Location loc=CyBssCoreAPI.getInstance().getTouristSite(locId,session.getLanguage());
-			if (loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_TOURIST_SITE))
+			
+			Location loc=CyBssCoreAPI.getInstance().getEvent(eventId,session.getLanguage());
+			if (!session.isSearch() && (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() || 
+				loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_EVENT)))
 				{
-				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_INVALID_ID, session.getLanguage());
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.EVENT_INVALID_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 						update.getMessage().getMessage_id(),getListOptionMsgKb(session).getKeyboard());
 				return;
@@ -96,32 +100,22 @@ public class TouristShowTask extends TouristTaskAdapter{
 			if (loc.getDescription()!=null && !loc.getDescription().equals(""))
 				TelegramAPI.getInstance().sendMessage("<strong>"+loc.getName()+"</strong>\n"+loc.getDescription(), session.getId(), 
 						update.getMessage().getMessage_id(),TelegramAPI.MESSAGE_PARSEMODE_HTML);
+			
 			// Invia Location
 			TelegramAPI.getInstance().sendLocation(loc.getLatitude(), loc.getLongitude(), 
 						session.getId(), update.getMessage().getMessage_id());
 			
-			List<CyBssFile> files=CyBssCoreAPI.getInstance().getTouristSiteFiles(locId);
+			
+			List<CyBssFile> files=CyBssCoreAPI.getInstance().getEventFiles(eventId);
 			if (files!=null && !files.isEmpty()){
 				for(CyBssFile file:files){
 					
 					logger.info(file.toString());
-					
 					if (file.getVisibility().equals(CyBssFile.VISIBILITY_PUBLIC)){
-					
+						
 						String caption=file.getNote();
 						
-						
 						CyBssCoreAPI.getInstance().downloadFile(file.getId(), session.getId()+"_"+file.getName());
-						
-						if (file.getFileType()==null || file.getFileType().equals("") || (
-							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE) &&
-							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_AUDIO_TYPE) &&
-							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_VIDEO_TYPE) &&
-							!file.getFileType().equals(ICyUrbanbotConst.MEDIA_VOICE_TYPE))
-							)
-							TelegramAPI.getInstance().sendDocument(session.getId()+"_"+file.getName(), 
-									session.getId(),update.getMessage().getMessage_id());
-						
 						if (file.getFileType().equals(ICyUrbanbotConst.MEDIA_PHOTO_TYPE))
 							TelegramAPI.getInstance().sendPhoto(session.getId()+"_"+file.getName(), 
 									session.getId(),update.getMessage().getMessage_id(),caption);
@@ -153,12 +147,10 @@ public class TouristShowTask extends TouristTaskAdapter{
 					}
 					else
 						logger.warn(file.toString()+": not visible !");
-					
 				}
 			}
-						
 		} // end /v
-		
+	
 	}
 
 }

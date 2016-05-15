@@ -663,6 +663,51 @@ public class CyBssCoreAPI {
 		return locationListResponse.getLocations();
 	}
 
+	public List<Location> findEvents(String name,String description,String languageCode) throws CyUrbanbotException{
+		return findEvents(name,description,languageCode,0,0);
+	}
+	
+	public List<Location> findEvents(String name, String description, String languageCode,int offSet, int size) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		headerAttrs.add(new BasicNameValuePair("Language",languageCode));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/find?name="+
+					URLEncoder.encode(name, "UTF-8")+"&description="+URLEncoder.encode(description, "UTF-8")+"&locationType="+ICyUrbanbotConst.LOCATION_TYPE_EVENT, 
+					headerAttrs);
+		} catch (CyUrbanbotException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		LocationListResponse locationListResponse =null;
+		try{
+			locationListResponse=new Gson().fromJson(response, LocationListResponse.class);
+			if (!locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+				
+				if (locationListResponse.getResultCode().equals(ICyBssResultConst.RESULT_SESSION_NOK))
+					relogOn();
+				
+				throw new CyUrbanbotException(locationListResponse.getResultCode()+":"+locationListResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		return locationListResponse.getLocations();
+	}
+	
+	
 	public Location getStory(long storyId, String languageCode) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
@@ -702,6 +747,47 @@ public class CyBssCoreAPI {
 		return locationResponse.getLocation();
 	}
 
+	
+	public Location getEvent(long eventId, String languageCode) throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		headerAttrs.add(new BasicNameValuePair("Language",languageCode));
+
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/"+eventId+"/get", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+
+		LocationResponse locationResponse =null;
+		try{
+			locationResponse=new Gson().fromJson(response, LocationResponse.class);
+			if (!locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+				
+				if (locationResponse.getResultCode().equals(ICyBssResultConst.RESULT_SESSION_NOK))
+					relogOn();
+				
+				throw new CyUrbanbotException(locationResponse.getResultCode()+":"+locationResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		return locationResponse.getLocation();
+	}
+	
+	
 	public Location getTouristSite(long locId, String languageCode) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
 		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
@@ -854,6 +940,44 @@ public class CyBssCoreAPI {
 		
 		return filesResponse.getFiles();
 	}
+	
+	public List<CyBssFile> getEventFiles(long eventId)throws CyUrbanbotException{
+		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
+		headerAttrs.add(new BasicNameValuePair("Content-Type","application/json"));
+		headerAttrs.add(new BasicNameValuePair("Security-Token",securityToken));
+		
+		String response=null;
+		try {
+			response=CyUrbanBotUtility.httpGet(coreUrl+"/rest/location/"+eventId+"/getFiles", 
+					headerAttrs);
+		} catch (CyUrbanbotException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		FileListResponse filesResponse =null;
+		try{
+			filesResponse=new Gson().fromJson(response, FileListResponse.class);
+			if (!filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_OK)){
+				logger.error(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+				
+				if (filesResponse.getResultCode().equals(ICyBssResultConst.RESULT_SESSION_NOK))
+					relogOn();
+				
+				throw new CyUrbanbotException(filesResponse.getResultCode()+":"+filesResponse.getResultDesc());
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error("response="+response);
+			throw new CyUrbanbotException(e);
+		}
+		
+		return filesResponse.getFiles();
+	}
+	
 	
 	public void removeStory(long id) throws CyUrbanbotException{
 		List<NameValuePair> headerAttrs=new ArrayList<NameValuePair>();
@@ -1275,5 +1399,6 @@ public class CyBssCoreAPI {
 	public String toString() {
 		return "CyBssCoreAPI [appId=" + appId + ", coreUrl=" + coreUrl + "]";
 	}
+	
 	
 }

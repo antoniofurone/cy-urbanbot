@@ -25,12 +25,12 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'WELCOME_MENU','Benvenuto in Carovigno Bot (Beta version). Inviami uno dei seguenti comandi: /s segnalazioni;  /n storie ; /t siti turistici; /m mappe;  /l change language.');
+1,'WELCOME_MENU','Benvenuto in Carovigno Bot. Inviami uno dei seguenti comandi:\n /s segnalazioni;\n /n storie;\n /e eventi;\n /t siti turistici;\n /m mappe;\n  /l change language.');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'WELCOME_MENU','Welcome at Carovigno Bot (Beta version). Send one of following commands: /s warnings; /n stories; /t tourist sites; /m maps; /l cambia lingua.');
+2,'WELCOME_MENU','Welcome at Carovigno Bot. Send one of following commands:\n /s warnings;\n /n stories;\n /e events;\n /t tourist sites;\n /m maps;\n /l cambia lingua.');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -231,6 +231,78 @@ insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
 2,'WARN_SEL_CATEGORY','Select category or /b to return back');
+
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_GET_SEARCH','Inserisci il testo di ricerca (! per vedere tutto) o /b per tornare indietro');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_GET_SEARCH','Insert text search (! for all) o /b to return back');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_LIST_OP','Invia /v# per visualizzare; /b per tornare indietro.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_LIST_OP','Send /v# to show; /b to return back.');
+
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_LIST_OP_N','Invia /v# per visualizzare; /s successive; /b per tornare indietro.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_LIST_OP_N','Send /v# to show; /s next; /b to return back.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_LIST_OP_P','Invia /v# per visualizzare;  /p precedenti; /b per tornare indietro.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_LIST_OP_P','Send /v# to show; /p previous; /b to return back.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_LIST_OP_NP','Invia /v# per visualizzare; /s successive; /p precedenti; /b per tornare indietro.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_LIST_OP_NP','Send /v# to show; /s next; /p previous; /b to return back.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_INVALID_ID','# non valida !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_INVALID_ID','invalid # !');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+1,'EVENT_NO_STORY','Nessun evento; /b per tornare indietro.');
+
+insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
+values (
+(select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
+2,'EVENT_NO_STORY','No events; /b to return back.');
 
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
@@ -481,9 +553,9 @@ values (
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-1,'MAP_URLS','Seleziona uno dei seguenti link:\n\n<strong>Segnalazioni</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Storie</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Siti Turistici</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');
+1,'MAP_URLS','Seleziona uno dei seguenti link:\n\n<strong>Segnalazioni</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Storie</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Eventi</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/events.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/eventsOSM.html \n\n<strong>Siti Turistici</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');
 
 insert into BSST_AME_APP_MESSAGE(APP_N_APP_ID,LAN_N_LANG_ID,AME_S_ID,AME_S_VALUE)
 values (
 (select APP_N_APP_ID from BSST_APP_APP where APP_S_NAME='UrbanBot'),
-2,'MAP_URLS','Select one of following links:\n\n<strong>Warnings</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Stories</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Tourist Sites</strong>\n Google Maps: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://192.168.1.5:8080/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');
+2,'MAP_URLS','Select one of following links:\n\n<strong>Warnings</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/warnings.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/warningsOSM.html \n\n<strong>Stories</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/stories.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/storiesOSM.html \n\n<strong>Events</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/events.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/eventsOSM.html \n\n<strong>Tourist Sites</strong>\n Google Maps: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html \n Open Street Map: http://carovignobot.org/cy-bss-ironhorse/html/maps/urbanbot/touristSitesOSM.html  ');

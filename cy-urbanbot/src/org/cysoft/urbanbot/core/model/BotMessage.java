@@ -6,7 +6,7 @@ import java.util.List;
 public class BotMessage {
 	
 	
-	public static final List<List<String>> WELCOME_MENU_KEYB=Arrays.asList(Arrays.asList("/s", "/n", "/t"),Arrays.asList("/m", "/l"));
+	public static final List<List<String>> WELCOME_MENU_KEYB=Arrays.asList(Arrays.asList("/s", "/n", "/t"),Arrays.asList("/e","/m", "/l"));
 	public static final List<List<String>> NVB_KEYB=Arrays.asList(Arrays.asList("/n", "/v", "/b"));
 	public static final List<List<String>> NRVB_KEYB=Arrays.asList(Arrays.asList("/n","/r", "/v", "/b"));
 	public static final List<List<String>> VB_KEYB=Arrays.asList(Arrays.asList( "/v", "/b"));
@@ -42,6 +42,15 @@ public class BotMessage {
 	public static final String WARN_SEL_CATEGORY_ID="WARN_SEL_CATEGORY";
 	public static final String WARN_GET_SEARCH_ID = "WARN_GET_SEARCH";
 
+	public static final String EVENT_LIST_OP_ID = "EVENT_LIST_OP";
+	public static final String EVENT_LIST_OP_ID_N="EVENT_LIST_OP_N";
+	public static final String EVENT_LIST_OP_ID_P = "EVENT_LIST_OP_P";
+	public static final String EVENT_LIST_OP_ID_NP="EVENT_LIST_OP_NP";
+	public static final String EVENT_INVALID_ID="EVENT_INVALID_ID";
+	public static final String EVENT_NO_EVENT_ID="EVENT_NO_STORY";
+	public static final String EVENT_GET_SEARCH_ID = "EVENT_GET_SEARCH";
+	
+	
 	
 	public static final String STORY_LOC_ID="STORY_LOC";
 	public static final String STORY_SHOW_OP_ID="STORY_SHOW_OP";
@@ -72,6 +81,7 @@ public class BotMessage {
 	
 	
 	public static final String MAP_URLS_ID="MAP_URLS";
+	
 	
 	private String id="";
 	private String text="";

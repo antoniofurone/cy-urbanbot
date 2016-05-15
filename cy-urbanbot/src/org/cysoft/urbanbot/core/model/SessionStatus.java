@@ -26,6 +26,14 @@ public class SessionStatus {
 	public static final int TOURIST_GETLOC_STATUS_ID=30;
 	public static final int TOURIST_SELLOC_STATUS_ID=31;
 	
+	
+	//public static final int EVENT_SHOWOP_STATUS_ID=32;
+	//public static final int EVENT_SELOP_STATUS_ID=33;
+	public static final int EVENT_SHOWLIST_STATUS_ID=34;
+	public static final int EVENT_SEARCH_STATUS_ID = 35;
+	
+	
+	
 	private int id=INIT_STATUS_ID;
 	public int getId() {
 		return id;

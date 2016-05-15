@@ -10,7 +10,10 @@ public interface ICyUrbanbotConst {
 	
 	public static final String LOCATION_TYPE_STORY="StoryLocation";
 	public static final String LOCATION_TYPE_TOURIST_SITE="TouristSiteLocation";
+	public static final Object LOCATION_TYPE_EVENT = "EventLocation";
+
 	
 	public static final long SESSION_TIME_OUT=600000;
+
 	
 }

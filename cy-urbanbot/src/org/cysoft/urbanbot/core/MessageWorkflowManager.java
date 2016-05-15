@@ -6,6 +6,8 @@ import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
+import org.cysoft.urbanbot.core.task.EventSelOpTask;
+import org.cysoft.urbanbot.core.task.EventShowTask;
 import org.cysoft.urbanbot.core.task.MapsTask;
 import org.cysoft.urbanbot.core.task.StoryGetTask;
 import org.cysoft.urbanbot.core.task.StorySelOpTask;
@@ -68,6 +70,10 @@ public class MessageWorkflowManager {
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/n"))
 				task=new StorySelOpTask();
+	
+			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
+				update.getMessage().getText().trim().equalsIgnoreCase("/e"))
+				task=new EventSelOpTask();
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
 				update.getMessage().getText().trim().equalsIgnoreCase("/t"))
@@ -118,6 +124,16 @@ public class MessageWorkflowManager {
 		if (session.getSessionStatus().getId()==SessionStatus.STORY_SHOWLIST_STATUS_ID)
 			task=new StoryShowDelTask();
 		// end STORY transitionTouristSiteLocation
+		
+		// EVENT transition
+		if (session.getSessionStatus().getId()==SessionStatus.EVENT_SEARCH_STATUS_ID)
+			task=new EventSelOpTask();
+		
+		if (session.getSessionStatus().getId()==SessionStatus.EVENT_SHOWLIST_STATUS_ID)
+			task=new EventShowTask();
+		// end EVENT 
+		
+		
 		
 		// tourist site transition
 		if (session.getSessionStatus().getId()==SessionStatus.TOURIST_GETLOC_STATUS_ID)

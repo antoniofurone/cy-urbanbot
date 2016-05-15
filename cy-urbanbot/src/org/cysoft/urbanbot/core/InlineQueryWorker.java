@@ -30,12 +30,17 @@ public class InlineQueryWorker implements Runnable{
 	private static final short QUERY_SITES=0;
 	private static final short QUERY_WARN=1;
 	private static final short QUERY_STORY=2;
+	private static final short QUERY_EVENT=3;
 	
 	private static final String TOKEN_STORY1="story";
 	private static final String TOKEN_STORY2="storie";
 	
 	private static final String TOKEN_WARN1="warn";
 	private static final String TOKEN_WARN2="segn";
+	
+	private static final String TOKEN_EVENT1="event";
+	private static final String TOKEN_EVENT2="eventi";
+	
 	
 	private static final int QUERY_SIZE=20;
 	
@@ -182,12 +187,66 @@ public class InlineQueryWorker implements Runnable{
 		return inLineResults;
 	}
 
+	private List<InlineQueryResult> getEvents(String query, String langCode) throws CyUrbanbotException{
+		logger.info("query="+query+";langCode="+langCode);
+		
+		List<InlineQueryResult> inLineResults=new ArrayList<InlineQueryResult>();
+		
+		List<Location> locs=CyBssCoreAPI.getInstance().findEvents(query.equals("")?"":"%"+query+"%","",langCode);
+		if (query!=null && !query.equals("")){
+			// find using description
+			Map <Long,String> hMap=new LinkedHashMap<Long,String>();
+			for(Location loc:locs)
+				hMap.put(loc.getId(), loc.getName());
+			
+			List<Location> locsDesc=CyBssCoreAPI.getInstance().findEvents("",query.equals("")?"":"%"+query+"%",langCode);
+			for(Location loc:locsDesc){
+				if (!hMap.containsKey(loc.getId()))
+				locs.add(loc);	
+			}
+		}
+		
+		for(Location loc:locs){
+			InlineQueryResultArticle inRes=new InlineQueryResultArticle();
+			inRes.setId(""+loc.getId());
+			inRes.setTitle(loc.getName());
+			String message="<strong>"+loc.getName()+"</strong>\n";
+			message+=loc.getDescription()+"\n";
+			
+			List<CyBssFile> files=FilesCache.getInstance().getLocationFiles(loc.getId());
+			if (files!=null){
+				for(CyBssFile file:files){
+					message+="\n";
+					if (file.getFileType()!=null && !file.getFileType().equals(""))
+						message+=file.getFileType()+" - ";
+					if (file.getNote()!=null && !file.getNote().equals(""))
+						message+=file.getNote()+" - ";
+					message+=CyBssCoreAPI.getInstance().getExternalCoreUrl()+"/fileservice/file/"+file.getId()+"/download";
+				}
+			}
+			
+			message+="\n\n";
+			message+="Google Maps: http://maps.google.com/?q="+loc.getLatitude()+","+loc.getLongitude()+"\n";
+			message+="OpenStreetMap: http://www.openstreetmap.org/?mlat="+loc.getLatitude()+"&mlon="+loc.getLongitude()+"&zoom=12"+"\n";
+			message+="\n";
+			
+			inRes.setMessage_text(message);
+			inRes.setParse_mode(TelegramAPI.MESSAGE_PARSEMODE_HTML);
+			inRes.setDescription(loc.getDescription().length()>50?loc.getDescription().substring(0,50)+" [...]":
+				loc.getDescription()); 
+			inLineResults.add(inRes);
+			
+			if (inLineResults.size()>=50)
+				break;
+		}
+		
+		return inLineResults;
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		logger.info(">>> InlineQueryWorker Thread...");
-		
-		
 		
 		String queryforSearch="";
 		String queryReceived=inLineQuery.getQuery();
@@ -214,8 +273,13 @@ public class InlineQueryWorker implements Runnable{
 			    			 queryType=QUERY_WARN;
 			    			 logger.info("Is warns query !");
 			    		 } 
-		    			 else	
-		    				 queryforSearch+=queryforSearch.equals("")?token:" "+token;
+		    			 else
+		    				 if (token_lc.equalsIgnoreCase(TOKEN_EVENT1)||token_lc.equalsIgnoreCase(TOKEN_EVENT2)){
+				    			 queryType=QUERY_EVENT;
+				    			 logger.info("Is event query !");
+				    		 } 
+		    				 else	
+		    					 queryforSearch+=queryforSearch.equals("")?token:" "+token;
 		     }
 		}
 
@@ -233,7 +297,10 @@ public class InlineQueryWorker implements Runnable{
 				if (queryType==QUERY_WARN)
 					inLineResults=getWarns(queryforSearch,langCode,inLineQuery.getOffset());
 				else
-					inLineResults=getTouristSite(queryforSearch, langCode);
+					if (queryType==QUERY_EVENT)
+						inLineResults=getEvents(queryforSearch,langCode);
+					else
+						inLineResults=getTouristSite(queryforSearch, langCode);
 		
 		} catch (CyUrbanbotException e) {
 			// TODO Auto-generated catch block
@@ -253,7 +320,6 @@ public class InlineQueryWorker implements Runnable{
 		}
 		
 		logger.info("<<< InlineQueryWorker Thread...");
-		
 	}
 	
 	
