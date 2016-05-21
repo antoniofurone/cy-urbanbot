@@ -12,6 +12,7 @@ import org.cysoft.urbanbot.api.telegram.model.Video;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -29,12 +30,15 @@ public class WarnMediaLocTask extends WarnTaskAdapter {
 			session.getSessionStatus().getId()==SessionStatus.WARN_IMG_STATUS_ID	){
 			String text=update.getMessage().getText()==null?"":update.getMessage().getText();
 			
-			if (text.equalsIgnoreCase("/b")){
+			if (text.equalsIgnoreCase(Keyboard.SELECTION_B)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+				){
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 				return;
 			}
@@ -52,7 +56,7 @@ public class WarnMediaLocTask extends WarnTaskAdapter {
 						update.getMessage().getMessage_id());
 				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				
 				session.getSessionStatus().setId(SessionStatus.WARN_IMG_STATUS_ID);
 				
@@ -74,7 +78,7 @@ public class WarnMediaLocTask extends WarnTaskAdapter {
 				
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_VIDEOOK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			}
 			
 			List<PhotoSize> phs=update.getMessage().getPhoto();
@@ -106,7 +110,7 @@ public class WarnMediaLocTask extends WarnTaskAdapter {
 				else
 					message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				
 				return;
 			}
@@ -117,7 +121,7 @@ public class WarnMediaLocTask extends WarnTaskAdapter {
 			else
 				message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_MEDIA_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			
 		} 
 				

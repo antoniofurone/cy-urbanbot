@@ -10,6 +10,7 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -27,19 +28,23 @@ public class EventSelOpTask extends EventTaskAdapter {
 			String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.EVENT_GET_SEARCH_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.EVENT_SEARCH_STATUS_ID);
 			return;
 		}
 		
 		if (session.getSessionStatus().getId()==SessionStatus.EVENT_SEARCH_STATUS_ID){
 			String text=update.getMessage().getText().trim();
-			if (text.equalsIgnoreCase("/b")){
+			if (
+				text.equalsIgnoreCase(Keyboard.SELECTION_B)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+				){
 			
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.WELCOME_MENU_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getWelcome(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 				
 				return;
@@ -79,7 +84,7 @@ public class EventSelOpTask extends EventTaskAdapter {
 						getMessage(BotMessage.EVENT_NO_EVENT_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			}
 			else
 			{

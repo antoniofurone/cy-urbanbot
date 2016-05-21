@@ -9,6 +9,7 @@ import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 
@@ -22,7 +23,7 @@ public class WelcomeTask extends TaskAdapter implements Task {
 		
 		TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 				update.getMessage().getMessage_id(),
-				BotMessage.WELCOME_MENU_KEYB);
+				Keyboard.getWelcome(session.getLanguage()));
 		
 		session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 	}

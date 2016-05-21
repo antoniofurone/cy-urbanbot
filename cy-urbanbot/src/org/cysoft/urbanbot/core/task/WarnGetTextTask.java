@@ -5,6 +5,7 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -19,12 +20,15 @@ public class WarnGetTextTask extends WarnTaskAdapter {
 		// TODO Auto-generated method stub
 		String warn=update.getMessage().getText()==null?"":update.getMessage().getText();
 		
-		if (warn.equalsIgnoreCase("/b")){
+		if (warn.equalsIgnoreCase(Keyboard.SELECTION_B)||
+			warn.equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+			warn.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+			){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
 		}
@@ -43,7 +47,7 @@ public class WarnGetTextTask extends WarnTaskAdapter {
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WARN_MEDIALOC_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.WARN_IMGLOC_STATUS_ID);
 		}
 		else
@@ -52,7 +56,7 @@ public class WarnGetTextTask extends WarnTaskAdapter {
 					getMessage(BotMessage.WARN_TEXT_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.WARN_TEXT_STATUS_ID);
 		}
 		

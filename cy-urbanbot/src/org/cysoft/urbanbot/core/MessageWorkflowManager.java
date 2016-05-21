@@ -3,6 +3,7 @@ package org.cysoft.urbanbot.core;
 
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.cysoft.urbanbot.core.task.ChangeLanguageTask;
@@ -38,7 +39,7 @@ public class MessageWorkflowManager {
 		Task task=null;
 	
 		String textofMsg=update.getMessage().getText()==null?"":update.getMessage().getText();
-		if (textofMsg.trim().equalsIgnoreCase("/start")){
+		if (textofMsg.trim().equalsIgnoreCase(Keyboard.SELECTION_START)){
 			task=new WelcomeTask();
 
 			task.exec(update, session);
@@ -48,7 +49,7 @@ public class MessageWorkflowManager {
 		
 		// Init Status
 		if (session.getSessionStatus().getId()==SessionStatus.INIT_STATUS_ID){
-			if (textofMsg.trim().trim().equalsIgnoreCase("/start"))
+			if (textofMsg.trim().trim().equalsIgnoreCase(Keyboard.SELECTION_START))
 				task=new WelcomeTask();
 			
 			if (task==null)
@@ -60,27 +61,57 @@ public class MessageWorkflowManager {
 		if (session.getSessionStatus().getId()==SessionStatus.MAIN_MENU_STATUS_ID){
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
-				update.getMessage().getText().trim().equalsIgnoreCase("/l"))
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_L) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_CHANGE_LANGUAGE) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_CHANGE_LANGUAGE_EN)
+					)
+				)
 				task=new ChangeLanguageTask();
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
-				update.getMessage().getText().trim().equalsIgnoreCase("/s"))
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_S) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_WARNING) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_WARNING_EN)
+					)
+				)
 				task=new WarnSelOpTask();
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
-				update.getMessage().getText().trim().equalsIgnoreCase("/n"))
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_N) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_STORY) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_STORY_EN)
+					)
+				)
 				task=new StorySelOpTask();
 	
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
-				update.getMessage().getText().trim().equalsIgnoreCase("/e"))
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_E) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_EVENT) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_EVENT_EN)
+					)
+				)
 				task=new EventSelOpTask();
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
-				update.getMessage().getText().trim().equalsIgnoreCase("/t"))
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_T) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_SITE) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_SITE_EN)
+					)
+				)
 				task=new TouristGetLocTask();
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null && 
-				update.getMessage().getText().trim().equalsIgnoreCase("/m"))
+				(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_M) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_MAP) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_MAP_EN)
+					)
+				)
 				task=new MapsTask();
 				
 			
@@ -132,8 +163,6 @@ public class MessageWorkflowManager {
 		if (session.getSessionStatus().getId()==SessionStatus.EVENT_SHOWLIST_STATUS_ID)
 			task=new EventShowTask();
 		// end EVENT 
-		
-		
 		
 		// tourist site transition
 		if (session.getSessionStatus().getId()==SessionStatus.TOURIST_GETLOC_STATUS_ID)

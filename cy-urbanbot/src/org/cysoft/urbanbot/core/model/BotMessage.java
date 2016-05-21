@@ -1,20 +1,6 @@
 package org.cysoft.urbanbot.core.model;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class BotMessage {
-	
-	
-	public static final List<List<String>> WELCOME_MENU_KEYB=Arrays.asList(Arrays.asList("/s", "/n", "/t"),Arrays.asList("/e","/m", "/l"));
-	public static final List<List<String>> NVB_KEYB=Arrays.asList(Arrays.asList("/n", "/v", "/b"));
-	public static final List<List<String>> NRVB_KEYB=Arrays.asList(Arrays.asList("/n","/r", "/v", "/b"));
-	public static final List<List<String>> VB_KEYB=Arrays.asList(Arrays.asList( "/v", "/b"));
-	public static final List<List<String>> B_KEYB=Arrays.asList(Arrays.asList("/b"));
-	public static final List<List<String>> BN_KEYB=Arrays.asList(Arrays.asList("/s","/b"));
-	public static final List<List<String>> BP_KEYB=Arrays.asList(Arrays.asList("/p","/b"));
-	public static final List<List<String>> BNP_KEYB=Arrays.asList(Arrays.asList("/s","/p","/b"));
-	public static final List<List<String>> B14_KEYB=Arrays.asList(Arrays.asList("1", "2", "3","4"),Arrays.asList("/b"));
 	
 	public static final String WAIT_LOCK_SESSION_ID="WAIT_LOCK_SESSION";
 	

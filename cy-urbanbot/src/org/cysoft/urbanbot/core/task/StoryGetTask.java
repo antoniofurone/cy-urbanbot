@@ -14,6 +14,7 @@ import org.cysoft.urbanbot.api.telegram.model.Voice;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -28,12 +29,16 @@ public class StoryGetTask extends StoryTaskAdapter{
 		// TODO Auto-generated method stub
 		
 		String text=update.getMessage().getText()==null?"":update.getMessage().getText();
-		if (text.equalsIgnoreCase("/b")){
+		if (
+				text.equalsIgnoreCase(Keyboard.SELECTION_B)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+		   ){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.STORY_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.STORY_SELOP_STATUS_ID);
 			return;
 		}
@@ -50,7 +55,7 @@ public class StoryGetTask extends StoryTaskAdapter{
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.STORY_TEXT_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.STORY_GETTEXT_STATUS_ID);
 			}
 			else
@@ -59,7 +64,7 @@ public class StoryGetTask extends StoryTaskAdapter{
 						getMessage(BotMessage.STORY_LOC_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.STORY_GETLOC_STATUS_ID);
 			}
 			
@@ -78,7 +83,7 @@ public class StoryGetTask extends StoryTaskAdapter{
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.STORY_TEXT_OK_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				
 				session.getSessionStatus().setId(SessionStatus.STORY_GETMEDIA_STATUS_ID);
 			}
@@ -87,7 +92,7 @@ public class StoryGetTask extends StoryTaskAdapter{
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.STORY_TEXT_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.STORY_GETTEXT_STATUS_ID);
 				
 			}

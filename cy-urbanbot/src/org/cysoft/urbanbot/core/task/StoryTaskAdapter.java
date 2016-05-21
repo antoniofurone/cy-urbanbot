@@ -8,6 +8,7 @@ import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +45,9 @@ public abstract class StoryTaskAdapter extends TaskAdapter{
 		for(int i=offSet;i<endIndex;i++){
 			Location loc=locs.get(i);
 			
-			messageList+=itemEmoj+" /v"+loc.getId()+" "+(loc.getDescription().length()>80?loc.getDescription().substring(0,80)+" [...]":loc.getDescription())
+			messageList+=itemEmoj+" "+Keyboard.SELECTION_V+loc.getId()+" "+(loc.getDescription().length()>80?loc.getDescription().substring(0,80)+" [...]":loc.getDescription())
 				+" ["+(loc.getPersonFirstName()!=null?loc.getPersonFirstName():"")+"]"
-				+" @ "+loc.getCreationDate().substring(0, 10)+(session.getPersonId()!=loc.getPersonId()?"":" /d"+loc.getId())+";\n";
+				+" @ "+loc.getCreationDate().substring(0, 10)+(session.getPersonId()!=loc.getPersonId()?"":" "+Keyboard.SELECTION_D+loc.getId())+";\n";
 		}
 		
 		session.setCachedItemsOffset(offSet);
@@ -69,27 +70,27 @@ public abstract class StoryTaskAdapter extends TaskAdapter{
 		if (session.getCachedItems().size()<=STORY_NUM_SHOW){
 			ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_LIST_OP_ID, 
 					session.getLanguage()));
-			ret.setKeyboard(BotMessage.B_KEYB);
+			ret.setKeyboard(Keyboard.getB(session.getLanguage()));
 		}
 		else
 		{
 			if (session.getCachedItemsOffset()+STORY_NUM_SHOW>=session.getCachedItems().size()){
 				ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_LIST_OP_ID_P, 
 						session.getLanguage()));
-				ret.setKeyboard(BotMessage.BP_KEYB);
+				ret.setKeyboard(Keyboard.getPb(session.getLanguage()));
 			}
 			else 
 			{
 				if (session.getCachedItemsOffset()==0){
 					ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_LIST_OP_ID_N, 
 							session.getLanguage()));
-					ret.setKeyboard(BotMessage.BN_KEYB);
+					ret.setKeyboard(Keyboard.getNb(session.getLanguage()));
 				}
 				else
 				{
 					ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_LIST_OP_ID_NP, 
 							session.getLanguage()));
-					ret.setKeyboard(BotMessage.BNP_KEYB);
+					ret.setKeyboard(Keyboard.getNpb(session.getLanguage()));
 				}
 				
 			}

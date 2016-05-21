@@ -5,10 +5,12 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import org.cysoft.bss.core.model.ICyBssConst;
 import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.LocDistance;
 import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
@@ -46,8 +48,8 @@ public abstract class TouristTaskAdapter extends TaskAdapter{
 		for(int i=offSet;i<endIndex;i++){
 			LocDistance locDist=locDists.get(i);
 			
-			messageList+=itemEmoj+" /v"+locDist.getLocation().getId()+" "+locDist.getLocation().getName()+" @ "+
-					(session.getLanguage().equals("it")?
+			messageList+=itemEmoj+" "+Keyboard.SELECTION_V+locDist.getLocation().getId()+" "+locDist.getLocation().getName()+" @ "+
+					(session.getLanguage().equalsIgnoreCase(ICyBssConst.LOCALE_IT)?
 							NumberFormat.getNumberInstance(Locale.ITALIAN).format((int)locDist.getDistance()):
 							NumberFormat.getNumberInstance(Locale.US).format((int)locDist.getDistance())	
 						)
@@ -74,27 +76,27 @@ public abstract class TouristTaskAdapter extends TaskAdapter{
 		if (session.getCachedItems().size()<=TOURIST_NUM_SHOW){
 			ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID, 
 					session.getLanguage()));
-			ret.setKeyboard(BotMessage.B_KEYB);
+			ret.setKeyboard(Keyboard.getB(session.getLanguage()));
 		}
 		else
 		{
 			if (session.getCachedItemsOffset()+TOURIST_NUM_SHOW>=session.getCachedItems().size()){
 				ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID_P, 
 						session.getLanguage()));
-				ret.setKeyboard(BotMessage.BP_KEYB);
+				ret.setKeyboard(Keyboard.getPb(session.getLanguage()));
 			}
 			else 
 			{
 				if (session.getCachedItemsOffset()==0){
 					ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID_N, 
 							session.getLanguage()));
-					ret.setKeyboard(BotMessage.BN_KEYB);
+					ret.setKeyboard(Keyboard.getNb(session.getLanguage()));
 				}
 				else
 				{
 					ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.TOURIST_LIST_OP_ID_NP, 
 							session.getLanguage()));
-					ret.setKeyboard(BotMessage.BNP_KEYB);
+					ret.setKeyboard(Keyboard.getNpb(session.getLanguage()));
 				}
 				
 			}

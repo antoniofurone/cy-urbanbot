@@ -8,6 +8,7 @@ import org.cysoft.urbanbot.api.bss.CyBssCoreAPI;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,6 @@ public abstract class WarnTaskAdapter extends TaskAdapter{
 	private static final Logger logger = LoggerFactory.getLogger(WarnTaskAdapter.class);
 	private static final String itemEmoj=new String(new byte[]{(byte)0xE2, (byte)0x9C, (byte)0x94}, Charset.forName("UTF-8"));
 	
-	
-
 	protected static final int WARN_CACHE_SIZE=100;
 	protected static final int WARN_NUM_SHOW=5;
 	
@@ -46,9 +45,9 @@ public abstract class WarnTaskAdapter extends TaskAdapter{
 		for(int i=offSet;i<endIndex;i++){
 			Ticket warn=warns.get(i);
 			
-			messageList+=itemEmoj+" /v"+warn.getId()+" "+(warn.getText().length()>80?warn.getText().substring(0,80)+" [...]":warn.getText())
+			messageList+=itemEmoj+" "+Keyboard.SELECTION_V+warn.getId()+" "+(warn.getText().length()>80?warn.getText().substring(0,80)+" [...]":warn.getText())
 				+" ["+(warn.getCategoryName()!=null?warn.getCategoryName():"")+","+warn.getStatusName()+"]"
-				+" @ "+warn.getCreationDate().substring(0, 10)+(session.getPersonId()!=warn.getPersonId()?"":" /d"+warn.getId())+";\n";
+				+" @ "+warn.getCreationDate().substring(0, 10)+(session.getPersonId()!=warn.getPersonId()?"":" "+Keyboard.SELECTION_D+warn.getId())+";\n";
 		}
 		
 		session.setCachedItemsOffset(offSet);
@@ -71,27 +70,27 @@ public abstract class WarnTaskAdapter extends TaskAdapter{
 		if (session.getCachedItems().size()<=WARN_NUM_SHOW){
 			ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID, 
 					session.getLanguage()));
-			ret.setKeyboard(BotMessage.B_KEYB);
+			ret.setKeyboard(Keyboard.getB(session.getLanguage()));
 		}
 		else
 		{
 			if (session.getCachedItemsOffset()+WARN_NUM_SHOW>=session.getCachedItems().size()){
 				ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID_P, 
 						session.getLanguage()));
-				ret.setKeyboard(BotMessage.BP_KEYB);
+				ret.setKeyboard(Keyboard.getPb(session.getLanguage()));
 			}
 			else 
 			{
 				if (session.getCachedItemsOffset()==0){
 					ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID_N, 
 							session.getLanguage()));
-					ret.setKeyboard(BotMessage.BN_KEYB);
+					ret.setKeyboard(Keyboard.getNb(session.getLanguage()));
 				}
 				else
 				{
 					ret.setMessage(CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_LIST_OP_ID_NP, 
 							session.getLanguage()));
-					ret.setKeyboard(BotMessage.BNP_KEYB);
+					ret.setKeyboard(Keyboard.getNpb(session.getLanguage()));
 				}
 				
 			}

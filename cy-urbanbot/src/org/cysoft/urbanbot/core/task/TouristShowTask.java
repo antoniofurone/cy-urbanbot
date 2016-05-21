@@ -11,6 +11,7 @@ import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -26,9 +27,15 @@ public class TouristShowTask extends TouristTaskAdapter{
 		
 		String selection=update.getMessage().getText()==null?"":update.getMessage().getText();
 		if (selection.equals("") || (selection.length()<3 
-				&& !selection.equalsIgnoreCase("/b")
-				&& !selection.equalsIgnoreCase("/s")
-				&& !selection.equalsIgnoreCase("/p")
+				&& !selection.equalsIgnoreCase(Keyboard.SELECTION_B)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_BACK)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+				&& !selection.equalsIgnoreCase(Keyboard.SELECTION_S)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT_EN)
+				&& !selection.equalsIgnoreCase(Keyboard.SELECTION_P)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_PREV)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_PREV_EN)
 				)){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
@@ -37,23 +44,32 @@ public class TouristShowTask extends TouristTaskAdapter{
 			return;
 		}
 		
-		if (selection.equalsIgnoreCase("/b")){
+		if (selection.equalsIgnoreCase(Keyboard.SELECTION_B) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_BACK) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+			){
 			String message=CyBssCoreAPI.getInstance().
-					getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
+					getMessage(BotMessage.TOURIST_LOC_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.WELCOME_MENU_KEYB);
-			session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
+					update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+			session.getSessionStatus().setId(SessionStatus.TOURIST_GETLOC_STATUS_ID);
 			return;
 		}
 		
-		if (selection.equalsIgnoreCase("/s")){
+		if (selection.equalsIgnoreCase(Keyboard.SELECTION_S) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT_EN)
+			){
 			ListOptionMsgKb msgKb=this.getListMsgKb(session, true);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
-		if (selection.equalsIgnoreCase("/p")){
+		if (selection.equalsIgnoreCase(Keyboard.SELECTION_P) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_PREV) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_PREV_EN)
+			){
 			ListOptionMsgKb msgKb=this.getListMsgKb(session, false);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
@@ -76,14 +92,14 @@ public class TouristShowTask extends TouristTaskAdapter{
 		}
 		
 		
-		if (!command.equalsIgnoreCase("/v")){
+		if (!command.equalsIgnoreCase(Keyboard.SELECTION_V)){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
-		if (command.equalsIgnoreCase("/v")){
+		if (command.equalsIgnoreCase(Keyboard.SELECTION_V)){
 			Location loc=CyBssCoreAPI.getInstance().getTouristSite(locId,session.getLanguage());
 			if (loc.getLocationType()==null || !loc.getLocationType().equals(ICyUrbanbotConst.LOCATION_TYPE_TOURIST_SITE))
 				{

@@ -8,6 +8,7 @@ import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.Task;
 import org.cysoft.urbanbot.core.TaskAdapter;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 
 public class ChangeLanguageTask extends TaskAdapter implements Task {
@@ -22,7 +23,8 @@ public class ChangeLanguageTask extends TaskAdapter implements Task {
 		String message=CyBssCoreAPI.getInstance().
 				getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 		
-		TelegramAPI.getInstance().sendMessage(message, session.getId(), update.getMessage().getMessage_id());
+		TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+				update.getMessage().getMessage_id(),Keyboard.getWelcome(session.getLanguage()));
 	}
 
 }

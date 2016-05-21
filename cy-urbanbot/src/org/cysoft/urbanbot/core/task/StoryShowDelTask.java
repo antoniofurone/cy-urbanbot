@@ -12,6 +12,7 @@ import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.common.ICyUrbanbotConst;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -27,9 +28,15 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 		
 		String selection=update.getMessage().getText()==null?"":update.getMessage().getText();
 		if (selection.equals("") || (selection.length()<3 
-				&& !selection.equalsIgnoreCase("/b")
-				&& !selection.equalsIgnoreCase("/s")
-				&& !selection.equalsIgnoreCase("/p")
+				&& !selection.equalsIgnoreCase(Keyboard.SELECTION_B)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_BACK)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+				&& !selection.equalsIgnoreCase(Keyboard.SELECTION_S)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT_EN)
+				&& !selection.equalsIgnoreCase(Keyboard.SELECTION_P)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_PREV)
+				&& !selection.equalsIgnoreCase(Keyboard.BUTTON_PREV_EN)
 				)){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
@@ -38,24 +45,33 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 			return;
 		}
 		
-		if (selection.equalsIgnoreCase("/b")){
+		if (selection.equalsIgnoreCase(Keyboard.SELECTION_B) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_BACK) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+			){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.STORY_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.STORY_SELOP_STATUS_ID);
 			return;
 		}
 		
-		if (selection.equalsIgnoreCase("/s")){
+		if (selection.equalsIgnoreCase(Keyboard.SELECTION_S) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_NEXT_EN)
+			){
 			ListOptionMsgKb msgKb=this.getListMsgKb(session, true);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
 			return;
 		}
 		
-		if (selection.equalsIgnoreCase("/p")){
+		if (selection.equalsIgnoreCase(Keyboard.SELECTION_P) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_PREV) ||
+			selection.equalsIgnoreCase(Keyboard.BUTTON_PREV_EN)
+			){
 			ListOptionMsgKb msgKb=this.getListMsgKb(session, false);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
@@ -77,7 +93,7 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 			return;
 		}
 		
-		if (!command.equalsIgnoreCase("/v") && !command.equalsIgnoreCase("/d")){
+		if (!command.equalsIgnoreCase(Keyboard.SELECTION_V) && !command.equalsIgnoreCase(Keyboard.SELECTION_D)){
 			ListOptionMsgKb msgKb=getListOptionMsgKb(session);
 			TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 					update.getMessage().getMessage_id(),msgKb.getKeyboard());
@@ -85,7 +101,7 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 		}
 		
 		
-		if (command.equalsIgnoreCase("/v")){
+		if (command.equalsIgnoreCase(Keyboard.SELECTION_V)){
 			
 			Location loc=CyBssCoreAPI.getInstance().getStory(storyId,session.getLanguage());
 			if (!session.isSearch() && (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() || 
@@ -150,7 +166,7 @@ public class StoryShowDelTask extends StoryTaskAdapter{
 		} // end /v
 		
 		
-		if (command.equalsIgnoreCase("/d")){
+		if (command.equalsIgnoreCase(Keyboard.SELECTION_D)){
 			
 			Location loc=CyBssCoreAPI.getInstance().getStory(storyId,session.getLanguage());
 			if (loc.getPersonId()==0 || loc.getPersonId()!=session.getPersonId() ||

@@ -15,6 +15,7 @@ import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanBotUtility;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.LocDistance;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
@@ -31,12 +32,17 @@ public class TouristGetLocTask extends TouristTaskAdapter{
 	public void exec(Update update, Session session) throws CyUrbanbotException {
 		// TODO Auto-generated method stub
 	
-		if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-				update.getMessage().getText().trim().equalsIgnoreCase("/b")){
+		if (update.getMessage()!=null && update.getMessage().getText()!=null && 
+				(
+				update.getMessage().getText().equalsIgnoreCase(Keyboard.SELECTION_B)||
+				update.getMessage().getText().equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+				update.getMessage().getText().equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+				)
+			){
 			String message=CyBssCoreAPI.getInstance().
 					getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.WELCOME_MENU_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getWelcome(session.getLanguage()));
 			
 			session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 			return;
@@ -47,7 +53,7 @@ public class TouristGetLocTask extends TouristTaskAdapter{
 					getMessage(BotMessage.TOURIST_LOC_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			session.getSessionStatus().setId(SessionStatus.TOURIST_GETLOC_STATUS_ID);
 			return;
 		}
@@ -109,7 +115,7 @@ public class TouristGetLocTask extends TouristTaskAdapter{
 							getMessage(BotMessage.TOURIST_NO_SITE_ID, session.getLanguage());
 					
 					TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
-							update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+							update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				}
 				else
 				{
@@ -138,7 +144,7 @@ public class TouristGetLocTask extends TouristTaskAdapter{
 						getMessage(BotMessage.TOURIST_LOC_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.TOURIST_GETLOC_STATUS_ID);
 			}
 			

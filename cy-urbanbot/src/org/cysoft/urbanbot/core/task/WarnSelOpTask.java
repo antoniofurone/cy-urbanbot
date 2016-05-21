@@ -10,6 +10,7 @@ import org.cysoft.urbanbot.api.telegram.TelegramAPI;
 import org.cysoft.urbanbot.api.telegram.model.Update;
 import org.cysoft.urbanbot.common.CyUrbanbotException;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.cysoft.urbanbot.core.model.SessionStatus;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 					getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 			
 			TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-					update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
+					update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
 			
 			session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 			return;
@@ -37,12 +38,15 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SEARCH_STATUS_ID){
 			String text=update.getMessage().getText().trim();
-			if (text.equalsIgnoreCase("/b")){
+			if (text.equalsIgnoreCase(Keyboard.SELECTION_B)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+				text.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+				){
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.NRVB_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
 				
 				session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
 				return;
@@ -62,7 +66,7 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 						getMessage(BotMessage.WARN_NO_WARN_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 			}
 			else
 			{
@@ -84,18 +88,27 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SELOP_STATUS_ID){
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-				update.getMessage().getText().trim().equalsIgnoreCase("/r")){
-				
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_R) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_SEARCH) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_SEARCH_EN)
+					)
+				){
 				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_GET_SEARCH_ID, session.getLanguage());
 				
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.WARN_SEARCH_STATUS_ID);
 				return;
 			}
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-				update.getMessage().getText().trim().equalsIgnoreCase("/v")){
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_V) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_SHOW) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_SHOW_EN)
+					)
+				){
 						
 					List<Ticket> warns=CyBssCoreAPI.getInstance().findWarns(session.getPersonId(),"",
 							session.getLanguage(),1,WARN_CACHE_SIZE);
@@ -107,7 +120,7 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 								getMessage(BotMessage.WARN_NO_WARN_ID, session.getLanguage());
 						
 						TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
-								update.getMessage().getMessage_id(),BotMessage.B_KEYB);
+								update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
 					}
 					else
 					{
@@ -126,7 +139,12 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 				} 
 				
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-					update.getMessage().getText().trim().equalsIgnoreCase("/n")){
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_N) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_NEW) ||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_NEW_EN)
+					)
+				){
 				List<TicketCategory> categories=CyBssCoreAPI.getInstance().getWarnCategories(session.getLanguage());
 				String categoriesMessage="";
 				for (TicketCategory category:categories)
@@ -137,18 +155,23 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 				session.putVariable("WarnCategories", categories);
 				
 				TelegramAPI.getInstance().sendMessage(categoriesMessage, session.getId(), 
-						update.getMessage().getMessage_id(),BotMessage.B14_KEYB);
+						update.getMessage().getMessage_id(),Keyboard.get14b(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.WARN_CATEGORY_STATUS_ID);
 				return;
 			}
 			
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&
-					update.getMessage().getText().trim().equalsIgnoreCase("/b")){
+					(
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.SELECTION_B)||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_BACK)||
+						update.getMessage().getText().trim().equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
+					)
+				){
 				String message=CyBssCoreAPI.getInstance().
 						getMessage(BotMessage.WELCOME_MENU_ID, session.getLanguage());
 				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 						update.getMessage().getMessage_id(),
-						BotMessage.WELCOME_MENU_KEYB);
+						Keyboard.getWelcome(session.getLanguage()));
 				session.getSessionStatus().setId(SessionStatus.MAIN_MENU_STATUS_ID);
 				return;
 			}
