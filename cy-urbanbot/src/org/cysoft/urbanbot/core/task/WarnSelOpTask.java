@@ -67,6 +67,16 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 				
 				TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
 						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.WARN_GET_SEARCH_ID, session.getLanguage());
+				
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				
+				
+				session.getSessionStatus().setId(SessionStatus.WARN_SEARCH_STATUS_ID);
+				return;
+	
 			}
 			else
 			{
@@ -78,10 +88,10 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 				TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 						update.getMessage().getMessage_id(),msgKb.getKeyboard());
 				
-				}
+				session.getSessionStatus().setId(SessionStatus.WARN_SHOWLIST_STATUS_ID);
+				return;
 			
-			session.getSessionStatus().setId(SessionStatus.WARN_SHOWLIST_STATUS_ID);
-			return;
+				}
 		}
 			
 		
@@ -121,6 +131,16 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 						
 						TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
 								update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+						
+						String message=CyBssCoreAPI.getInstance().
+								getMessage(BotMessage.WARN_SHOW_OP_ID, session.getLanguage());
+						
+						TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+								update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
+						
+						session.getSessionStatus().setId(SessionStatus.WARN_SELOP_STATUS_ID);
+						return;
+						
 					}
 					else
 					{
@@ -132,10 +152,11 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 						TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 								update.getMessage().getMessage_id(),msgKb.getKeyboard());
 						
+						
+						session.getSessionStatus().setId(SessionStatus.WARN_SHOWLIST_STATUS_ID);
+						return;
 						}
 					
-					session.getSessionStatus().setId(SessionStatus.WARN_SHOWLIST_STATUS_ID);
-					return;
 				} 
 				
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&

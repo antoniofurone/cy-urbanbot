@@ -17,6 +17,7 @@ import org.cysoft.urbanbot.core.LiveSessions;
 import org.cysoft.urbanbot.core.UpdateDispatcher;
 import org.cysoft.urbanbot.core.UpdateDispatcherListener;
 import org.cysoft.urbanbot.core.model.BotMessage;
+import org.cysoft.urbanbot.core.model.Keyboard;
 import org.cysoft.urbanbot.core.model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,7 +233,7 @@ public class UrbanbotMain  implements Runnable,UpdateDispatcherListener
 								getMessage(BotMessage.SESSION_TIMEOUT_ID, session.getLanguage());
 						long sessionRemoved=session.getId();
 						LiveSessions.getInstance().remove(session.getId());
-						TelegramAPI.getInstance().sendMessage(message, sessionRemoved, 0);
+						TelegramAPI.getInstance().sendMessage(message, sessionRemoved, 0,Keyboard.getStart());
 						
 					}
 				}

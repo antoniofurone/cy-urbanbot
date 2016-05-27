@@ -64,6 +64,14 @@ public class StorySelOpTask extends StoryTaskAdapter {
 				
 				TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
 						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.STORY_GET_SEARCH_ID, session.getLanguage());
+				
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				session.getSessionStatus().setId(SessionStatus.STORY_SEARCH_STATUS_ID);
+				
+				return;
 			}
 			else
 			{
@@ -75,10 +83,10 @@ public class StorySelOpTask extends StoryTaskAdapter {
 				TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 						update.getMessage().getMessage_id(),msgKb.getKeyboard());
 				
-				}
+				session.getSessionStatus().setId(SessionStatus.STORY_SHOWLIST_STATUS_ID);
+				return;
+			}
 			
-			session.getSessionStatus().setId(SessionStatus.STORY_SHOWLIST_STATUS_ID);
-			return;
 		}
 
 		
@@ -97,6 +105,7 @@ public class StorySelOpTask extends StoryTaskAdapter {
 					
 					TelegramAPI.getInstance().sendMessage(message, session.getId(), 
 							update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+					
 					session.getSessionStatus().setId(SessionStatus.STORY_SEARCH_STATUS_ID);
 					return;
 				}
@@ -121,6 +130,16 @@ public class StorySelOpTask extends StoryTaskAdapter {
 					
 					TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
 							update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				
+					String message=CyBssCoreAPI.getInstance().
+							getMessage(BotMessage.STORY_SHOW_OP_ID, session.getLanguage());
+					
+					TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+							update.getMessage().getMessage_id(),Keyboard.getNrvb(session.getLanguage()));
+					session.getSessionStatus().setId(SessionStatus.STORY_SELOP_STATUS_ID);
+					
+					return;
+			
 				}
 				else
 				{
@@ -132,10 +151,10 @@ public class StorySelOpTask extends StoryTaskAdapter {
 					TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 							update.getMessage().getMessage_id(),msgKb.getKeyboard());
 					
+					session.getSessionStatus().setId(SessionStatus.STORY_SHOWLIST_STATUS_ID);
+					return;
 				}
 				
-				session.getSessionStatus().setId(SessionStatus.STORY_SHOWLIST_STATUS_ID);
-				return;
 			} 
 				
 			if (update.getMessage()!=null && update.getMessage().getText()!=null &&

@@ -33,7 +33,7 @@ public class BotMessage {
 	public static final String EVENT_LIST_OP_ID_P = "EVENT_LIST_OP_P";
 	public static final String EVENT_LIST_OP_ID_NP="EVENT_LIST_OP_NP";
 	public static final String EVENT_INVALID_ID="EVENT_INVALID_ID";
-	public static final String EVENT_NO_EVENT_ID="EVENT_NO_STORY";
+	public static final String EVENT_NO_EVENT_ID="EVENT_NO_EVENT";
 	public static final String EVENT_GET_SEARCH_ID = "EVENT_GET_SEARCH";
 	
 	

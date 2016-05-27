@@ -85,6 +85,13 @@ public class EventSelOpTask extends EventTaskAdapter {
 				
 				TelegramAPI.getInstance().sendMessage(messageList, session.getId(), 
 						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				
+				String message=CyBssCoreAPI.getInstance().getMessage(BotMessage.EVENT_GET_SEARCH_ID, session.getLanguage());
+				TelegramAPI.getInstance().sendMessage(message, session.getId(), 
+						update.getMessage().getMessage_id(),Keyboard.getB(session.getLanguage()));
+				session.getSessionStatus().setId(SessionStatus.EVENT_SEARCH_STATUS_ID);
+				return;
+			
 			}
 			else
 			{
@@ -96,10 +103,10 @@ public class EventSelOpTask extends EventTaskAdapter {
 				TelegramAPI.getInstance().sendMessage(msgKb.getMessage(), session.getId(), 
 						update.getMessage().getMessage_id(),msgKb.getKeyboard());
 				
-				}
+				session.getSessionStatus().setId(SessionStatus.EVENT_SHOWLIST_STATUS_ID);
+				return;
+			}
 			
-			session.getSessionStatus().setId(SessionStatus.EVENT_SHOWLIST_STATUS_ID);
-			return;
 		}
 
 	}

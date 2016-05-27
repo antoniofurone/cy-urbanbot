@@ -95,10 +95,16 @@ public class Keyboard {
 			return Arrays.asList(Arrays.asList(BUTTON_NEXT_EN,BUTTON_PREV_EN,BUTTON_BACK_EN));
 	}
 	
+	
 	public static List<List<String>> get14b(String language){
 		if (language.equalsIgnoreCase(ICyBssConst.LOCALE_IT))
 			return Arrays.asList(Arrays.asList("1", "2", "3","4"),Arrays.asList(BUTTON_BACK));
 		else
 			return Arrays.asList(Arrays.asList("1", "2", "3","4"),Arrays.asList(BUTTON_BACK_EN));
+	}
+	
+	public static List<List<String>> getStart(){
+			return Arrays.asList(Arrays.asList(SELECTION_START));
+		
 	}
 }
