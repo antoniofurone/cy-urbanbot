@@ -34,7 +34,10 @@ public class EventSelOpTask extends EventTaskAdapter {
 		}
 		
 		if (session.getSessionStatus().getId()==SessionStatus.EVENT_SEARCH_STATUS_ID){
+			if (update.getMessage().getText()==null)
+				return;
 			String text=update.getMessage().getText().trim();
+			
 			if (
 				text.equalsIgnoreCase(Keyboard.SELECTION_B)||
 				text.equalsIgnoreCase(Keyboard.BUTTON_BACK)||

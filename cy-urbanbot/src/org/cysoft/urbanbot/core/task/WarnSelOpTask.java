@@ -37,7 +37,11 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 		}
 		
 		if (session.getSessionStatus().getId()==SessionStatus.WARN_SEARCH_STATUS_ID){
+			if (update.getMessage().getText()==null)
+				return;
+			
 			String text=update.getMessage().getText().trim();
+			
 			if (text.equalsIgnoreCase(Keyboard.SELECTION_B)||
 				text.equalsIgnoreCase(Keyboard.BUTTON_BACK)||
 				text.equalsIgnoreCase(Keyboard.BUTTON_BACK_EN)
@@ -52,10 +56,12 @@ public class WarnSelOpTask extends WarnTaskAdapter {
 				return;
 			}
 			
+			
 			if (text.equalsIgnoreCase("!"))
 				text="";
 			else
 				text="%"+text+"%";
+			
 			List<Ticket> warns=CyBssCoreAPI.getInstance().findWarns(0,text,
 					session.getLanguage(),1,WARN_CACHE_SIZE);
 			logger.info("warns.size()="+warns.size());
